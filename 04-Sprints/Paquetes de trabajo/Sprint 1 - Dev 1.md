@@ -47,7 +47,7 @@ Si necesitas cambiar un archivo de otro paquete, **no lo edites**: repórtalo co
 - En T-1-01 tocas una línea de cada *PanelProvider*; después son de Dev 2.
 - `User.php` es de Dev 2: entregas el trait `HasTemporaryPassword` y Dev 2 agrega el `use` (T-1-10 lo necesita).
 - T-1-03 espera la redirección de Dev 2 (T-1-12); mientras tanto, prueba solo la autenticación.
-- Dev 3 (T-1-19) mide el login cuando tu T-1-02 esté en staging.
+- Dev 3 (T-1-19) mide el login cuando tu T-1-02 esté integrada.
 
 ## Verificación
 ```bash
@@ -57,12 +57,14 @@ vendor/bin/phpstan analyse
 vendor/bin/pest
 vendor/bin/pest --filter=HU0xx      # pruebas de una historia
 composer audit
+php artisan colegio:demo            # base de demostración con datos ficticios (desde el Sprint 0, T-0-11)
 ```
 
 ## Definición de terminado del paquete
 - [ ] Todas las tareas cumplen su "Terminado/Pruebas" de [[Sprint 1 - Login base#Tareas técnicas]].
 - [ ] Cada escenario de las historias del paquete tiene una prueba Pest con su nombre; prueba con rol sin acceso cuando aplica.
-- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite y PostgreSQL).
+- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite).
+- [ ] Solo datos ficticios (`@colegio-piloto.test`); lo nuevo se puede mostrar con `php artisan colegio:demo`.
 - [ ] Sin contraseñas, tokens ni secretos en logs ni en `audit_events`; acciones sensibles auditadas.
 - [ ] Textos de UI en `lang/es`, en español claro.
 - [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.

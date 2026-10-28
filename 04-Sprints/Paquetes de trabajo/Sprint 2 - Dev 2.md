@@ -13,7 +13,7 @@ Volver a [[Paquetes MOC]] · Sprint: [[Sprint 2 - Seguridad del login]] (30/11 �
 ## Objetivo del sprint
 > Las cuentas del personal están protegidas contra accesos indebidos y cada persona puede recuperar su acceso por sí misma.
 
-**Foco de este paquete:** Bloqueo por intentos fallidos, administración mínima de cuentas y respaldos (HU-004, TEC-16).
+**Foco de este paquete:** Bloqueo por intentos fallidos, administración mínima de cuentas, acción "Restablecer MFA" y datos de demostración (HU-004, parte de HU-005, TEC-16).
 
 ## Antes de empezar
 1. Lee el detalle de cada tarea en [[Sprint 2 - Seguridad del login#Tareas técnicas]] y las historias enlazadas.
@@ -26,24 +26,25 @@ Volver a [[Paquetes MOC]] · Sprint: [[Sprint 2 - Seguridad del login]] (30/11 �
 | 2 | T-2-08 | Bloqueo integrado en el login | T-2-07 |
 | 3 | T-2-10 | `UserResource` mínimo con "Desbloquear" | T-2-07 |
 | 4 | T-2-09 | Aviso por correo y auditoría del bloqueo | T-2-08 |
-| 5 | T-2-11 | Respaldos y monitoreo de staging | — |
+| 5 | T-2-15 | Acción "Restablecer MFA" (Soporte TI) | T-2-10, T-2-12 (Dev 3) |
+| 6 | T-2-11 | Datos de demostración del personal (`DemoStaffSeeder`) | T-2-07, T-2-12 (Dev 3) |
 
 ## Archivos de este paquete
 Solo tú modificas estos archivos en este sprint (rutas bajo `app-colegio/`, salvo `.github/` y el vault):
 - `app/Services/AccountLockout.php`, `app/Models/Concerns/HasAccountLockout.php` y su migración
 - `app/Filament/Pages/Auth/Login.php` (dueño en el Sprint 2)
 - `app/Notifications/AccountLockedNotification.php`, `lang/es/lockout.php`, `lang/es/auth.php`
-- `app/Filament/Admin/Resources/Users/**` (salvo `Actions/ResetMfaAction.php`)
+- `app/Filament/Admin/Resources/Users/**` (incluida `Actions/ResetMfaAction.php`)
 - `app/Policies/UserPolicy.php`
-- `deploy/backup.sh`, `deploy/crontab.example`, `config/logging.php`
-- `tests/Feature/HU004/*`, `tests/Unit/Services/AccountLockoutTest.php`
+- `database/seeders/DemoStaffSeeder.php`, `database/seeders/DatabaseSeeder.php`
+- `tests/Feature/HU004/*`, `tests/Feature/HU005/ResetMfaTest.php`, `tests/Feature/Seeders/*`, `tests/Unit/Services/AccountLockoutTest.php`
 
 Si necesitas cambiar un archivo de otro paquete, **no lo edites**: repórtalo como impedimento o coordínalo con su dueño.
 
 ## Dependencias con otros paquetes
 - Entrega T-2-07 pronto: Dev 1 (T-2-04, T-2-06) y Dev 3 (T-2-14) lo usan.
 - `User.php` es de Dev 3 en este sprint: él agrega `use HasAccountLockout;`.
-- Registra en `UsersTable` la `ResetMfaAction` de Dev 3 (T-2-15) y agrega `UserPolicy::resetMfa`.
+- T-2-15 y T-2-11 usan las columnas MFA de Dev 3 (T-2-12).
 - T-2-14 (Dev 3) añade un *hook* en `Login.php`: coordínalo con él (*pairing* corto).
 
 ## Verificación
@@ -54,12 +55,14 @@ vendor/bin/phpstan analyse
 vendor/bin/pest
 vendor/bin/pest --filter=HU0xx      # pruebas de una historia
 composer audit
+php artisan colegio:demo            # base de demostración con datos ficticios (desde el Sprint 0, T-0-11)
 ```
 
 ## Definición de terminado del paquete
 - [ ] Todas las tareas cumplen su "Terminado/Pruebas" de [[Sprint 2 - Seguridad del login#Tareas técnicas]].
 - [ ] Cada escenario de las historias del paquete tiene una prueba Pest con su nombre; prueba con rol sin acceso cuando aplica.
-- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite y PostgreSQL).
+- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite).
+- [ ] Solo datos ficticios (`@colegio-piloto.test`); lo nuevo se puede mostrar con `php artisan colegio:demo`.
 - [ ] Sin contraseñas, tokens ni secretos en logs ni en `audit_events`; acciones sensibles auditadas.
 - [ ] Textos de UI en `lang/es`, en español claro.
 - [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.

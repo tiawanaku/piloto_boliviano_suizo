@@ -7,6 +7,8 @@ aliases: [Paquetes de trabajo]
 
 Volver a [[Sprints MOC]] · Habilitadores: [[Backlog tecnico]] · Stack: [[ADR-005 Stack PHP Laravel y Filament]] · Planificación: [[2026-10-28 Sprint Planning tecnico - Scrum Master]]
 
+> 🧪 Alcance piloto: sin staging, despliegue ni respaldos; SQLite, correo `log`/Mailpit y datos ficticios con `php artisan colegio:demo`.
+
 Un paquete por developer y sprint, para los agentes `php-senior-developer`. Cada paquete lista sus tareas `T-<sprint>-<nn>` en orden, los **archivos de los que es dueño** (nadie más los toca ese sprint), lo que debe esperar de otros paquetes, los comandos de verificación y su definición de terminado. El detalle de cada tarea está en la sección "Tareas técnicas" de la nota del sprint.
 
 ## Reglas comunes
@@ -18,9 +20,9 @@ Un paquete por developer y sprint, para los agentes `php-senior-developer`. Cada
 ## Sprint 0 · Preparación (02/11 – 13/11/2026)
 | Paquete | Foco | Orden / dependencias |
 |---|---|---|
-| [[Sprint 0 - Dev 1]] | Proyecto, identidad base, paneles, idioma | **Va primero:** T-0-01 bloquea a todos |
+| [[Sprint 0 - Dev 1]] | Proyecto, identidad base, paneles | **Va primero:** T-0-01 bloquea a todos |
 | [[Sprint 0 - Dev 2]] | Pest, Larastan, Pint, CI | Tras T-0-01; T-0-08 espera paneles de Dev 1 |
-| [[Sprint 0 - Dev 3]] | Entorno local, correo, colas, staging | T-0-11 desde el día 1; resto tras T-0-01; despliegue tras CI de Dev 2 |
+| [[Sprint 0 - Dev 3]] | Idioma, entorno local (SQLite), correo `log`, colas, `colegio:demo` | Tras T-0-01; T-0-11 espera los paneles de Dev 1 (T-0-03) |
 
 ## Sprint 1 · Login base (16/11 – 27/11/2026)
 | Paquete | Foco | Orden / dependencias |
@@ -33,12 +35,12 @@ Un paquete por developer y sprint, para los agentes `php-senior-developer`. Cada
 | Paquete | Foco | Orden / dependencias |
 |---|---|---|
 | [[Sprint 2 - Dev 1]] | HU-003, HU-029 | Espera T-2-01 de Dev 3 y `AccountLockout` de Dev 2 |
-| [[Sprint 2 - Dev 2]] | HU-004, TEC-16 | **T-2-07 temprano** (lo usan Dev 1 y Dev 3) |
-| [[Sprint 2 - Dev 3]] | HU-005 (solo administrativos) | **T-2-01 primero** (día 1, desbloquea a Dev 1); T-2-15 espera `UserResource` de Dev 2 |
+| [[Sprint 2 - Dev 2]] | HU-004, "Restablecer MFA" (HU-005), datos de demostración (TEC-16) | **T-2-07 temprano** (lo usan Dev 1 y Dev 3); T-2-15 y T-2-11 esperan columnas MFA de Dev 3 |
+| [[Sprint 2 - Dev 3]] | HU-005 (solo administrativos) | **T-2-01 primero** (día 1, desbloquea a Dev 1); T-2-12 temprano (lo usa Dev 2) |
 
 ## Sprint 3 · Gestión de personal (14/12 – 24/12/2026)
 | Paquete | Foco | Orden / dependencias |
 |---|---|---|
 | [[Sprint 3 - Dev 1]] | HU-030, HU-010 (dueño de `UserResource`) | **T-3-01 primero** (día 1, desbloquea a Dev 2); T-3-07 integra acciones de Dev 2 al final |
 | [[Sprint 3 - Dev 2]] | HU-009, HU-011 | Tras T-3-01; T-3-09 espera `UserForm` de Dev 1 |
-| [[Sprint 3 - Dev 3]] | HU-014, TEC-17, regresión | Independiente desde el día 1 |
+| [[Sprint 3 - Dev 3]] | HU-014, datos de demostración (TEC-16), regresión | HU-014 desde el día 1; T-3-13 tras T-3-01 de Dev 1 |

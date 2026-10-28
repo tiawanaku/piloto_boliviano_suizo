@@ -38,9 +38,9 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 ## Tareas técnicas
 > Definidas por el [[Scrum Master]] el 2026-10-28 ([[2026-10-28 Sprint Planning tecnico - Scrum Master]]); se confirman en la [[Sprint Planning]] del sprint con los resultados de los *spikes* T-1-19 y T-1-20. Stack: [[ADR-005 Stack PHP Laravel y Filament]] · [[Stack tecnologico]] · Paquetes: [[Sprint 2 - Dev 1]], [[Sprint 2 - Dev 2]], [[Sprint 2 - Dev 3]].
 >
-> **Terminado técnico común:** `vendor/bin/pint --test`, `vendor/bin/phpstan analyse`, `vendor/bin/pest` en verde (CI con SQLite y PostgreSQL); cada escenario Gherkin con su prueba Pest; prueba con rol sin acceso cuando aplica; correos con `Notification::fake()` y en cola; acciones sensibles auditadas; PR revisado.
+> **Terminado técnico común:** `vendor/bin/pint --test`, `vendor/bin/phpstan analyse`, `vendor/bin/pest` en verde (CI con SQLite); solo datos ficticios `@colegio-piloto.test`; cada escenario Gherkin con su prueba Pest; prueba con rol sin acceso cuando aplica; correos con `Notification::fake()` y en cola; acciones sensibles auditadas; PR revisado.
 >
-> Reparto: **Dev 1** = recuperación y cambio de contraseña (HU-003, HU-029) · **Dev 2** = bloqueo, administración mínima de cuentas y respaldos (HU-004, TEC-16) · **Dev 3** = MFA (HU-005).
+> Reparto: **Dev 1** = recuperación y cambio de contraseña (HU-003, HU-029) · **Dev 2** = bloqueo, administración mínima de cuentas, acción de restablecer MFA y datos de demostración (HU-004, parte de HU-005, TEC-16) · **Dev 3** = MFA (HU-005).
 
 | ID | Tarea | Relacionada | Dev | Depende de |
 |---|---|---|---|---|
@@ -54,12 +54,12 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 | T-2-08 | Bloqueo integrado en el login | HU-004 | Dev 2 | T-2-07 |
 | T-2-09 | Aviso por correo y auditoría del bloqueo | HU-004 | Dev 2 | T-2-08 |
 | T-2-10 | `UserResource` mínimo con "Desbloquear" (Soporte TI) | HU-004, HU-005 | Dev 2 | T-2-07 |
-| T-2-11 | Respaldos y monitoreo de staging | TEC-16 | Dev 2 | — |
+| T-2-11 | Datos de demostración del personal (`DemoStaffSeeder`) | TEC-16 | Dev 2 | T-2-07, T-2-12 |
 | T-2-12 | Columnas MFA e interfaces de Filament en `User` | HU-005 | Dev 3 | T-2-01 |
 | T-2-13 | MFA obligatorio para roles administrativos | HU-005 | Dev 3 | T-2-12 |
 | T-2-14 | Ingreso con código, códigos de respaldo y código incorrecto | HU-005 | Dev 3 | T-2-13, T-2-07 |
-| T-2-15 | Acción "Restablecer MFA" (Soporte TI) | HU-005 | Dev 3 | T-2-10, T-2-12 |
-| T-2-16 | Verificación de la DoD de experiencia en staging | Todas | Dev 3 | resto del sprint |
+| T-2-15 | Acción "Restablecer MFA" (Soporte TI) | HU-005 | Dev 2 | T-2-10, T-2-12 |
+| T-2-16 | Verificación de la DoD de experiencia en el entorno de demostración | Todas | Dev 3 | resto del sprint |
 
 #### T-2-01 · `StaffPanel`: restablecimiento, perfil y MFA — Dev 3 ⚠️ debe completarse primero (día 1)
 - **Qué:** en `StaffPanel` activar `->passwordReset(RequestPasswordReset::class, ResetPassword::class)`, `->profile(EditProfile::class)` y `->multiFactorAuthentication([...])` según el resultado de T-1-20. Crear las tres páginas como **clases base vacías** que extienden las de Filament; desde ese momento `RequestPasswordReset`, `ResetPassword` y `EditProfile` pertenecen a Dev 1.
@@ -113,10 +113,10 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Archivos:** `app/Filament/Admin/Resources/Users/UserResource.php`, `app/Filament/Admin/Resources/Users/Pages/ListUsers.php`, `app/Filament/Admin/Resources/Users/Tables/UsersTable.php`, `app/Filament/Admin/Resources/Users/Actions/UnlockAccountAction.php`, `app/Policies/UserPolicy.php`, `tests/Feature/HU004/UnlockAccountTest.php`.
 - **Pruebas (HU-004):** "Desbloqueo manual por TI" (ingresa de inmediato y queda en auditoría); Secretaría no ve la acción; Docente recibe 403 en la lista.
 
-#### T-2-11 · Respaldos y monitoreo de staging — Dev 2
-- **Qué:** `pg_dump` diario cifrado fuera del servidor con retención de 14 días; restauración probada en una base temporal; rotación de `storage/logs`; alerta por correo a TI ante errores 500 repetidos (canal `log` `slack`/`mail` o monitoreo del proveedor).
-- **Archivos:** `deploy/backup.sh`, `deploy/crontab.example`, `config/logging.php` (canal diario).
-- **Terminado:** restauración probada y documentada en "Decisiones técnicas".
+#### T-2-11 · Datos de demostración del personal — Dev 2
+- **Qué:** `DemoStaffSeeder` llamado por `colegio:demo`: hasta 15 administrativos y 50 docentes **ficticios** con correos `@colegio-piloto.test` (nombres generados), al menos una cuenta por rol y una por estado (activa, pendiente, con contraseña temporal, bloqueada, desactivada), administrativos con y sin MFA configurado y un docente con rol de coordinación. Contraseña de demostración conocida solo en `local`. Reemplaza a "Respaldos y monitoreo de staging", fuera del alcance del piloto.
+- **Archivos:** `database/seeders/DemoStaffSeeder.php`, `database/seeders/DatabaseSeeder.php`, `tests/Feature/Seeders/DemoStaffSeederTest.php`.
+- **Pruebas:** respeta los máximos (15/50), todos los correos son del dominio ficticio, existe al menos una cuenta por rol y por estado, y ejecutarlo dos veces no duplica.
 
 #### T-2-12 · Columnas MFA e interfaces en `User` — Dev 3
 - **Qué:** migración `add_app_authentication_columns_to_users_table` (secreto y códigos de recuperación, cifrados con *casts* `encrypted`); `User` implementa las interfaces de MFA por app y de recuperación de Filament; `$hidden` para secreto y códigos.
@@ -133,13 +133,13 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Archivos:** `app/Filament/Pages/Auth/Login.php` (solo el *hook* del desafío, coordinado con Dev 2) o `app/Listeners/RecordMfaFailure.php` según el spike, `lang/es/mfa.php`, `tests/Feature/HU005/MfaChallengeTest.php`.
 - **Pruebas (HU-005):** "Ingreso con MFA", "Uso de código de respaldo" (queda invalidado), "Código incorrecto o vencido" (suma al bloqueo). TOTP generado en la prueba con `pragmarx/google2fa`.
 
-#### T-2-15 · "Restablecer MFA" (Soporte TI) — Dev 3
-- **Qué:** `ResetMfaAction` con confirmación ("¿Verificaste la identidad de la persona?"), borra secreto y códigos, registra `mfa.reset`; autorizada por `UserPolicy::resetMfa` (permiso `mfa.reset`). Dev 2 la registra en `UsersTable`.
-- **Archivos:** `app/Filament/Admin/Resources/Users/Actions/ResetMfaAction.php`, `tests/Feature/HU005/ResetMfaTest.php`. (El método `resetMfa` de `UserPolicy` lo agrega Dev 2 en T-2-10.)
+#### T-2-15 · "Restablecer MFA" (Soporte TI) — Dev 2
+- **Qué:** `ResetMfaAction` con confirmación ("¿Verificaste la identidad de la persona?"), borra secreto y códigos, registra `mfa.reset`; autorizada por `UserPolicy::resetMfa` (permiso `mfa.reset`) y registrada en `UsersTable`. Reasignada a Dev 2 (dueño de `UserResource`) con la capacidad liberada por el alcance piloto.
+- **Archivos:** `app/Filament/Admin/Resources/Users/Actions/ResetMfaAction.php`, `tests/Feature/HU005/ResetMfaTest.php`. (Usa las columnas MFA de Dev 3, T-2-12.)
 - **Pruebas (HU-005):** "Restablecer MFA" (en el siguiente ingreso debe configurarlo de nuevo; auditado); Secretaría no ve la acción.
 
 #### T-2-16 · Verificación de la DoD de experiencia — Dev 3
-- **Qué:** recorrer HU-003, HU-004, HU-005 y HU-029 en staging (Chrome, Firefox, Android, 3G, teclado), incluyendo correos reales del SMTP institucional y una app autenticadora real (Google Authenticator o Aegis).
+- **Qué:** recorrer HU-003, HU-004, HU-005 y HU-029 en el entorno de demostración (Chrome, Firefox, Android, 3G, teclado), viendo los correos en Mailpit o en el log y usando una app autenticadora real (Google Authenticator o Aegis) con cuentas ficticias.
 
 ## Decisiones técnicas
 _(completar durante el sprint)_

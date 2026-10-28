@@ -50,7 +50,7 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 ## Tareas técnicas
 > Definidas por el [[Scrum Master]] el 2026-10-28 ([[2026-10-28 Sprint Planning tecnico - Scrum Master]]). Stack: [[ADR-005 Stack PHP Laravel y Filament]] · Convenciones: [[Stack tecnologico]] · Habilitadores: [[Backlog tecnico]] · Paquetes: [[Sprint 1 - Dev 1]], [[Sprint 1 - Dev 2]], [[Sprint 1 - Dev 3]]. Los Developers las ajustan en la [[Sprint Planning]].
 >
-> **Terminado técnico común:** `vendor/bin/pint --test`, `vendor/bin/phpstan analyse`, `vendor/bin/pest` en verde (CI con SQLite y PostgreSQL); cada escenario Gherkin de la historia tiene al menos una prueba Pest con su nombre; prueba con un rol sin acceso cuando aplica; textos en `lang/es`; PR revisado.
+> **Terminado técnico común:** `vendor/bin/pint --test`, `vendor/bin/phpstan analyse`, `vendor/bin/pest` en verde (CI con SQLite); solo datos ficticios `@colegio-piloto.test`; cada escenario Gherkin de la historia tiene al menos una prueba Pest con su nombre; prueba con un rol sin acceso cuando aplica; textos en `lang/es`; PR revisado.
 >
 > Reparto: **Dev 1** = login, sesión y contraseña (HU-001, HU-002, HU-006, TEC-13) · **Dev 2** = roles y paneles (TEC-10, TEC-11, HU-007) · **Dev 3** = auditoría y *spikes* (TEC-12, HU-013, TEC-14, TEC-15).
 
@@ -71,12 +71,12 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 | T-1-13 | Cambio de panel y panel docente vacío | HU-007 | Dev 2 | T-1-12 |
 | T-1-14 | Página 403 en español y registro del acceso denegado | HU-007 | Dev 2 | T-1-11, T-1-15 |
 | T-1-15 | Tabla `audit_events`, modelo inmutable y `AuditLogger` ⚠️ **temprano** | TEC-12, HU-013 | Dev 3 | — |
-| T-1-16 | *Trigger* PostgreSQL de inmutabilidad | TEC-12, HU-013 | Dev 3 | T-1-15 |
+| T-1-16 | *Trigger* de inmutabilidad en la base de datos | TEC-12, HU-013 | Dev 3 | T-1-15 |
 | T-1-17 | *Listeners* de intentos de login y logout | HU-013 | Dev 3 | T-1-15 |
 | T-1-18 | *Policy* de auditoría y pruebas de inmutabilidad | HU-013 | Dev 3 | T-1-15 |
 | T-1-19 | Spike: peso del login en 3G | TEC-14 | Dev 3 | T-1-02 |
 | T-1-20 | Spike: MFA por rol en Filament 5 | TEC-15 | Dev 3 | T-1-11 |
-| T-1-21 | Verificación de la DoD de experiencia en staging | Todas | Dev 3 | resto del sprint |
+| T-1-21 | Verificación de la DoD de experiencia en el entorno de demostración | Todas | Dev 3 | resto del sprint |
 
 #### T-1-01 · `StaffPanel` (configuración compartida) — Dev 1 ⚠️ debe completarse primero (día 1)
 - **Qué:** clase `App\Filament\Support\StaffPanel::configure(Panel $panel): Panel` con lo común a `admin` y `docente`: página de login (`Pages\Auth\Login`), *middleware* de autenticación compartido, marca y colores. Ambos *PanelProviders* la invocan (cambio de una línea; luego los *providers* pasan a Dev 2).
@@ -94,12 +94,12 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Pruebas (HU-001):** "Inicio de sesión exitoso" (autenticado y redirigido al panel según rol — usa T-1-12), "Cuenta desactivada".
 
 #### T-1-04 · Cierre de sesión, inactividad y "atrás" — Dev 1
-- **Qué:** `SESSION_LIFETIME` leído de `config('colegio.sesion_inactividad_minutos')` en `config/session.php`; cookies `secure`, `http_only`, `same_site=lax`; *middleware* `PreventBackHistory` (`Cache-Control: no-store, private`) registrado en `StaffPanel`; logout de Filament invalida la sesión.
+- **Qué:** `SESSION_LIFETIME` leído de `config('colegio.sesion_inactividad_minutos')` en `config/session.php`; cookies `http_only`, `same_site=lax` y `secure` vía `SESSION_SECURE_COOKIE` (activo solo si la demostración usa HTTPS); *middleware* `PreventBackHistory` (`Cache-Control: no-store, private`) registrado en `StaffPanel`; logout de Filament invalida la sesión.
 - **Archivos:** `config/session.php`, `app/Http/Middleware/PreventBackHistory.php`, `app/Filament/Support/StaffPanel.php`, `tests/Feature/HU002/LogoutTest.php`.
 - **Pruebas (HU-002):** "Cerrar sesión manualmente" (fila de `sessions` eliminada, redirección al login, cabecera `no-store`), "Expiración por inactividad" (`$this->travel(31)->minutes()` → redirige al login).
 
 #### T-1-05 · Cabeceras de seguridad — Dev 1
-- **Qué:** *middleware* `SecurityHeaders`: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, HSTS solo en producción/staging, `Content-Security-Policy-Report-Only` compatible con Livewire/Alpine. Registrado en `StaffPanel`.
+- **Qué:** *middleware* `SecurityHeaders`: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, HSTS solo cuando la petición es HTTPS, `Content-Security-Policy-Report-Only` compatible con Livewire/Alpine. Registrado en `StaffPanel`.
 - **Archivos:** `app/Http/Middleware/SecurityHeaders.php`, `app/Filament/Support/StaffPanel.php`, `tests/Feature/Security/SecurityHeadersTest.php`.
 - **Pruebas:** cabeceras presentes en `/admin/login`.
 
@@ -124,7 +124,7 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Pruebas:** *dataset* Pest rol × permiso que verifica cada celda de la matriz; ejecutar el *seeder* dos veces no duplica.
 
 #### T-1-10 · *Factories*, *helpers* y cuentas semilla — Dev 2
-- **Qué:** estados de `UserFactory`: `active()`, `pending()`, `deactivated()`, `withTemporaryPassword()`, `withRoles(StaffRole ...)`; *helper* global `actingAsStaff(StaffRole ...$roles)` en `tests/Pest.php`; comando `colegio:crear-cuenta {correo} {--rol=*}` que crea una cuenta activa con contraseña temporal (72 h) y la muestra una sola vez (temporal hasta [[HU-009 Invitar personal]]).
+- **Qué:** estados de `UserFactory`: `active()`, `pending()`, `deactivated()`, `withTemporaryPassword()`, `withRoles(StaffRole ...)`; *helper* global `actingAsStaff(StaffRole ...$roles)` en `tests/Pest.php`; comando `colegio:crear-cuenta {correo} {--rol=*}` (solo correos ficticios del dominio configurado) que crea una cuenta activa con contraseña temporal (72 h) y la muestra una sola vez (temporal hasta [[HU-009 Invitar personal]]).
 - **Archivos:** `database/factories/UserFactory.php`, `tests/Pest.php`, `app/Console/Commands/CreateStaffAccount.php`, `tests/Feature/Commands/CreateStaffAccountTest.php`.
 - **Pruebas:** el comando crea la cuenta con los roles y `must_change_password = true`; rechaza correos fuera del dominio.
 
@@ -153,9 +153,9 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Archivos:** `database/migrations/2026_11_16_080000_create_audit_events_table.php`, `app/Models/AuditEvent.php`, `app/Enums/AuditEventType.php`, `app/Services/AuditLogger.php`, `lang/es/audit.php`, `tests/Unit/Services/AuditLoggerTest.php`.
 - **Pruebas:** registra un evento con contexto; nunca guarda claves sensibles; `update()`/`delete()` lanzan excepción.
 
-#### T-1-16 · *Trigger* PostgreSQL — Dev 3
-- **Qué:** migración que, solo si el *driver* es `pgsql`, crea la función y el *trigger* que rechazan `UPDATE`/`DELETE` en `audit_events` (la retención usará un rol de base de datos distinto, TEC-17).
-- **Archivos:** `database/migrations/2026_11_16_080100_add_immutability_trigger_to_audit_events.php`, `tests/Feature/HU013/AuditImmutabilityPgsqlTest.php` (se omite en SQLite; corre en el trabajo `pest-pgsql`).
+#### T-1-16 · *Trigger* de inmutabilidad — Dev 3
+- **Qué:** migración que crea los *triggers* que rechazan `UPDATE`/`DELETE` en `audit_events`: rama `sqlite` (`BEFORE UPDATE/DELETE … SELECT RAISE(ABORT, …)`), usada en el piloto, y rama `pgsql` (función + *trigger*) preparada para una implementación real. Sin purga por retención (fuera del alcance del piloto).
+- **Archivos:** `database/migrations/2026_11_16_080100_add_immutability_trigger_to_audit_events.php`, `tests/Feature/HU013/AuditImmutabilityDatabaseTest.php` (corre en la suite normal con SQLite).
 - **Pruebas (HU-013):** "Inmutabilidad" a nivel de base de datos (`DB::table()->update()` falla).
 
 #### T-1-17 · *Listeners* de login y logout — Dev 3
@@ -169,7 +169,7 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Pruebas (HU-013):** "Inmutabilidad" a nivel de aplicación.
 
 #### T-1-19 · Spike: peso del login en 3G — Dev 3 (timebox 1 día)
-- **Qué:** medir `/admin/login` en staging con Chrome DevTools (perfil "Slow 3G") y Lighthouse: bytes transferidos, tiempo hasta interactivo. Si supera 200 KB / 10 s, proponer medidas (compresión Brotli/gzip en Nginx, caché de recursos, fuentes del sistema).
+- **Qué:** medir `/admin/login` en el entorno local/demostración con `php artisan optimize` y recursos compilados, usando Chrome DevTools (perfil "Slow 3G") y Lighthouse: bytes transferidos, tiempo hasta interactivo. Si supera 200 KB / 10 s, proponer medidas en la aplicación (recursos mínimos, fuentes del sistema); la compresión del servidor web se anota como recomendación para una implementación real.
 - **Entregable:** resultados y decisión en la sección "Decisiones técnicas" de este sprint; tareas nuevas si hacen falta.
 
 #### T-1-20 · Spike: MFA por rol en Filament 5 — Dev 3 (timebox 1 día)
@@ -177,7 +177,7 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Entregable:** nota en "Decisiones técnicas" y, si cambia algo, actualización de [[ADR-005 Stack PHP Laravel y Filament]] §4; tareas del Sprint 2 ajustadas.
 
 #### T-1-21 · Verificación de la DoD de experiencia — Dev 3
-- **Qué:** en staging, recorrer HU-001, HU-002, HU-006, HU-007 en Chrome, Firefox y Android, con red 3G simulada, navegación por teclado y contraste (Lighthouse Accesibilidad ≥ 90).
+- **Qué:** en el entorno de demostración (`colegio:demo`), recorrer HU-001, HU-002, HU-006, HU-007 en Chrome, Firefox y Android, con red 3G simulada, navegación por teclado y contraste (Lighthouse Accesibilidad ≥ 90).
 - **Entregable:** lista de verificación en esta nota; defectos como tareas o *bugs*.
 
 ## Decisiones técnicas

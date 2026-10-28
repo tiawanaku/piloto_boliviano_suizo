@@ -23,12 +23,12 @@ Volver a [[Paquetes MOC]] · Sprint: [[Sprint 1 - Login base]] (16/11 – 27/11/
 | # | ID | Tarea | Espera a |
 |---|---|---|---|
 | 1 | T-1-15 | `audit_events`, modelo inmutable y `AuditLogger` ⚠️ temprano (día 1–2) | — |
-| 2 | T-1-16 | *Trigger* PostgreSQL de inmutabilidad | T-1-15 |
+| 2 | T-1-16 | *Trigger* de inmutabilidad (SQLite; rama `pgsql` preparada) | T-1-15 |
 | 3 | T-1-17 | *Listeners* de login y logout | T-1-15 |
 | 4 | T-1-18 | *Policy* de auditoría | T-1-15 |
-| 5 | T-1-19 | Spike: peso del login en 3G (timebox 1 día) | T-1-02 (Dev 1) en staging |
+| 5 | T-1-19 | Spike: peso del login en 3G, medido en local (timebox 1 día) | T-1-02 (Dev 1) |
 | 6 | T-1-20 | Spike: MFA por rol en Filament 5, solo roles administrativos (timebox 1 día) | T-1-11 (Dev 2) |
-| 7 | T-1-21 | Verificación de la DoD de experiencia en staging | resto del sprint |
+| 7 | T-1-21 | Verificación de la DoD de experiencia en el entorno de demostración | resto del sprint |
 
 ## Archivos de este paquete
 Solo tú modificas estos archivos en este sprint (rutas bajo `app-colegio/`, salvo `.github/` y el vault):
@@ -56,12 +56,14 @@ vendor/bin/phpstan analyse
 vendor/bin/pest
 vendor/bin/pest --filter=HU0xx      # pruebas de una historia
 composer audit
+php artisan colegio:demo            # base de demostración con datos ficticios (desde el Sprint 0, T-0-11)
 ```
 
 ## Definición de terminado del paquete
 - [ ] Todas las tareas cumplen su "Terminado/Pruebas" de [[Sprint 1 - Login base#Tareas técnicas]].
 - [ ] Cada escenario de las historias del paquete tiene una prueba Pest con su nombre; prueba con rol sin acceso cuando aplica.
-- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite y PostgreSQL).
+- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite).
+- [ ] Solo datos ficticios (`@colegio-piloto.test`); lo nuevo se puede mostrar con `php artisan colegio:demo`.
 - [ ] Sin contraseñas, tokens ni secretos en logs ni en `audit_events`; acciones sensibles auditadas.
 - [ ] Textos de UI en `lang/es`, en español claro.
 - [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.

@@ -11,7 +11,7 @@ tags: [sprint, paquete, dev2]
 Volver a [[Paquetes MOC]] · Sprint: [[Sprint 0 - Preparacion]] (02/11 – 13/11/2026) · Otros paquetes: [[Sprint 0 - Dev 1]] · [[Sprint 0 - Dev 3]]
 
 ## Objetivo del sprint
-> El equipo puede construir, probar y desplegar automáticamente una versión mínima de la plataforma en el ambiente de pruebas (Laravel 13 + Filament 5 en `app-colegio/`, pruebas en verde, CI y panel `/admin` en staging).
+> El equipo puede construir, probar automáticamente y demostrar una versión mínima de la plataforma en el entorno de demostración (Laravel 13 + Filament 5 en `app-colegio/`, pruebas en verde, CI y panel `/admin` con `colegio:demo`).
 
 **Foco de este paquete:** Herramientas de calidad y CI (TEC-03, TEC-04).
 
@@ -39,7 +39,7 @@ Si necesitas cambiar un archivo de otro paquete, **no lo edites**: repórtalo co
 ## Dependencias con otros paquetes
 - Esperas T-0-01 (Dev 1) para empezar.
 - No modificas `composer.json`: las dependencias de desarrollo las instala Dev 1 en T-0-01. Si falta una, pídesela.
-- Dev 3 (T-0-12) espera tu T-0-06 para encadenar el despliegue.
+- El CI tiene 4 trabajos (Pint, PHPStan, Pest con SQLite y cobertura, `composer audit`); en el piloto no hay despliegue.
 
 ## Verificación
 ```bash
@@ -49,12 +49,14 @@ vendor/bin/phpstan analyse
 vendor/bin/pest
 vendor/bin/pest --filter=HU0xx      # pruebas de una historia
 composer audit
+php artisan colegio:demo            # base de demostración con datos ficticios (desde el Sprint 0, T-0-11)
 ```
 
 ## Definición de terminado del paquete
 - [ ] Todas las tareas cumplen su "Terminado/Pruebas" de [[Sprint 0 - Preparacion#Tareas técnicas]].
 - [ ] Cada escenario de las historias del paquete tiene una prueba Pest con su nombre; prueba con rol sin acceso cuando aplica.
-- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite y PostgreSQL).
+- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite).
+- [ ] Solo datos ficticios (`@colegio-piloto.test`); lo nuevo se puede mostrar con `php artisan colegio:demo`.
 - [ ] Sin contraseñas, tokens ni secretos en logs ni en `audit_events`; acciones sensibles auditadas.
 - [ ] Textos de UI en `lang/es`, en español claro.
 - [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.

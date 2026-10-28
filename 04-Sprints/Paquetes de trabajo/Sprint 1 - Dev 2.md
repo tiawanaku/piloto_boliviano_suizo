@@ -60,12 +60,14 @@ vendor/bin/phpstan analyse
 vendor/bin/pest
 vendor/bin/pest --filter=HU0xx      # pruebas de una historia
 composer audit
+php artisan colegio:demo            # base de demostración con datos ficticios (desde el Sprint 0, T-0-11)
 ```
 
 ## Definición de terminado del paquete
 - [ ] Todas las tareas cumplen su "Terminado/Pruebas" de [[Sprint 1 - Login base#Tareas técnicas]].
 - [ ] Cada escenario de las historias del paquete tiene una prueba Pest con su nombre; prueba con rol sin acceso cuando aplica.
-- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite y PostgreSQL).
+- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite).
+- [ ] Solo datos ficticios (`@colegio-piloto.test`); lo nuevo se puede mostrar con `php artisan colegio:demo`.
 - [ ] Sin contraseñas, tokens ni secretos en logs ni en `audit_events`; acciones sensibles auditadas.
 - [ ] Textos de UI en `lang/es`, en español claro.
 - [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.

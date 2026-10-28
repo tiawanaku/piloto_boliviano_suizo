@@ -11,9 +11,9 @@ tags: [sprint, paquete, dev1]
 Volver a [[Paquetes MOC]] · Sprint: [[Sprint 0 - Preparacion]] (02/11 – 13/11/2026) · Otros paquetes: [[Sprint 0 - Dev 2]] · [[Sprint 0 - Dev 3]]
 
 ## Objetivo del sprint
-> El equipo puede construir, probar y desplegar automáticamente una versión mínima de la plataforma en el ambiente de pruebas (Laravel 13 + Filament 5 en `app-colegio/`, pruebas en verde, CI y panel `/admin` en staging).
+> El equipo puede construir, probar automáticamente y demostrar una versión mínima de la plataforma en el entorno de demostración (Laravel 13 + Filament 5 en `app-colegio/`, pruebas en verde, CI y panel `/admin` con `colegio:demo`).
 
-**Foco de este paquete:** Esqueleto del proyecto, identidad base, paneles e idioma (TEC-01, TEC-06, TEC-05, TEC-07).
+**Foco de este paquete:** Esqueleto del proyecto, identidad base y paneles (TEC-01, TEC-06, TEC-05).
 
 ## Antes de empezar
 1. Lee el detalle de cada tarea en [[Sprint 0 - Preparacion#Tareas técnicas]] y las historias enlazadas.
@@ -24,8 +24,7 @@ Volver a [[Paquetes MOC]] · Sprint: [[Sprint 0 - Preparacion]] (02/11 – 13/11
 |---|---|---|---|
 | 1 | T-0-01 | Crear proyecto Laravel 13 e instalar **todas** las dependencias Composer del sprint ⚠️ debe completarse primero (día 1) | — |
 | 2 | T-0-02 | Identidad base: `User` UUID, `AccountStatus`, Argon2id, sesiones en BD | T-0-01 |
-| 3 | T-0-04 | Localización `lang/es` | T-0-01 |
-| 4 | T-0-03 | Paneles Filament `admin` y `docente` | T-0-02 |
+| 3 | T-0-03 | Paneles Filament `admin` y `docente` | T-0-02 |
 
 ## Archivos de este paquete
 Solo tú modificas estos archivos en este sprint (rutas bajo `app-colegio/`, salvo `.github/` y el vault):
@@ -35,8 +34,8 @@ Solo tú modificas estos archivos en este sprint (rutas bajo `app-colegio/`, sal
 - `database/migrations/0001_01_01_000000_create_users_table.php`
 - `app/Models/User.php`, `app/Enums/AccountStatus.php`, `database/factories/UserFactory.php`, `database/seeders/DatabaseSeeder.php`
 - `app/Providers/Filament/*`, `bootstrap/providers.php`
-- `lang/es/*.php` (salvo `lang/es/mail.php`)
-- `tests/Unit/Models/UserTest.php`, `tests/Feature/Panels/*`, `tests/Feature/Localization/*`
+- `lang/es/account.php`
+- `tests/Unit/Models/UserTest.php`, `tests/Feature/Panels/*`
 
 Si necesitas cambiar un archivo de otro paquete, **no lo edites**: repórtalo como impedimento o coordínalo con su dueño.
 
@@ -44,7 +43,7 @@ Si necesitas cambiar un archivo de otro paquete, **no lo edites**: repórtalo co
 - **Bloquea a todos:** Dev 2 y Dev 3 esperan la integración de T-0-01 en `main`. Avísales en cuanto esté.
 - `.env.example`: lo dejas completo en T-0-01; después pasa a Dev 3.
 - `phpunit.xml` y `tests/Pest.php` son de Dev 2: si necesitas algo, pídeselo.
-- T-0-08 (Dev 2) espera tu T-0-03.
+- T-0-08 (Dev 2) y T-0-11 (Dev 3) esperan tu T-0-03.
 
 ## Verificación
 ```bash
@@ -54,12 +53,14 @@ vendor/bin/phpstan analyse
 vendor/bin/pest
 vendor/bin/pest --filter=HU0xx      # pruebas de una historia
 composer audit
+php artisan colegio:demo            # base de demostración con datos ficticios (desde el Sprint 0, T-0-11)
 ```
 
 ## Definición de terminado del paquete
 - [ ] Todas las tareas cumplen su "Terminado/Pruebas" de [[Sprint 0 - Preparacion#Tareas técnicas]].
 - [ ] Cada escenario de las historias del paquete tiene una prueba Pest con su nombre; prueba con rol sin acceso cuando aplica.
-- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite y PostgreSQL).
+- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite).
+- [ ] Solo datos ficticios (`@colegio-piloto.test`); lo nuevo se puede mostrar con `php artisan colegio:demo`.
 - [ ] Sin contraseñas, tokens ni secretos en logs ni en `audit_events`; acciones sensibles auditadas.
 - [ ] Textos de UI en `lang/es`, en español claro.
 - [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.
