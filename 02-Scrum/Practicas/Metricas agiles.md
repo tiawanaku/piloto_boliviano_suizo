@@ -12,7 +12,8 @@ Puntos de historia **terminados (DoD)** por sprint. Sirve para *pronosticar*, no
 | Sprint | Comprometidos | Terminados |
 |---|---|---|
 | [[Sprint 1 - Login base]] | 17 | _pendiente_ |
-| [[Sprint 2 - Seguridad del login]] | 21 | _pendiente_ |
+| [[Sprint 2 - Seguridad del login]] | 19 | _pendiente_ |
+| [[Sprint 3 - Gestion de personal]] | 18 | _pendiente_ |
 
 Velocidad media (últimos 3 sprints) → capacidad referencial para la [[Sprint Planning]].
 

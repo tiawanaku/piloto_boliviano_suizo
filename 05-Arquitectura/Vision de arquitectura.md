@@ -6,7 +6,7 @@ tags: [moc, arquitectura]
 
 Volver a [[Inicio]]
 
-> Propuesta inicial, **tecnológicamente neutral**. La elección concreta de stack se registra como ADR en el [[Sprint 0 - Preparacion]].
+> Stack decidido en el [[Sprint 0 - Preparacion]]: **PHP 8.3 + Laravel 13 + Filament 5** con PostgreSQL. Ver [[ADR-005 Stack PHP Laravel y Filament]] y la guía práctica [[Stack tecnologico]].
 
 ## Vista de contexto
 ```mermaid
@@ -18,13 +18,13 @@ flowchart TB
         O[🏢 Oficina de información]
     end
     subgraph Plataforma["Plataforma Colegio Virtual"]
-        WEB[Portal web del personal]
-        APP[App de estudiantes<br/>móvil / PWA]
-        API[API backend]
+        WEB[Portal web del personal<br/>Filament: paneles admin y docente]
+        APP[App de estudiantes<br/>móvil / PWA · Fase 4]
+        API[Backend Laravel 13<br/>Actions · Policies · Livewire]
         AUTH[Módulo de identidad<br/>login · MFA · sesiones]
         ACAD[Módulo académico<br/>gestiones · aulas · asignaciones]
         AUD[Auditoría]
-        DB[(Base de datos)]
+        DB[(PostgreSQL)]
     end
     MAIL[✉️ Correo institucional]
     P --> WEB
@@ -52,7 +52,23 @@ flowchart TB
 | Atención | Oficina de información | [[EP-07 Oficina de informacion]] |
 | Auditoría | Bitácora inmutable | [[EP-08 Seguridad y auditoria]] |
 
+## Stack tecnológico
+| Capa | Elección |
+|---|---|
+| Lenguaje / framework | PHP 8.3+ · Laravel 13 |
+| Portal del personal (frontend + backend) | Filament 5 (Livewire 4, Alpine.js, Tailwind CSS 4), paneles `admin` y `docente` |
+| Base de datos | PostgreSQL 16+ (SQLite en memoria para pruebas) |
+| Autenticación | Login de Filament personalizado (correo institucional), MFA TOTP nativo de Filament, sesiones en base de datos |
+| Autorización | `spatie/laravel-permission` + Policies de Laravel |
+| Auditoría | Tabla propia `audit_events` inmutable |
+| Calidad | Pest 4, Larastan nivel 6, Pint, GitHub Actions |
+| App de estudiantes (Fase 4) | Decisión abierta: panel Filament PWA vs. API Sanctum + app móvil |
+| Código | Carpeta `app-colegio/` en la raíz del repositorio, separada del vault |
+
+Detalle y justificación: [[ADR-005 Stack PHP Laravel y Filament]] · Versiones, convenciones y mapeo de historias: [[Stack tecnologico]].
+
 ## Notas de diseño
+- [[Stack tecnologico]]
 - [[Modelo de dominio]]
 - [[Roles y permisos RBAC]]
 - [[Flujo de autenticacion]]
@@ -64,8 +80,9 @@ flowchart TB
 - [[ADR-002 Autenticacion con correo institucional y MFA]]
 - [[ADR-003 Separar acceso de personal y estudiantes]]
 - [[ADR-004 Control de acceso basado en roles]]
+- [[ADR-005 Stack PHP Laravel y Filament]]
 
-## Criterios para elegir stack (para el ADR del Sprint 0)
+## Criterios usados para elegir el stack (ver ADR-005)
 - Conocimiento del equipo y facilidad de contratar en el medio local.
 - Bibliotecas maduras de autenticación (hash de contraseñas, TOTP, sesiones).
 - Costo de hosting y posibilidad de alojamiento local/regional.

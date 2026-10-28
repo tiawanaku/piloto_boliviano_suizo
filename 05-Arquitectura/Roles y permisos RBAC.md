@@ -36,9 +36,12 @@ Una persona puede tener **varios roles** (p. ej. Docente + Coordinación).
 | Catálogo de materias | ✅ | — | ✅ | — | — | — |
 | Crear aulas virtuales | ✅ | — | ✅ | — | — | — |
 | Asignar materias y docentes a aulas | ✅ | — | ✅ | — | — | — |
+| Ver y corregir la ficha del personal (correo institucional: solo TI) | ✅ | ✅ | — | ✅ | — | — |
+| Registrar estudiantes y tutores | ✅ | ✅ | — | — | — | — |
 | Matricular estudiantes | ✅ | ✅ | — | — | — | — |
+| Generar / restablecer credenciales de estudiantes | ✅ | ✅ | — | — | — | — |
 | Ver datos básicos de estudiantes/docentes | ✅ | ✅ | ✅ | — | ✅ | — |
-| Ver sus aulas y estudiantes asignados | — | — | — | — | — | ✅ |
+| Ver sus aulas y estudiantes asignados (sin datos del tutor, salvo decisión de dirección) | — | — | — | — | — | ✅ |
 | Gestionar sus propias sesiones / contraseña | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 ## Principios

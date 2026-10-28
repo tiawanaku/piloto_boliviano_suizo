@@ -57,8 +57,10 @@ gantt
 ## Hitos
 | Hito | Criterio | Fecha tentativa |
 |---|---|---|
-| H1 — Personal puede ingresar | HU-001..HU-008 terminadas | Fin de Sprint 2 |
-| H2 — Personal gestionado por el colegio | EP-02 terminada | Fin de Sprint 3 |
+| H1 — Personal puede ingresar | HU-001..HU-007 y HU-029 terminadas (HU-008 queda primera tras la Fase 1) | Fin de Sprint 2 |
+| H2 — Personal gestionado por el colegio | HU-009, HU-010, HU-011, HU-030 y HU-014 terminadas (HU-012 según tamaño del plantel) | Fin de Sprint 3 |
 | H3 — Aulas virtuales listas | EP-03 + EP-04 | Fin de Fase 2 |
-| H4 — Docentes asignados | EP-05 | Fin de Fase 3 |
+| H4 — Docentes asignados y estudiantes matriculados | EP-05 | Fin de Fase 3 |
 | H5 — Estudiantes en la app | EP-06 (MVP) | Fin de Fase 4 |
+
+> ⚠️ **Calendario escolar (revisión del PO, 2026-10-28):** con este roadmap la Fase 3 termina hacia marzo de 2027 y la Fase 4 hacia mayo de 2027, después del inicio habitual de clases en Bolivia (febrero). La dirección debe decidir con qué gestión arranca el colegio en la plataforma. Ver [[2026-10-28 Revision del Product Owner]].

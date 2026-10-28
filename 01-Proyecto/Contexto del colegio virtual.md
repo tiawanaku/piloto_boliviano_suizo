@@ -36,7 +36,7 @@ flowchart TD
 | Plantel administrativo | Portal web del personal | 1 |
 | Docentes | Portal web del personal (y móvil responsive) | 1 |
 | Estudiantes | **Aplicativo de estudiantes** (móvil + web) | 4 |
-| Padres / tutores | Por definir (posible acceso de consulta) | Futuro |
+| Padres / tutores | Sin acceso propio por ahora: se registran con su consentimiento ([[HU-033 Registrar estudiante y tutor]]) y reciben las credenciales del estudiante ([[HU-034 Credenciales del estudiante para el tutor]]). Acceso de consulta: por decidir | 3–4 / futuro |
 | Personal de oficina de información | Portal web del personal (rol propio) | 1 / 5 |
 
 ## Restricciones y realidades

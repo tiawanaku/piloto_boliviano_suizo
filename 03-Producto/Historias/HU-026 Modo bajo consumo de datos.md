@@ -5,7 +5,8 @@ epica: "[[EP-06 App de estudiantes]]"
 sprint: ""
 puntos: 8
 estado: idea
-orden: 26
+prioridad: baja
+orden: 32
 tags: [historia, fase4]
 ---
 # HU-026 · Modo bajo consumo de datos

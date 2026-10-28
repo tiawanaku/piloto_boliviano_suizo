@@ -14,12 +14,16 @@ Volver a [[Backlog del producto]]
 Aplicativo **separado** del portal del personal ([[ADR-003 Separar acceso de personal y estudiantes]]), optimizado para celulares y conexiones lentas, desde el que cada estudiante accede a su aula virtual y materias.
 
 ## Historias
-- [[HU-024 Login de estudiante en la app]] (8)
-- [[HU-025 Estudiante ve sus materias]] (5)
-- [[HU-026 Modo bajo consumo de datos]] (8)
+| ID | Historia | Pts | Estado |
+|---|---|---|---|
+| [[HU-034 Credenciales del estudiante para el tutor]] | Credenciales entregadas al tutor | 5 | backlog |
+| [[HU-024 Login de estudiante en la app]] | Login en la app | 8 | backlog |
+| [[HU-025 Estudiante ve sus materias]] | Mis materias | 5 | backlog |
+| [[HU-026 Modo bajo consumo de datos]] | Ahorro de datos | 8 | idea |
+| **Total** | | **26** | |
 
 ## Consideraciones
 - Estudiantes menores de edad: credenciales entregadas por el colegio a la familia; sin correo personal obligatorio.
-- Recuperación de acceso a través del tutor o de secretaría.
+- Recuperación de acceso a través del tutor o de secretaría ([[HU-034 Credenciales del estudiante para el tutor]]).
 - Formato: PWA o app nativa Android → candidato a ADR.
 - Ver [[Accesibilidad y conectividad]].

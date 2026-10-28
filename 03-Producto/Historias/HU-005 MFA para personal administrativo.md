@@ -36,6 +36,17 @@ Escenario: Uso de código de respaldo
   Cuando ingreso un código de respaldo válido
   Entonces accedo y ese código queda invalidado
 
+Escenario: Código incorrecto o vencido
+  Dado que se me pide el código de 6 dígitos
+  Cuando ingreso un código incorrecto o vencido
+  Entonces veo "Código incorrecto. Revisa la hora de tu celular e inténtalo de nuevo"
+  Y el intento cuenta para el bloqueo por intentos fallidos (HU-004)
+
+Escenario: Abandonar la activación
+  Dado que soy administrativo sin MFA configurado
+  Cuando cierro la pantalla de activación sin confirmar el código
+  Entonces no accedo a ninguna otra pantalla hasta completar la activación
+
 Escenario: Restablecer MFA
   Dado que soy Soporte TI
   Cuando restablezco el MFA de un usuario tras verificar su identidad

@@ -14,9 +14,15 @@ Volver a [[Backlog del producto]]
 Registrar la **organización académica** del colegio para una gestión: niveles, grados (años de escolaridad), paralelos y el catálogo de materias/áreas. Es configurable para adaptarse a cambios normativos ([[Marco normativo Bolivia]]).
 
 ## Historias
-- [[HU-015 Registrar gestion academica]] (3)
-- [[HU-016 Configurar niveles grados y paralelos]] (5)
-- [[HU-017 Catalogo de materias]] (3)
+| ID | Historia | Pts |
+|---|---|---|
+| [[HU-015 Registrar gestion academica]] | Gestión académica (planificada → activa → cerrada) | 3 |
+| [[HU-016 Configurar niveles grados y paralelos]] | Niveles, grados y paralelos | 5 |
+| [[HU-017 Catalogo de materias]] | Catálogo de materias | 3 |
+| **Total** | | **11** |
+
+## Inicio de gestión
+La gestión **planificada** ([[HU-015 Registrar gestion academica]]) permite preparar estructura, aulas, asignaciones y matrículas de la gestión siguiente mientras la actual sigue activa.
 
 ## Relacionado
 [[Modelo de dominio]] · [[Contexto del colegio virtual#Estructura académica (referencia Bolivia)]]

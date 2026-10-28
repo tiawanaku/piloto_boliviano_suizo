@@ -55,4 +55,5 @@ erDiagram
 - **Usuario** = identidad para autenticarse; **Personal** / **Estudiante** = perfiles con datos de negocio. Permite una sola tabla de identidad con flujos de acceso separados ([[ADR-003 Separar acceso de personal y estudiantes]]).
 - Todo lo académico cuelga de **Gestión** para conservar el histórico año a año.
 - Niveles/grados configurables ([[Marco normativo Bolivia]]).
+- Pendiente tras la [[2026-10-28 Revision del Product Owner]]: incorporar **TUTOR** (vinculado a uno o varios estudiantes) con el **consentimiento** de tratamiento de datos ([[HU-033 Registrar estudiante y tutor]]), y el historial de matrícula (cambio de paralelo, retiro — [[HU-023 Matricular estudiantes en aula]]).
 - Fase 1 implementa solo: USUARIO, ROL, PERMISO, USUARIO_ROL, ROL_PERMISO, SESION, EVENTO_AUDITORIA, PERSONAL.

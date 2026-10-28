@@ -24,7 +24,7 @@ aliases: [Home, Mapa principal]
 ## 🚦 Estado actual del proyecto
 
 - **Fase en curso:** Fase 1 — Acceso del personal (login de plantel administrativo y docentes). Ver [[Fases y roadmap]].
-- **Sprint actual:** [[Sprint 1 - Login base]]
+- **Próximo sprint:** [[Sprint 0 - Preparacion]] (inicia el 02/11/2026); luego [[Sprint 1 - Login base]].
 - **Objetivo del producto:** ver [[Vision del producto#Objetivo del producto (Product Goal)]]
 - **Siguiente hito:** el personal puede ingresar de forma segura y ver su panel según su rol.
 
@@ -45,3 +45,4 @@ flowchart LR
 - [[Definicion de Terminado]] · [[Definicion de Listo]]
 - [[Roles y permisos RBAC]] · [[Flujo de autenticacion]]
 - [[Equipo Scrum del proyecto]]
+- Última revisión del backlog: [[2026-10-28 Revision del Product Owner]]

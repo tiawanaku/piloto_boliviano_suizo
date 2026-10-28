@@ -23,16 +23,22 @@ flowchart LR
 ```
 
 ## Historias
-- [[HU-020 Asignar materias al aula]] (3)
-- [[HU-021 Asignar docente a materia]] (5)
-- [[HU-022 Docente ve sus aulas asignadas]] (3)
-- [[HU-023 Matricular estudiantes en aula]] (5)
+| ID | Historia | Pts |
+|---|---|---|
+| [[HU-020 Asignar materias al aula]] | Materias por grado y aula | 3 |
+| [[HU-021 Asignar docente a materia]] | Docente titular / suplente por materia | 5 |
+| [[HU-022 Docente ve sus aulas asignadas]] | Mis aulas (docente) | 3 |
+| [[HU-033 Registrar estudiante y tutor]] | Estudiante + tutor + consentimiento | 5 |
+| [[HU-023 Matricular estudiantes en aula]] | Matrícula, cambio de paralelo, retiro | 5 |
+| **Total** | | **21** |
 
 ## Reglas de negocio
 - Un docente puede tener varias materias en varias aulas.
 - Una materia de un aula tiene un docente titular (y opcionalmente un suplente).
 - Un estudiante está matriculado en una sola aula por gestión.
 - Las asignaciones pertenecen a una gestión; al cerrar la gestión quedan como histórico.
+- Todo estudiante tiene al menos un tutor registrado con consentimiento antes de matricularse.
+- Las credenciales de la app se generan en [[HU-034 Credenciales del estudiante para el tutor]] (EP-06).
 
 ## Relacionado
 [[Modelo de dominio]] · [[Roles y permisos RBAC]]

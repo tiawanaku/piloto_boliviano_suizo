@@ -23,4 +23,5 @@ WHERE tipo = "reunion"
 SORT file.name DESC
 ```
 
+- [[2026-10-28 Revision del Product Owner]]
 - [[2026-11-03 Taller - Roles y permisos]]

@@ -5,7 +5,8 @@ epica: "[[EP-08 Seguridad y auditoria]]"
 sprint: "[[Sprint 3 - Gestion de personal]]"
 puntos: 5
 estado: refinada
-orden: 13
+prioridad: alta
+orden: 14
 tags: [historia, fase1]
 ---
 # HU-014 · Consultar bitácora de auditoría
@@ -26,6 +27,15 @@ Escenario: Filtrar
 Escenario: Exportar
   Cuando exporto el resultado
   Entonces obtengo un CSV y la exportación también queda auditada
+
+Escenario: Sin resultados
+  Cuando ningún evento coincide con los filtros
+  Entonces veo "No hay eventos para estos filtros"
+
+Escenario: Sin permiso
+  Dado que soy Secretaría académica, Coordinación pedagógica, Oficina de información o Docente
+  Cuando intento abrir la bitácora, incluso por URL directa
+  Entonces veo "No tienes permiso para ver esta página" y el intento queda registrado
 ```
 
 ## Notas

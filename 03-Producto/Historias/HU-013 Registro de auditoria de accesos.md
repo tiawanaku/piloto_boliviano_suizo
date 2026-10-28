@@ -5,6 +5,7 @@ epica: "[[EP-08 Seguridad y auditoria]]"
 sprint: "[[Sprint 1 - Login base]]"
 puntos: 3
 estado: lista
+prioridad: alta
 orden: 5
 tags: [historia, fase1]
 ---
