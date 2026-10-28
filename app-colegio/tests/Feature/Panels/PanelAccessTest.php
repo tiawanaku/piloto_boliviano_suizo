@@ -3,11 +3,6 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
-// TODO(Dev 2, T-0-05): quitar esta línea cuando tests/Pest.php vincule TestCase y RefreshDatabase en Feature.
-uses(TestCase::class, RefreshDatabase::class);
 
 it('muestra la página de login del panel :dataset', function (string $panel) {
     $this->get("/{$panel}/login")->assertOk();

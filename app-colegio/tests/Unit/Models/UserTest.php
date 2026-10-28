@@ -4,14 +4,9 @@ declare(strict_types=1);
 
 use App\Enums\AccountStatus;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Tests\TestCase;
-
-// Necesita la aplicación y la base de datos; tests/Pest.php (Dev 2) solo vincula Feature.
-uses(TestCase::class, RefreshDatabase::class);
 
 it('usa un UUID como identificador', function () {
     $user = User::factory()->create();

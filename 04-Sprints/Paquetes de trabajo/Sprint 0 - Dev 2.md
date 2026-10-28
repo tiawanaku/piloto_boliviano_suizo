@@ -3,7 +3,7 @@ tipo: paquete
 sprint: "[[Sprint 0 - Preparacion]]"
 developer: Dev 2
 agente: php-senior-developer
-estado: por hacer
+estado: en revisión
 tags: [sprint, paquete, dev2]
 ---
 # Sprint 0 · Dev 2

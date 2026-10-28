@@ -1,58 +1,101 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Colegio Virtual (piloto)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplicación del Colegio Virtual: **Laravel 13 + Filament 5** sobre PHP 8.3, con SQLite.
+Es un **piloto de demostración con datos 100 % ficticios** (`@colegio-piloto.test`): no hay producción, staging ni correos a personas reales.
 
-## About Laravel
+Documentación del proyecto (historias, arquitectura, sprints) en el vault de Obsidian de la raíz del repositorio; el stack está en `05-Arquitectura/Decisiones/ADR-005 Stack PHP Laravel y Filament.md`.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Requisitos
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP 8.3 o superior con las extensiones `pdo_sqlite`, `sqlite3`, `mbstring` e `intl`, y soporte de Argon2id (`php -r "var_dump(defined('PASSWORD_ARGON2ID'));"` debe mostrar `true`).
+- Composer 2.
+- Node.js 20+ y npm (solo para `composer dev`, que lanza los procesos con `npx`).
+- No se necesita Docker ni un servidor de base de datos.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Arranque desde cero
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Desde la carpeta `app-colegio/`:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+cp .env.example .env
+php artisan key:generate
+touch database/database.sqlite
+php artisan migrate --seed
+npm install
+composer dev
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+`composer dev` levanta juntos el servidor web (`http://127.0.0.1:8000`), el *worker* de la cola, los logs (`pail`) y Vite. Para detenerlo: `Ctrl+C`.
 
-## Contributing
+Sin npm se puede arrancar a mano en dos terminales: `php artisan serve` y `php artisan queue:work`.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Paneles:
 
-## Code of Conduct
+| Panel | Dirección |
+|---|---|
+| Administrativo | http://127.0.0.1:8000/admin |
+| Docente | http://127.0.0.1:8000/docente |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Cuenta ficticia creada por el *seeder*: `demo@colegio-piloto.test` / `password`.
 
-## Security Vulnerabilities
+## Configuración del piloto (`.env`)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Variable | Valor | Para qué |
+|---|---|---|
+| `DB_CONNECTION` | `sqlite` | Base en `database/database.sqlite` |
+| `SESSION_DRIVER`, `CACHE_STORE`, `QUEUE_CONNECTION` | `database` | Sin Redis |
+| `MAIL_MAILER` | `log` | Los correos quedan en `storage/logs/laravel.log` |
+| `APP_LOCALE` / `APP_TIMEZONE` | `es` / `America/La_Paz` | Español y hora de Bolivia |
+| `HASH_DRIVER` | `argon2id` | Hash de contraseñas |
+| `COLEGIO_*` | ver `config/colegio.php` | Dominio institucional, bloqueo, vigencias |
 
-## License
+## Correo y colas
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Todas las notificaciones por correo van **en cola** (`ShouldQueue`); el *worker* lo levanta `composer dev`.
+
+Para probar el envío:
+
+```bash
+php artisan colegio:correo-prueba prueba@colegio-piloto.test
+```
+
+El comando solo acepta correos del dominio ficticio del piloto. Con `MAIL_MAILER=log` el correo aparece en `storage/logs/laravel.log` cuando el *worker* procesa la cola.
+
+**Mailpit (opcional)** para ver los correos en una bandeja web durante la demostración:
+
+1. Instale y ejecute [Mailpit](https://mailpit.axllent.org) (un solo binario; escucha SMTP en el puerto 1025 y la web en el 8025).
+2. En `.env`, comente `MAIL_MAILER=log` y descomente el bloque de Mailpit (`MAIL_MAILER=smtp`, `MAIL_HOST=127.0.0.1`, `MAIL_PORT=1025`).
+3. `php artisan config:clear` y abra http://127.0.0.1:8025.
+
+**Tareas programadas:** `routes/console.php` registra `auth:clear-resets` (diario). En local se ejecutan con `php artisan schedule:work`.
+
+## Cómo hacer la demostración
+
+1. Regenerar la base de demostración (borra la base actual y carga solo datos ficticios):
+
+   ```bash
+   php artisan colegio:demo          # pide confirmación; --force para no preguntar
+   ```
+
+   El comando se niega a correr con `APP_ENV=production`, ejecuta `migrate:fresh --seed` y muestra las direcciones de los paneles y las cuentas ficticias. Los *seeders* que agregue cada sprint en `DatabaseSeeder` quedan incluidos.
+2. Levantar la aplicación: `composer dev`.
+3. Entrar a http://127.0.0.1:8000/admin con `demo@colegio-piloto.test` / `password`.
+4. Si la demostración incluye correos, tener Mailpit abierto (ver arriba) o mostrar `storage/logs/laravel.log`.
+
+Si la demostración se publica fuera del equipo, usar HTTPS y cambiar `APP_URL`; los datos siguen siendo ficticios.
+
+## Calidad
+
+```bash
+vendor/bin/pint --test        # formato
+vendor/bin/phpstan analyse    # análisis estático (Larastan)
+vendor/bin/pest               # pruebas (SQLite en memoria)
+composer audit                # vulnerabilidades de dependencias
+```
+
+## Reglas del piloto
+
+- Solo datos ficticios con correos `@colegio-piloto.test` (hasta 15 administrativos y 50 docentes).
+- Ningún correo sale a personas reales.
+- Textos de interfaz en español mediante `lang/es`.
