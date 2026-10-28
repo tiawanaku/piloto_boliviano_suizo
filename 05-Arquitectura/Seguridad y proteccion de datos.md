@@ -25,18 +25,20 @@ Un colegio virtual concentra **datos de menores de edad** y toda su operación o
 | MFA para administrativos | [[HU-005 MFA para personal administrativo]] |
 | Contraseña temporal obligatoria de cambiar | [[HU-006 Cambio de contrasena en primer ingreso]] |
 | Autorización en servidor | [[HU-007 Panel segun rol]] |
-| Control de sesiones | [[HU-008 Gestion de sesiones activas]] |
+| Cambio voluntario de contraseña | [[HU-029 Mi cuenta datos y cambio de contrasena]] |
+| Control de sesiones (tras la Fase 1) | [[HU-008 Gestion de sesiones activas]] |
 | Auditoría | [[HU-013 Registro de auditoria de accesos]] |
 
 ## Buenas prácticas generales
-- HTTPS en todo; cabeceras de seguridad (HSTS, CSP).
+- HTTPS en todo; cabeceras de seguridad (HSTS, CSP). 🧪 Piloto: las cabeceras se aplican siempre; HTTPS y HSTS solo si la demostración se publica fuera del equipo local.
 - Protección CSRF; validación de entradas; consultas parametrizadas.
-- Secretos fuera del código (variables de entorno / gestor de secretos).
+- Secretos fuera del código (variables de entorno / gestor de secretos). 🧪 Piloto: `.env` local sin versionar; gestor de secretos solo en una implementación real.
 - Dependencias revisadas automáticamente.
 - Referencia: OWASP Top 10 y OWASP ASVS (nivel 2).
 
 ## Privacidad
+- 🧪 **En el piloto solo se usan datos ficticios**; lo siguiente describe el diseño, el cumplimiento legal completo queda para una eventual implementación real.
 - Recolectar el **mínimo** de datos necesarios.
 - Acceso a datos de estudiantes solo por roles con necesidad ([[Roles y permisos RBAC]]).
-- Informar a familias qué datos se guardan y para qué.
+- Informar a familias qué datos se guardan y para qué, y registrar el consentimiento del tutor ([[HU-033 Registrar estudiante y tutor]]).
 - Revisar obligaciones legales vigentes en Bolivia ([[Marco normativo Bolivia]]).

@@ -5,7 +5,8 @@ epica: "[[EP-02 Gestion de usuarios y roles]]"
 sprint: "[[Sprint 3 - Gestion de personal]]"
 puntos: 2
 estado: refinada
-orden: 12
+prioridad: alta
+orden: 13
 tags: [historia, fase1]
 ---
 # HU-011 · Desactivar cuenta del personal
@@ -25,10 +26,16 @@ Escenario: Desactivar
   Y no puede volver a iniciar sesión (ver HU-001, cuenta desactivada)
   Y su historial (asignaciones, auditoría) se conserva
 
+Escenario: Desactivar mi propia cuenta
+  Cuando intento desactivar mi propia cuenta
+  Entonces la acción no está permitida
+
 Escenario: Reactivar
   Cuando reactivo la cuenta
   Entonces la persona puede ingresar nuevamente
 ```
 
 ## Notas
-Nunca se borra físicamente una cuenta: se desactiva (trazabilidad).
+- Nunca se borra físicamente una cuenta: se desactiva (trazabilidad).
+- Desactivar y reactivar quedan en auditoría.
+- Desde la Fase 3, si la persona tenía materias asignadas, esas materias pasan a "sin docente" ([[HU-021 Asignar docente a materia]]).

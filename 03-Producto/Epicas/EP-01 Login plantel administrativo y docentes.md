@@ -24,8 +24,9 @@ Como colegio 100 % virtual, la **puerta de entrada** es el login. El personal (a
 - Redirección al panel según rol.
 - Recuperación de contraseña por correo.
 - Bloqueo temporal por intentos fallidos.
-- MFA (TOTP) obligatorio para roles administrativos.
+- MFA (TOTP) obligatorio para roles administrativos (docentes: sin MFA en la Fase 1, pendiente).
 - Ver y cerrar sesiones activas.
+- Ver mis datos de cuenta y cambiar mi contraseña.
 
 **No incluye**
 - Login de estudiantes → [[EP-06 App de estudiantes]] ([[ADR-003 Separar acceso de personal y estudiantes]]).
@@ -42,8 +43,9 @@ Como colegio 100 % virtual, la **puerta de entrada** es el login. El personal (a
 | [[HU-003 Recuperar contrasena]] | Recuperación | 5 | S2 |
 | [[HU-004 Bloqueo por intentos fallidos]] | Bloqueo | 3 | S2 |
 | [[HU-005 MFA para personal administrativo]] | MFA | 8 | S2 |
-| [[HU-008 Gestion de sesiones activas]] | Sesiones | 5 | S2 |
-| **Total** | | **35** | |
+| [[HU-029 Mi cuenta datos y cambio de contrasena]] | Mi cuenta y cambio de contraseña | 3 | S2 |
+| [[HU-008 Gestion de sesiones activas]] | Sesiones (sin ubicación aproximada) | 5 | — (después del MVP del piloto) |
+| **Total** | | **38** | 33 en S1–S2 |
 
 ## Diseño y técnica
 - Pantalla: [[Pantalla login personal]] · [[Panel por rol]]
@@ -54,3 +56,5 @@ Como colegio 100 % virtual, la **puerta de entrada** es el login. El personal (a
 ## Criterio de éxito de la épica
 - ≥ 90 % del personal piloto ingresa sin ayuda en su primer intento.
 - 0 cuentas administrativas sin MFA activado al cierre de la Fase 1.
+
+> Revisión del PO 2026-10-28: se agrega HU-029 y HU-008 sale del Sprint 2 por capacidad ([[2026-10-28 Revision del Product Owner]]).

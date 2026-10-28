@@ -1,0 +1,83 @@
+---
+tipo: paquete
+sprint: "[[Sprint 1 - Login base]]"
+developer: Dev 2
+agente: php-senior-developer
+estado: terminado
+tags: [sprint, paquete, dev2]
+---
+# Sprint 1 · Dev 2
+
+Volver a [[Paquetes MOC]] · Sprint: [[Sprint 1 - Login base]] (16/11 – 27/11/2026) · Otros paquetes: [[Sprint 1 - Dev 1]] · [[Sprint 1 - Dev 3]]
+
+## Objetivo del sprint
+> El personal administrativo y docente puede iniciar sesión con su correo institucional, definir su propia contraseña y llegar a su panel según su rol; cada acceso queda registrado.
+
+**Foco de este paquete:** Deuda del Sprint 0, roles, permisos, cuentas semilla y paneles por rol (TEC-18, TEC-19, TEC-10, TEC-11, HU-007).
+
+## Antes de empezar
+1. Lee el detalle de cada tarea en [[Sprint 1 - Login base#Tareas técnicas]] y las historias enlazadas.
+2. Lee [[ADR-005 Stack PHP Laravel y Filament]], [[Stack tecnologico]], [[Roles y permisos RBAC]], [[Flujo de autenticacion]] y la [[Definicion de Terminado]].
+
+## Tareas en orden de ejecución
+| # | ID | Tarea | Espera a |
+|---|---|---|---|
+| 1 | T-1-22 | Deuda: quitar `notPath` de Pint y la prueba trivial ⚠️ debe completarse primero (día 1, mañana) | — |
+| 2 | T-1-23 | Deuda: CI sin filtro `paths` y primera ejecución en GitHub | T-1-22 |
+| 3 | T-1-08 | spatie/laravel-permission y enums ⚠️ temprano (día 1–2) | — |
+| 4 | T-1-09 | *Seeder* de la matriz RBAC | T-1-08, taller del 03/11 |
+| 5 | T-1-11 | Acceso a paneles por rol y rol principal | T-1-09 |
+| 6 | T-1-12 | Redirección al panel principal | T-1-11 |
+| 7 | T-1-10 | *Factories*, *helpers* de Pest y `colegio:crear-cuenta` | T-1-06 (Dev 1), T-1-09 |
+| 8 | T-1-13 | Cambio de panel y panel docente vacío | T-1-12 |
+| 9 | T-1-14 | Página 403 y registro del acceso denegado | T-1-11, T-1-15 (Dev 3) |
+
+## Archivos de este paquete
+Solo tú modificas estos archivos en este sprint (rutas bajo `app-colegio/`, salvo `.github/` y el vault):
+- `pint.json`, `.github/workflows/app-colegio.yml`; en T-1-22, solo por formato, los archivos que estaban en `notPath`
+- `composer.json`, `composer.lock` (único dueño en el Sprint 1)
+- `config/permission.php` y migración de permisos
+- `app/Models/User.php` (dueño; incorporas traits de otros)
+- `app/Enums/StaffRole.php`, `app/Enums/Permission.php`
+- `database/seeders/*`, `database/factories/UserFactory.php`, `tests/Pest.php`
+- `app/Console/Commands/CreateStaffAccount.php`
+- `app/Providers/Filament/*PanelProvider.php` (después de T-1-01), `app/Providers/StaffAuthServiceProvider.php`, `bootstrap/providers.php`, `bootstrap/app.php`
+- `app/Http/Responses/StaffLoginResponse.php`, `app/Filament/Docente/Pages/Dashboard.php`, `resources/views/errors/403.blade.php`
+- `lang/es/roles.php`, `permissions.php`, `panels.php`, `errors.php`
+- `tests/Feature/HU007/*`, `tests/Feature/Rbac/*`, `tests/Feature/Commands/*`, `tests/Unit/Enums/*`
+
+Si necesitas cambiar un archivo de otro paquete, **no lo edites**: repórtalo como impedimento o coordínalo con su dueño.
+
+## Dependencias con otros paquetes
+- **T-1-22 va primero**: integra el formato del esqueleto antes de que Dev 1 toque `AppServiceProvider.php`/`config/session.php` y antes de tu T-1-14 en `bootstrap/app.php`. Avísale al equipo al integrarla.
+- Tras T-1-23, avisa al Scrum Master para que pida la protección de `main` (TEC-20).
+- El taller del 03/11 no registró decisiones: T-1-09 parte de la matriz vigente de [[Roles y permisos RBAC]].
+- Al agregar `spatie/laravel-permission`, el proxy puede bloquear descargas de GitHub (impedimento del S0): usa `--prefer-dist` desde Packagist o la caché de Composer y repórtalo si falla.
+- Esperas T-1-01 (Dev 1) antes de editar los *PanelProviders*.
+- T-1-10 usa las columnas de contraseña temporal de Dev 1 (T-1-06).
+- T-1-14 usa `AuditLogger` de Dev 3 (T-1-15).
+- Entregas pronto T-1-08/T-1-09: Dev 3 (T-1-20) y Dev 1 (T-1-03) dependen de los roles.
+
+## Verificación
+```bash
+cd app-colegio
+vendor/bin/pint --test
+vendor/bin/phpstan analyse
+vendor/bin/pest
+vendor/bin/pest --filter=HU0xx      # pruebas de una historia
+composer audit
+php artisan colegio:demo            # base de demostración con datos ficticios (desde el Sprint 0, T-0-11)
+```
+
+## Definición de terminado del paquete
+- [ ] Todas las tareas cumplen su "Terminado/Pruebas" de [[Sprint 1 - Login base#Tareas técnicas]].
+- [ ] Cada escenario de las historias del paquete tiene una prueba Pest con su nombre; prueba con rol sin acceso cuando aplica.
+- [ ] `pint --test`, `phpstan analyse` y `pest` en verde en local y en CI (SQLite).
+- [ ] Solo datos ficticios (`@colegio-piloto.test`); lo nuevo se puede mostrar con `php artisan colegio:demo`.
+- [ ] Sin contraseñas, tokens ni secretos en logs ni en `audit_events`; acciones sensibles auditadas.
+- [ ] Textos de UI en `lang/es`, en español claro.
+- [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.
+- [ ] Reporte final: tareas hechas, pruebas ejecutadas y resultado, impedimentos y deuda técnica. Sin commits ni push (los hace quien invoca).
+
+## Cierre (27/11/2026)
+Todas las tareas hechas (T-1-08 a T-1-14, T-1-22, T-1-23). Matriz RBAC con 21 permisos y 147 celdas probadas; `notPath` de Pint eliminado; CI sin filtro `paths` y en verde en GitHub (PR #1). Sigue pendiente la protección de `main` (TEC-20), que está en manos del dueño del repositorio. Detalle en [[Sprint 1 - Login base#Cierre del sprint (27/11/2026)]] y [[2026-11-27 Retrospectiva - Sprint 1]].

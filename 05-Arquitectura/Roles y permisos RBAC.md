@@ -17,8 +17,9 @@ Volver a [[Vision de arquitectura]] · Decisión: [[ADR-004 Control de acceso ba
 | Coordinación pedagógica | Administrativo | Materias, asignaciones docentes, seguimiento | Obligatorio |
 | Soporte TI | Administrativo | Cuentas, seguridad, auditoría | Obligatorio |
 | Oficina de información | Administrativo | Consulta básica y atención al público | Obligatorio |
-| Docente | Docente | Sus aulas y materias asignadas | Opcional (Fase 1) |
+| Docente | Docente | Sus aulas y materias asignadas | No en Fase 1 (pendiente) |
 | Estudiante | Estudiante | Su aula y materias (solo vía app) | No aplica (Fase 4) |
+| Tutor | Tutor | Consulta de sus hijos ([[EP-09 Acceso de tutores]]) | Por definir (Fase 4) |
 
 Una persona puede tener **varios roles** (p. ej. Docente + Coordinación).
 
@@ -36,9 +37,12 @@ Una persona puede tener **varios roles** (p. ej. Docente + Coordinación).
 | Catálogo de materias | ✅ | — | ✅ | — | — | — |
 | Crear aulas virtuales | ✅ | — | ✅ | — | — | — |
 | Asignar materias y docentes a aulas | ✅ | — | ✅ | — | — | — |
+| Ver y corregir la ficha del personal (correo institucional: solo TI) | ✅ | ✅ | — | ✅ | — | — |
+| Registrar estudiantes y tutores | ✅ | ✅ | — | — | — | — |
 | Matricular estudiantes | ✅ | ✅ | — | — | — | — |
+| Generar / restablecer credenciales de estudiantes | ✅ | ✅ | — | — | — | — |
 | Ver datos básicos de estudiantes/docentes | ✅ | ✅ | ✅ | — | ✅ | — |
-| Ver sus aulas y estudiantes asignados | — | — | — | — | — | ✅ |
+| Ver sus aulas y estudiantes asignados (sin datos del tutor, salvo decisión de dirección) | — | — | — | — | — | ✅ |
 | Gestionar sus propias sesiones / contraseña | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 ## Principios

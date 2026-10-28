@@ -1,0 +1,131 @@
+# CI del Colegio Virtual (piloto) — T-0-06 (TEC-04).
+# Cuatro trabajos requeridos para integrar en main: pint, phpstan, pest y audit.
+# Pruebas en SQLite en memoria (phpunit.xml). Sin despliegue: el piloto no tiene staging ni producción.
+name: app-colegio
+
+on:
+  # Sin filtro `paths` (T-1-23, TEC-19): los 4 trabajos informan en todo PR,
+  # también en los que solo tocan el vault, para poder exigirlos en `main`.
+  pull_request:
+  push:
+    branches: [main]
+    paths:
+      - 'app-colegio/**'
+      - '.github/workflows/app-colegio.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: app-colegio-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: app-colegio
+
+env:
+  PHP_VERSION: '8.3'
+  COMPOSER_NO_INTERACTION: '1'
+
+jobs:
+  pint:
+    name: pint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Caché de Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/composer/files
+          key: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ hashFiles('app-colegio/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-
+
+      - name: Instalar dependencias
+        run: composer install --prefer-dist --no-progress
+
+      - name: Formato (Pint)
+        run: vendor/bin/pint --test
+
+  phpstan:
+    name: phpstan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Caché de Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/composer/files
+          key: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ hashFiles('app-colegio/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-
+
+      - name: Instalar dependencias
+        run: composer install --prefer-dist --no-progress
+
+      - name: Análisis estático (Larastan nivel 6)
+        run: vendor/bin/phpstan analyse --no-progress --error-format=github
+
+  pest:
+    name: pest
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: pdo_sqlite, sqlite3
+          coverage: pcov
+          tools: composer:v2
+
+      - name: Caché de Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/composer/files
+          key: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-${{ hashFiles('app-colegio/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-${{ env.PHP_VERSION }}-
+
+      - name: Instalar dependencias
+        run: composer install --prefer-dist --no-progress
+
+      - name: Preparar entorno (datos ficticios, sin secretos)
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Pruebas (Pest, SQLite en memoria) con cobertura mínima del 80 %
+        run: vendor/bin/pest --coverage --min=80
+
+  audit:
+    name: audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Auditoría de dependencias
+        run: composer audit --locked

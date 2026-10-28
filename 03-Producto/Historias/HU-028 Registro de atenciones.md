@@ -5,7 +5,8 @@ epica: "[[EP-07 Oficina de informacion]]"
 sprint: ""
 puntos: 3
 estado: idea
-orden: 28
+prioridad: baja
+orden: 38
 tags: [historia, fase5]
 ---
 # HU-028 · Registro de atenciones en oficina

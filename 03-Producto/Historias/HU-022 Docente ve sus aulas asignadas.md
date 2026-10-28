@@ -5,8 +5,9 @@ epica: "[[EP-05 Asignacion de cursos y materias]]"
 sprint: ""
 puntos: 3
 estado: backlog
+prioridad: alta
 orden: 21
-tags: [historia, fase3]
+tags: [historia, fase3, mvp-2027]
 ---
 # HU-022 · Docente ve sus aulas asignadas
 
@@ -21,11 +22,27 @@ tags: [historia, fase3]
 ```gherkin
 Escenario: Mis aulas
   Dado que tengo asignaciones en la gestión activa
-  Cuando inicio sesión
-  Entonces mi panel muestra tarjetas aula + materia
+  Cuando inicio sesión con el rol Docente
+  Entonces mi panel muestra una tarjeta por aula + materia (p. ej. "Matemática · 1.º Secundaria A")
+  Y al elegir una tarjeta veo los estudiantes del aula (HU-031) y, cuando esté disponible, la ficha del aula (HU-019)
 
 Escenario: Sin asignaciones
-  Entonces veo "Aún no tienes materias asignadas" y a quién consultar
+  Dado que no tengo asignaciones en la gestión activa
+  Entonces veo "Aún no tienes materias asignadas. Consulta con coordinación pedagógica"
+
+Escenario: Próxima gestión
+  Dado que ya tengo asignaciones en una gestión planificada
+  Entonces las veo en una sección aparte "Próxima gestión"
+
+Escenario: Asignación retirada
+  Dado que coordinación me retiró una materia
+  Cuando vuelvo a cargar mi panel
+  Entonces esa tarjeta ya no aparece
+
+Escenario: Varios roles
+  Dado que tengo los roles Docente y Coordinación pedagógica
+  Cuando cambio al rol Docente (HU-007)
+  Entonces veo mis aulas asignadas
 ```
 
 ## Notas

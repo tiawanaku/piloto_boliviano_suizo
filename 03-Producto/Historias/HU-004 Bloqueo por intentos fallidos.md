@@ -25,6 +25,13 @@ Escenario: Bloqueo tras 5 intentos
   Y se muestra "Demasiados intentos. Intenta de nuevo en 15 minutos o recupera tu contraseña"
   Y el titular recibe un correo de aviso
 
+Escenario: Muchos intentos desde una misma IP
+  Dado que desde una misma dirección IP se hicieron 20 intentos fallidos en un minuto, con cualquier correo
+  Cuando se hace otro intento desde esa IP
+  Entonces se rechaza sin evaluar las credenciales
+  Y se muestra "Demasiados intentos. Espera un minuto e inténtalo de nuevo"
+  Y los ingresos correctos no cuentan para este límite
+
 Escenario: Desbloqueo por tiempo
   Dado que la cuenta está bloqueada
   Cuando pasan 15 minutos
@@ -39,3 +46,5 @@ Escenario: Desbloqueo manual por TI
 
 ## Notas
 Umbrales configurables. Recuperar contraseña ([[HU-003 Recuperar contrasena]]) desbloquea la cuenta.
+
+Límite por IP (20 intentos fallidos/min, configurable) aceptado en la [[2026-11-27 Sprint Review - Sprint 1]] (DEF-02): frena los ataques que prueban muchos correos distintos, que el bloqueo por cuenta no detecta.

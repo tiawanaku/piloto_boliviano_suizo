@@ -14,7 +14,7 @@ Volver a [[Inicio]] · Historias: [[HU-001 Iniciar sesion con correo institucion
 │                                      │
 │  Correo institucional                │
 │  ┌────────────────────────────────┐  │
-│  │ nombre@colegio.edu.bo          │  │
+│  │ nombre@colegio-piloto.test          │  │
 │  └────────────────────────────────┘  │
 │  Contraseña                          │
 │  ┌──────────────────────────┐ ┌───┐  │
@@ -50,4 +50,4 @@ Volver a [[Inicio]] · Historias: [[HU-001 Iniciar sesion con correo institucion
 - Botón mostrar/ocultar contraseña.
 - Errores junto al campo y anunciados a lectores de pantalla.
 - Enlace visible a la app de estudiantes para evitar confusión ([[ADR-003 Separar acceso de personal y estudiantes]]).
-- Sin imágenes pesadas: página < 200 KB ([[Requisitos no funcionales]]).
+- Sin imágenes pesadas: página < 300 KB comprimida en la primera visita y < 50 KB en las siguientes ([[Requisitos no funcionales]]).

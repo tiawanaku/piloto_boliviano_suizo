@@ -4,13 +4,15 @@ id: HU-001
 epica: "[[EP-01 Login plantel administrativo y docentes]]"
 sprint: "[[Sprint 1 - Login base]]"
 puntos: 5
-estado: lista
+estado: aceptada-condicional
 prioridad: alta
 orden: 1
 roles: [administrativo, docente]
 tags: [historia, fase1, autenticacion]
 ---
 # HU-001 · Iniciar sesión con correo institucional
+
+> ✅ **Aceptada con condición** en la [[2026-11-27 Sprint Review - Sprint 1]]: falta que una persona revise y fusione el PR #1 y que el usuario verifique la experiencia en un navegador real.
 
 ## Historia
 > **Como** miembro del personal (administrativo o docente)
@@ -20,7 +22,7 @@ tags: [historia, fase1, autenticacion]
 ## Criterios de aceptación
 ```gherkin
 Escenario: Inicio de sesión exitoso
-  Dado que tengo una cuenta activa con correo "ana.perez@colegio.edu.bo"
+  Dado que tengo una cuenta activa con correo "ana.perez@colegio-piloto.test"
   Cuando ingreso ese correo y mi contraseña correcta y presiono "Ingresar"
   Entonces accedo a la plataforma
   Y soy redirigida a mi panel según mi rol (ver HU-007)

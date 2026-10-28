@@ -5,7 +5,8 @@ epica: "[[EP-07 Oficina de informacion]]"
 sprint: ""
 puntos: 5
 estado: idea
-orden: 27
+prioridad: baja
+orden: 37
 tags: [historia, fase5]
 ---
 # HU-027 · Consulta rápida para oficina de información
