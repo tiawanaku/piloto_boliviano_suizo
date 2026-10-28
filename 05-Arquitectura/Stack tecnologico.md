@@ -102,16 +102,20 @@ Reglas:
 - Nada sensible en logs: contraseñas, tokens, secretos TOTP y códigos de recuperación se excluyen (`$hidden`, `context` de auditoría filtrado).
 
 ## Mapeo de historias de la Fase 1 a componentes
+Incluye HU-001..HU-014 y las historias de Fase 1 que el PO añadió en la [[2026-10-28 Revision del Product Owner]]. El orden y el sprint de cada historia los define el PO en el [[Backlog del producto]].
+
 | Historia | Componentes Laravel / Filament |
 |---|---|
 | [[HU-001 Iniciar sesion con correo institucional]] | `Pages/Auth/Login` (extiende el login de Filament), regla de dominio institucional, enum `AccountStatus`, hash `argon2id`, `LoginResponse` propio, `lang/es/auth.php`, *seeder* de cuentas de prueba |
 | [[HU-002 Cerrar sesion]] | Logout de Filament, `SESSION_DRIVER=database`, `SESSION_LIFETIME` desde `config/colegio.php`, *middleware* `PreventBackHistory` (`Cache-Control: no-store`) |
 | [[HU-003 Recuperar contrasena]] | `->passwordReset()` de Filament, *password broker* (`expire=30`), `RateLimiter` 3/hora, notificación en cola de confirmación, borrado de sesiones y desbloqueo al restablecer |
 | [[HU-004 Bloqueo por intentos fallidos]] | Servicio `AccountLockout`, columnas `failed_login_attempts`/`locked_until`, notificación `AccountLockedNotification`, acción `UnlockAccount` en `UserResource` (`UserPolicy::unlock`) |
-| [[HU-005 MFA para personal administrativo]] | MFA de app autenticadora de Filament con códigos de recuperación, `User` implementa las interfaces de MFA de Filament, exigencia por rol administrativo, acción `ResetMfa` (`UserPolicy::resetMfa`) |
+| [[HU-005 MFA para personal administrativo]] | MFA de app autenticadora de Filament con códigos de recuperación, `User` implementa las interfaces de MFA de Filament, exigencia por rol administrativo, códigos incorrectos suman en `AccountLockout` (HU-004), acción `ResetMfa` (`UserPolicy::resetMfa`) |
 | [[HU-006 Cambio de contrasena en primer ingreso]] | Columnas `must_change_password`/`temporary_password_expires_at`, *middleware* `EnsurePasswordIsChanged`, página `Pages/ChangePassword`, regla `Password::min(10)->uncompromised()` |
 | [[HU-007 Panel segun rol]] | `AdminPanelProvider`, `DocentePanelProvider`, `User::canAccessPanel()`, columna `primary_role`, `LoginResponse` propio, ítem del menú de usuario "Cambiar de panel", vista 403 en español + registro en auditoría |
-| [[HU-008 Gestion de sesiones activas]] | Página `Pages/ActiveSessions` (tabla sobre `sessions`), acciones "Cerrar" y "Cerrar todas las demás" |
+| [[HU-008 Gestion de sesiones activas]] (reordenada por el PO para después de la Fase 1) | Página `Pages/ActiveSessions` (tabla sobre `sessions`), acciones "Cerrar" y "Cerrar todas las demás" |
+| [[HU-029 Mi cuenta datos y cambio de contrasena]] (nueva, Sprint 2) | Página de perfil de Filament (`->profile()`) personalizada: datos, roles y estado MFA; cambio de contraseña con contraseña actual, misma regla de política y cierre de las demás sesiones |
+| [[HU-030 Listado y ficha del personal]] (nueva, Sprint 3) | `Admin/Resources/UserResource` (lista con búsqueda/filtros, vista y edición) + `StaffMember`; CI único; cambio de correo solo con `UserPolicy::changeEmail` (Soporte TI) y auditado |
 | [[HU-009 Invitar personal]] | `Admin/Resources/UserResource` (crear), modelo `StaffMember`, *Action* `InviteStaffMember`, notificación con enlace firmado de 72 h, página pública de activación |
 | [[HU-010 Asignar roles al personal]] | Campo de roles en `UserResource` (spatie), `UserPolicy::assignRole` con regla de roles altos, evento `RoleAssigned`/`RoleRevoked` → auditoría |
 | [[HU-011 Desactivar cuenta]] | Acciones `DeactivateAccount`/`ReactivateAccount` con motivo, borrado de sesiones del usuario, sin borrado físico (`UserPolicy::delete` siempre `false`) |
