@@ -1,0 +1,7 @@
+{
+  "items": [
+    { "type": "file", "ctime": 1761660000000, "path": "00-Inicio/Inicio.md", "title": "Inicio" },
+    { "type": "file", "ctime": 1761660000001, "path": "03-Producto/Backlog del producto.md", "title": "Backlog del producto" },
+    { "type": "file", "ctime": 1761660000002, "path": "04-Sprints/Sprint 1 - Login base.md", "title": "Sprint actual" }
+  ]
+}

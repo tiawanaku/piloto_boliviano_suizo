@@ -1,0 +1,12 @@
+{
+  "colorGroups": [
+    { "query": "path:02-Scrum", "color": { "a": 1, "rgb": 3381759 } },
+    { "query": "path:03-Producto/Epicas", "color": { "a": 1, "rgb": 16750848 } },
+    { "query": "path:03-Producto/Historias", "color": { "a": 1, "rgb": 16766720 } },
+    { "query": "path:04-Sprints", "color": { "a": 1, "rgb": 5025616 } },
+    { "query": "path:05-Arquitectura", "color": { "a": 1, "rgb": 10233776 } },
+    { "query": "path:01-Proyecto", "color": { "a": 1, "rgb": 15022389 } }
+  ],
+  "showTags": false,
+  "showOrphans": true
+}

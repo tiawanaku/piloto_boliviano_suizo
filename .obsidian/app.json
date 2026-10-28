@@ -1,0 +1,9 @@
+{
+  "newFileLocation": "folder",
+  "newFileFolderPath": "00-Inicio",
+  "attachmentFolderPath": "09-Recursos/adjuntos",
+  "useMarkdownLinks": false,
+  "newLinkFormat": "shortest",
+  "showFrontmatter": true,
+  "alwaysUpdateLinks": true
+}
