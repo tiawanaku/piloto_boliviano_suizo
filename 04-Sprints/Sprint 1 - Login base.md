@@ -83,12 +83,13 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 | T-1-23 | Deuda: CI sin filtro `paths` y primera ejecución en GitHub | TEC-19 | Dev 2 | T-1-22 |
 
 #### T-1-01 · `StaffPanel` (configuración compartida) — Dev 1 ⚠️ debe completarse primero (día 1)
-- [x] Hecho (Dev 1). Por ahora usa `->login()` de Filament; T-1-02 la cambia por `Pages\Auth\Login`.
+- [x] Hecho (Dev 1). Desde T-1-02 registra `Pages\Auth\Login`.
 - **Qué:** clase `App\Filament\Support\StaffPanel::configure(Panel $panel): Panel` con lo común a `admin` y `docente`: página de login (`Pages\Auth\Login`), *middleware* de autenticación compartido, marca y colores. Ambos *PanelProviders* la invocan (cambio de una línea; luego los *providers* pasan a Dev 2).
 - **Archivos:** `app/Filament/Support/StaffPanel.php`, `app/Providers/Filament/AdminPanelProvider.php`, `app/Providers/Filament/DocentePanelProvider.php` (solo esa línea).
 - **Pruebas:** las de `tests/Feature/Panels/PanelAccessTest.php` siguen en verde.
 
 #### T-1-02 · Login personalizado: validaciones y mensajes — Dev 1
+- [x] Hecho (Dev 1, oleada 2).
 - **Qué:** `App\Filament\Pages\Auth\Login` extiende el login de Filament: etiquetas en español, contraseña con mostrar/ocultar, regla `InstitutionalEmail` (dominio de `config('colegio.dominio_institucional')`), mensaje genérico "Correo o contraseña incorrectos".
 - **Archivos:** `app/Filament/Pages/Auth/Login.php`, `app/Rules/InstitutionalEmail.php`, `lang/es/auth.php`, `tests/Feature/HU001/LoginValidationTest.php`, `tests/Unit/Rules/InstitutionalEmailTest.php`.
 - **Pruebas (HU-001):** "Credenciales incorrectas" (mismo mensaje con correo existente y no existente), "Correo no institucional", "Campos vacíos".
@@ -99,23 +100,26 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Pruebas (HU-001):** "Inicio de sesión exitoso" (autenticado y redirigido al panel según rol — usa T-1-12), "Cuenta desactivada".
 
 #### T-1-04 · Cierre de sesión, inactividad y "atrás" — Dev 1
+- [x] Hecho (Dev 1, oleada 2).
 - **Qué:** `SESSION_LIFETIME` leído de `config('colegio.sesion_inactividad_minutos')` en `config/session.php`; cookies `http_only`, `same_site=lax` y `secure` vía `SESSION_SECURE_COOKIE` (activo solo si la demostración usa HTTPS); *middleware* `PreventBackHistory` (`Cache-Control: no-store, private`) registrado en `StaffPanel`; logout de Filament invalida la sesión.
 - **Archivos:** `config/session.php`, `app/Http/Middleware/PreventBackHistory.php`, `app/Filament/Support/StaffPanel.php`, `tests/Feature/HU002/LogoutTest.php`.
 - **Pruebas (HU-002):** "Cerrar sesión manualmente" (fila de `sessions` eliminada, redirección al login, cabecera `no-store`), "Expiración por inactividad" (`$this->travel(31)->minutes()` → redirige al login).
 
 #### T-1-05 · Cabeceras de seguridad — Dev 1
+- [x] Hecho (Dev 1, oleada 2).
 - **Qué:** *middleware* `SecurityHeaders`: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, HSTS solo cuando la petición es HTTPS, `Content-Security-Policy-Report-Only` compatible con Livewire/Alpine. Registrado en `StaffPanel`.
 - **Archivos:** `app/Http/Middleware/SecurityHeaders.php`, `app/Filament/Support/StaffPanel.php`, `tests/Feature/Security/SecurityHeadersTest.php`.
 - **Pruebas:** cabeceras presentes en `/admin/login`.
 
 #### T-1-06 · Política de contraseñas y columnas de contraseña temporal — Dev 1
-- [x] Hecho (Dev 1), salvo el registro de `Password::defaults()` en `AppServiceProvider` (pasa a la oleada siguiente, junto con T-1-04).
+- [x] Hecho (Dev 1); `Password::defaults()` registrado en `AppServiceProvider` en la oleada 2.
 - **Qué:** migración `add_temporary_password_columns_to_users_table` (`must_change_password` bool, `temporary_password_expires_at` nullable); trait `App\Models\Concerns\HasTemporaryPassword` (*casts* y `temporaryPasswordExpired()`); `Password::defaults()` en `AppServiceProvider` (mín. 10, `uncompromised()`), regla `NotCommonPassword` con lista local `resources/data/common-passwords.txt`; mensajes en `lang/es/passwords.php`.
 - **Archivos:** `database/migrations/2026_11_16_100000_add_temporary_password_columns_to_users_table.php`, `app/Models/Concerns/HasTemporaryPassword.php`, `app/Providers/AppServiceProvider.php`, `app/Rules/NotCommonPassword.php`, `resources/data/common-passwords.txt`, `tests/Unit/Rules/PasswordPolicyTest.php`.
 - **Pruebas (HU-006):** "Política de contraseña" (menos de 10 caracteres y contraseña común, cada una con su mensaje). `uncompromised()` se simula con `Http::fake()`.
 - **Integración:** Dev 2 agrega `use HasTemporaryPassword;` en `User` (dueño de `User.php`).
 
 #### T-1-07 · Página "Cambiar contraseña" obligatoria — Dev 1
+- [x] Hecho (Dev 1, oleada 2).
 - **Qué:** página `App\Filament\Pages\Auth\ChangeTemporaryPassword` y *middleware* `EnsurePasswordIsChanged` (registrado en `StaffPanel`) que redirige a ella mientras `must_change_password` sea verdadero; contraseña temporal vencida (> 72 h) bloquea el login con "Tu contraseña temporal venció. Solicita una nueva a secretaría". Indicador de fortaleza simple.
 - **Archivos:** `app/Filament/Pages/Auth/ChangeTemporaryPassword.php`, `resources/views/filament/pages/auth/change-temporary-password.blade.php` (si hace falta), `app/Http/Middleware/EnsurePasswordIsChanged.php`, `app/Filament/Support/StaffPanel.php`, `app/Filament/Pages/Auth/Login.php`, `tests/Feature/HU006/TemporaryPasswordTest.php`.
 - **Pruebas (HU-006):** "Contraseña temporal" (cualquier URL del panel redirige al cambio), "Contraseña temporal vencida".
@@ -135,21 +139,25 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Qué:** estados de `UserFactory`: `active()`, `pending()`, `deactivated()`, `withTemporaryPassword()`, `withRoles(StaffRole ...)`; *helper* global `actingAsStaff(StaffRole ...$roles)` en `tests/Pest.php`; comando `colegio:crear-cuenta {correo} {--rol=*}` (solo correos ficticios del dominio configurado) que crea una cuenta activa con contraseña temporal (72 h) y la muestra una sola vez (temporal hasta [[HU-009 Invitar personal]]).
 - **Archivos:** `database/factories/UserFactory.php`, `tests/Pest.php`, `app/Console/Commands/CreateStaffAccount.php`, `tests/Feature/Commands/CreateStaffAccountTest.php`.
 - **Pruebas:** el comando crea la cuenta con los roles y `must_change_password = true`; rechaza correos fuera del dominio.
+- [x] Hecho (Dev 2). Además: `withPrimaryRole()`, `RolesAndPermissionsSeeder::ensureSeeded()` y cuentas de demostración por rol en `DatabaseSeeder` (`demo@` = Coordinación + Docente). Textos del comando en `lang/es/staff_account.php`.
 
 #### T-1-11 · Acceso a paneles por rol y rol principal — Dev 2
 - **Qué:** `User::canAccessPanel()`: `admin` → algún rol administrativo y cuenta activa; `docente` → rol `teacher` y cuenta activa. Migración `add_primary_role_to_users_table`; método `primaryPanelId()` (rol principal o prioridad por defecto).
 - **Archivos:** `app/Models/User.php`, `database/migrations/2026_11_16_110000_add_primary_role_to_users_table.php`, `tests/Feature/HU007/PanelAuthorizationTest.php`.
 - **Pruebas (HU-007):** *dataset* rol × panel (permitido/403); cuenta desactivada → 403 en ambos.
+- [x] Hecho (Dev 2). `tests/Feature/Panels/PanelAccessTest.php` ajustada (las cuentas necesitan rol).
 
 #### T-1-12 · Redirección al panel principal — Dev 2
 - **Qué:** implementación propia del contrato `LoginResponse` de Filament que redirige a la URL del panel principal; registrada en un nuevo `StaffAuthServiceProvider`.
 - **Archivos:** `app/Http/Responses/StaffLoginResponse.php`, `app/Providers/StaffAuthServiceProvider.php`, `bootstrap/providers.php`, `tests/Feature/HU007/LoginRedirectTest.php`.
 - **Pruebas (HU-007):** "Docente" → `/docente`; "Administrativo" → `/admin`.
+- [x] Hecho (Dev 2). Descarta `url.intended`. Falta que el login de un panel acepte a quien solo puede entrar al otro (T-1-03, Dev 1).
 
 #### T-1-13 · Cambio de panel y panel docente vacío — Dev 2
 - **Qué:** ítem del menú de usuario "Cambiar a panel docente/administrativo" en cada *PanelProvider*, visible solo si `canAccessPanel()` del otro panel es verdadero; *dashboard* docente con el mensaje "Tus aulas aparecerán aquí cuando coordinación te asigne materias".
 - **Archivos:** `app/Providers/Filament/AdminPanelProvider.php`, `app/Providers/Filament/DocentePanelProvider.php`, `app/Filament/Docente/Pages/Dashboard.php`, `lang/es/panels.php`, `tests/Feature/HU007/PanelSwitchTest.php`.
 - **Pruebas (HU-007):** "Varios roles" (entra al principal, ve el ítem y abre el otro panel sin nuevo login); usuario con un solo rol no ve el ítem.
+- [x] Hecho (Dev 2). Ítem en `App\Filament\Support\PanelSwitchAction`; el *dashboard* docente se registra por descubrimiento.
 
 #### T-1-14 · 403 en español y registro del acceso denegado — Dev 2
 - **Qué:** vista `errors/403.blade.php` liviana con "No tienes permiso para ver esta página" y enlace a su panel; en `bootstrap/app.php` (`withExceptions`) registrar `access.denied` con `AuditLogger` (URL, usuario, IP).
@@ -212,6 +220,9 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 
 - **Dev 1 (T-1-01/T-1-06):** `StaffPanel::configure()` concentra login, guard, marca, colores y *middleware*; los *PanelProviders* solo definen id, ruta y descubrimiento. El *trait* `HasTemporaryPassword` agrega sus *casts* con `initializeHasTemporaryPassword()` (no hace falta tocar `casts()` de `User`) y ofrece `markPasswordAsTemporary()` (usa `colegio.contrasena_temporal_horas`), `clearTemporaryPassword()` y `temporaryPasswordExpired()`. Política: `Password::min(10)->uncompromised()->rules([new NotCommonPassword])`; la lista local se compara sin mayúsculas ni espacios extremos.
 - **Dev 2 (T-1-08/T-1-09):** tablas de spatie con `model_uuid` (UUID) y sin *teams*; la migración usa nombres literales. Permisos (21, `recurso.accion`) en `App\Enums\Permission`, uno por fila de la matriz; "Desbloquear / restablecer MFA" se separa en `accounts.unlock` y `mfa.reset`, y "Ver y corregir la ficha" en `staff.view`, `staff.edit` y `staff.edit_email` (solo TI). `StaffRole` incluye `student` (7 roles) sin permisos hasta la Fase 4. `priority()`: Dirección 100, Secretaría 90, Coordinación 80, TI 70, Oficina 60, Docente 50, Estudiante 10 (orden de la matriz; a confirmar con dirección). La matriz vive en `RolesAndPermissionsSeeder::matrix()` y la prueba mantiene una copia independiente. El *seeder* limpia la caché de spatie a mano porque `DatabaseSeeder` usa `WithoutModelEvents`.
+- **Dev 2 (T-1-10 a T-1-13):** URL de destino tras el login: `User::primaryPanelUrl()` (null si no tiene panel o la cuenta no está activa); también `primaryPanelId()`, `primaryRole()` y `staffRoles()` (ordenados por prioridad). `primary_role` se ignora si el usuario ya no tiene ese rol. Panel de cada rol: `StaffRole::panelId()` (`ADMIN_PANEL`/`TEACHER_PANEL`). `StaffLoginResponse` siempre va al panel principal y descarta `url.intended` (podía apuntar a un panel sin acceso). `canAccessPanel()` exige cuenta activa y un rol del panel; una cuenta activa sin roles recibe 403 en ambos.
+
+- **Dev 1 (oleada 2):** el mensaje genérico de login vive en `auth.login.failed` ("Correo o contraseña incorrectos."); `auth.failed` no se cambió porque lo verifica `SpanishMessagesTest`. La contraseña temporal vencida se detecta en `Login::isUserAllowedToAccessPanel()` (dentro del *timebox* y tras validar credenciales: con contraseña errónea solo se ve el mensaje genérico) y dispara `Failed`, así que queda auditada como intento fallido. `session.lifetime` usa la misma variable que `colegio.sesion_inactividad_minutos` (`COLEGIO_SESION_INACTIVIDAD_MINUTOS`); `SESSION_LIFETIME` ya no se usa. La página "Define tu contraseña" es una `SimplePage` en `/{panel}/cambiar-contrasena` (ruta `auth.change-temporary-password`, registrada en `StaffPanel`); al guardar actualiza `password_hash_web` en sesión para que `AuthenticateSession` no cierre la sesión. Indicador de fortaleza en el navegador (Alpine), sin enviar la contraseña al servidor. CSP en modo informe con `'unsafe-inline'`/`'unsafe-eval'` (Livewire/Alpine), `fonts.bunny.net` y `ui-avatars.com`.
 
 ## Riesgos del sprint
 - Definición final de roles pendiente con dirección → usar roles base de [[Roles y permisos RBAC]].

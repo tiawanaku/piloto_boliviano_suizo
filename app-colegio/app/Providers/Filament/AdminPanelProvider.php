@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Filament\Support\PanelSwitchAction;
 use App\Filament\Support\StaffPanel;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
@@ -30,6 +31,9 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
             ->widgets([
                 AccountWidget::class,
+            ])
+            ->userMenuItems([
+                PanelSwitchAction::make('docente'),
             ]);
     }
 }

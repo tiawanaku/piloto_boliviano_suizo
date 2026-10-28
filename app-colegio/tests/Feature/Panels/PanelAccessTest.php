@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\StaffRole;
 use App\Models\User;
 
 it('muestra la página de login del panel :dataset', function (string $panel) {
@@ -12,11 +13,14 @@ it('redirige al login a un invitado que pide el panel :dataset', function (strin
     $this->get("/{$panel}")->assertRedirect("/{$panel}/login");
 })->with(['admin', 'docente']);
 
-it('permite entrar al panel :dataset a una cuenta activa', function (string $panel) {
-    $this->actingAs(User::factory()->create())
+it('permite entrar al panel :dataset a una cuenta activa con un rol del panel', function (string $panel, StaffRole $role) {
+    $this->actingAs(User::factory()->withRoles($role)->create())
         ->get("/{$panel}")
         ->assertOk();
-})->with(['admin', 'docente']);
+})->with([
+    'admin' => ['admin', StaffRole::AcademicSecretary],
+    'docente' => ['docente', StaffRole::Teacher],
+]);
 
 it('responde 403 a una cuenta :dataset en el panel admin', function (string $estado) {
     $user = User::factory()->{$estado}()->create();

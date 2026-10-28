@@ -34,7 +34,10 @@ return [
     |
     */
 
-    'lifetime' => (int) env('SESSION_LIFETIME', 120),
+    // Inactividad del personal (HU-002): misma variable y valor por defecto que
+    // colegio.sesion_inactividad_minutos (config/colegio.php), única fuente.
+    // SESSION_LIFETIME ya no se usa.
+    'lifetime' => (int) env('COLEGIO_SESION_INACTIVIDAD_MINUTOS', 30),
 
     'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
 

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Enums\StaffRole;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,3 +25,22 @@ pest()->extend(TestCase::class)
     ->in('Feature', 'Unit/Models');
 
 pest()->extend(TestCase::class)->in('Unit/Enums');
+
+/*
+|--------------------------------------------------------------------------
+| Helpers globales
+|--------------------------------------------------------------------------
+*/
+
+/**
+ * Crea una cuenta activa del personal con los roles indicados (carga la
+ * matriz RBAC si hace falta) y autentica la prueba con ella.
+ */
+function actingAsStaff(StaffRole ...$roles): User
+{
+    $user = User::factory()->active()->withRoles(...$roles)->create();
+
+    test()->actingAs($user);
+
+    return $user;
+}

@@ -10,8 +10,8 @@ use Tests\TestCase;
 
 /*
  * HU-006 · Escenario: Política de contraseña.
- * La política (mín. 10, uncompromised() y NotCommonPassword) es la que
- * AppServiceProvider registrará como Password::defaults() (T-1-06).
+ * Password::defaults() (AppServiceProvider): mín. 10, uncompromised() y
+ * NotCommonPassword (T-1-06).
  */
 
 uses(TestCase::class);
@@ -23,7 +23,7 @@ function passwordErrors(string $password): array
 {
     $validator = Validator::make(
         ['password' => $password],
-        ['password' => ['required', Password::min(10)->uncompromised()->rules([new NotCommonPassword])]],
+        ['password' => ['required', Password::default()]],
     );
 
     return $validator->errors()->get('password');
@@ -78,6 +78,13 @@ it('Política de contraseña: acepta una contraseña larga, no común y no filtr
     fakePwnedApi();
 
     expect(passwordErrors('lluvia-en-el-altiplano-42'))->toBe([]);
+});
+
+it('Password::defaults() aplica mínimo 10, uncompromised y la lista local', function () {
+    $rules = Password::default()->appliedRules();
+
+    expect($rules['min'])->toBe(10)
+        ->and($rules['uncompromised'])->toBeTrue();
 });
 
 it('NotCommonPassword no consulta la red', function () {

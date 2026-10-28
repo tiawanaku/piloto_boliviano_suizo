@@ -19,6 +19,10 @@ enum StaffRole: string
     case Teacher = 'teacher';
     case Student = 'student';
 
+    public const ADMIN_PANEL = 'admin';
+
+    public const TEACHER_PANEL = 'docente';
+
     public function label(): string
     {
         return __('roles.'.$this->value);
@@ -54,6 +58,18 @@ enum StaffRole: string
             self::InformationOffice => 60,
             self::Teacher => 50,
             self::Student => 10,
+        };
+    }
+
+    /**
+     * Panel de Filament al que da acceso el rol (ADR-005 §3); null si ninguno.
+     */
+    public function panelId(): ?string
+    {
+        return match (true) {
+            $this->isAdministrative() => self::ADMIN_PANEL,
+            $this === self::Teacher => self::TEACHER_PANEL,
+            default => null,
         };
     }
 

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Enums\AuditEventType;
+use App\Enums\StaffRole;
 use App\Models\AuditEvent;
 use App\Models\User;
 use Filament\Facades\Filament;
@@ -40,7 +41,7 @@ function hu013AssertPasswordNotStored(string $password): void
 }
 
 it('Registro de intento: un login correcto queda registrado sin la contraseña en el panel :dataset', function (string $panel) {
-    $user = User::factory()->create(['password' => HU013_CONTRASENA]);
+    $user = User::factory()->withRoles(StaffRole::Director, StaffRole::Teacher)->create(['password' => HU013_CONTRASENA]);
 
     hu013LoginPage($panel)
         ->fillForm(['email' => $user->email, 'password' => HU013_CONTRASENA])
@@ -114,7 +115,7 @@ it('Registro de intento: una cuenta sin acceso al panel queda registrada como fa
 });
 
 it('Registro de intento: guarda la IP y el navegador de la solicitud', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->withRoles(StaffRole::Director)->create();
 
     $this->withHeader('User-Agent', 'NavegadorDePrueba/3.0')
         ->withServerVariables(['REMOTE_ADDR' => '192.0.2.44'])
@@ -127,7 +128,7 @@ it('Registro de intento: guarda la IP y el navegador de la solicitud', function 
 });
 
 it('registra el cierre de sesión con el usuario que sale', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->withRoles(StaffRole::Director)->create();
 
     $this->actingAs($user)->post(route('filament.admin.auth.logout'))->assertRedirect();
 

@@ -41,6 +41,17 @@ class RolesAndPermissionsSeeder extends Seeder
     }
 
     /**
+     * Carga la matriz solo si faltan roles (factories, helpers de prueba y
+     * comandos que asignan roles sobre una base recién migrada).
+     */
+    public static function ensureSeeded(): void
+    {
+        if (Role::query()->where('guard_name', self::GUARD)->count() < count(StaffRole::cases())) {
+            (new self)->run();
+        }
+    }
+
+    /**
      * Matriz vigente (Fase 1–3): rol => permisos. Estudiante aún no tiene
      * permisos del portal del personal (Fase 4).
      *

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Filament\Support\PanelSwitchAction;
 use App\Filament\Support\StaffPanel;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Widgets\AccountWidget;
@@ -22,13 +22,14 @@ class DocentePanelProvider extends PanelProvider
             ->id('docente')
             ->path('docente')
             ->discoverResources(in: app_path('Filament/Docente/Resources'), for: 'App\Filament\Docente\Resources')
+            // Descubre App\Filament\Docente\Pages\Dashboard (inicio vacío con mensaje, Fase 1).
             ->discoverPages(in: app_path('Filament/Docente/Pages'), for: 'App\Filament\Docente\Pages')
-            ->pages([
-                Dashboard::class,
-            ])
             ->discoverWidgets(in: app_path('Filament/Docente/Widgets'), for: 'App\Filament\Docente\Widgets')
             ->widgets([
                 AccountWidget::class,
+            ])
+            ->userMenuItems([
+                PanelSwitchAction::make('admin'),
             ]);
     }
 }
