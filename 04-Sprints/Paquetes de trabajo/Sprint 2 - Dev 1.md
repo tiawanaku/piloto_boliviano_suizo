@@ -13,7 +13,7 @@ Volver a [[Paquetes MOC]] · Sprint: [[Sprint 2 - Seguridad del login]] (30/11 �
 ## Objetivo del sprint
 > Las cuentas del personal están protegidas contra accesos indebidos y cada persona puede recuperar su acceso por sí misma.
 
-**Foco de este paquete:** Recuperación y cambio de contraseña (HU-003, HU-029).
+**Foco de este paquete:** Recuperación y cambio de contraseña (HU-003, HU-029) y tono "tú" en los textos de Filament (DEF-01).
 
 ## Antes de empezar
 1. Lee el detalle de cada tarea en [[Sprint 2 - Seguridad del login#Tareas técnicas]] y las historias enlazadas.
@@ -24,9 +24,10 @@ Volver a [[Paquetes MOC]] · Sprint: [[Sprint 2 - Seguridad del login]] (30/11 �
 |---|---|---|---|
 | 1 | T-2-02 | Página "¿Olvidaste tu contraseña?" | T-2-01 (Dev 3) |
 | 2 | T-2-03 | Restablecimiento y enlace vencido/usado | T-2-01 (Dev 3) |
-| 3 | T-2-04 | Acción `UpdateUserPassword` | T-2-07 (Dev 2) |
-| 4 | T-2-05 | "Mi cuenta": ver mis datos | T-2-01, T-2-12 (Dev 3) |
-| 5 | T-2-06 | "Mi cuenta": cambiar contraseña | T-2-04, T-2-05 |
+| 3 | T-2-18 | Tono "tú" en los textos de Filament (login, recuperación, perfil) | T-2-01 (Dev 3) |
+| 4 | T-2-04 | Acción `UpdateUserPassword` | T-2-07 (Dev 2) |
+| 5 | T-2-05 | "Mi cuenta": ver mis datos | T-2-01, T-2-12 (Dev 3) |
+| 6 | T-2-06 | "Mi cuenta": cambiar contraseña | T-2-04, T-2-05 |
 
 ## Archivos de este paquete
 Solo tú modificas estos archivos en este sprint (rutas bajo `app-colegio/`, salvo `.github/` y el vault):
@@ -36,14 +37,16 @@ Solo tú modificas estos archivos en este sprint (rutas bajo `app-colegio/`, sal
 - `app/Models/Concerns/SendsStaffPasswordReset.php`
 - `config/auth.php`
 - `lang/es/passwords.php`, `lang/es/profile.php`
-- `tests/Feature/HU003/*`, `tests/Feature/HU029/*`
+- `lang/vendor/filament-panels/es/**` (salvo `auth/multi-factor/**`, de Dev 3)
+- `tests/Feature/HU003/*`, `tests/Feature/HU029/*`, `tests/Feature/Localization/InformalToneTest.php`
 
 Si necesitas cambiar un archivo de otro paquete, **no lo edites**: repórtalo como impedimento o coordínalo con su dueño.
 
 ## Dependencias con otros paquetes
 - Esperas T-2-01 (Dev 3, día 1).
 - T-2-04 y T-2-06 usan `AccountLockout` de Dev 2 (T-2-07).
-- T-2-05 muestra el estado de MFA: usa las columnas de Dev 3 (T-2-12).
+- T-2-05 muestra el estado de MFA: usa las columnas de Dev 3 (T-2-12). La acción "Desactivar" del MFA en el perfil la oculta Dev 3 (T-2-13) desde `StaffPanel`.
+- Los tipos de auditoría nuevos (`password.reset`, `password.reset_requested`) ya los agrega Dev 3 en T-2-01: no edites `AuditEventType` ni `lang/es/audit.php`.
 - `StaffPanel.php`, `User.php` y `Login.php` no son tuyos en este sprint.
 
 ## Verificación

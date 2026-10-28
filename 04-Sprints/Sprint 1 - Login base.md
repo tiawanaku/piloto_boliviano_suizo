@@ -3,9 +3,10 @@ tipo: sprint
 numero: 1
 inicio: 2026-11-16
 fin: 2026-11-27
-estado: planificado
+estado: terminado
 puntos_comprometidos: 17
-puntos_terminados:
+puntos_terminados: 17
+aceptacion: pendiente de la Sprint Review (verificación manual de la DoD de experiencia)
 tags: [sprint, fase1]
 ---
 # Sprint 1 · Login base
@@ -28,26 +29,15 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 ## Sprint Backlog
 | Historia | Pts | Estado |
 |---|---|---|
-| [[HU-001 Iniciar sesion con correo institucional]] | 5 | por hacer |
-| [[HU-007 Panel segun rol]] | 5 | por hacer |
-| [[HU-002 Cerrar sesion]] | 1 | por hacer |
-| [[HU-006 Cambio de contrasena en primer ingreso]] | 3 | por hacer |
-| [[HU-013 Registro de auditoria de accesos]] | 3 | por hacer |
+| [[HU-001 Iniciar sesion con correo institucional]] | 5 | terminada (código y pruebas) · UX manual pendiente |
+| [[HU-007 Panel segun rol]] | 5 | terminada (código y pruebas) · UX manual pendiente |
+| [[HU-002 Cerrar sesion]] | 1 | terminada (código y pruebas) · UX manual pendiente |
+| [[HU-006 Cambio de contrasena en primer ingreso]] | 3 | terminada (código y pruebas) · UX manual pendiente |
+| [[HU-013 Registro de auditoria de accesos]] | 3 | terminada (código y pruebas) · UX manual pendiente |
 | **Total** | **17** | |
 
 ## Tablero
-### Por hacer
-- [ ] HU-001 · Endpoint de autenticación
-- [ ] HU-001 · Pantalla de login responsive
-- [ ] HU-007 · Modelo de roles y verificación en servidor
-- [ ] HU-007 · Paneles vacíos por rol
-- [ ] HU-002 · Logout y expiración por inactividad
-- [ ] HU-006 · Flujo de contraseña temporal
-- [x] HU-013 · Tabla/evento de auditoría
-- [ ] Script de creación de cuentas semilla (temporal hasta [[HU-009 Invitar personal]])
-### En progreso
-### En revisión
-### Hecho
+> Cerrado el 27/11/2026. El estado de cada tarea está en la sección [[#Tareas técnicas]] y el resumen en [[#Cierre del sprint (27/11/2026)]].
 
 ## Tareas técnicas
 > Definidas por el [[Scrum Master]] el 2026-10-28 ([[2026-10-28 Sprint Planning tecnico - Scrum Master]]). Stack: [[ADR-005 Stack PHP Laravel y Filament]] · Convenciones: [[Stack tecnologico]] · Habilitadores: [[Backlog tecnico]] · Paquetes: [[Sprint 1 - Dev 1]], [[Sprint 1 - Dev 2]], [[Sprint 1 - Dev 3]]. Los Developers las ajustan en la [[Sprint Planning]].
@@ -235,7 +225,8 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Spike MFA (T-1-20, Dev 3):** viable con el MFA nativo de Filament 5 y sin dependencias nuevas. `isRequired` de Filament se evalúa al registrar rutas (por panel, no por usuario), por eso: proveedor `AppAuthentication` (10 códigos) en ambos paneles, `isRequired: true` y *middleware* propio `EnsureAdministrativeMfa` que lo exige solo a roles administrativos. Filament no emite evento con código incorrecto → evento propio para HU-004. Al activarlo fallan 16 pruebas actuales: en el Sprint 2 primero hay que adaptar *factories*/*helpers* (`withMfa()`). Detalle en [[Spike T-1-20 MFA por rol]].
 - **Spike peso del login (T-1-19, Dev 3):** `/admin/login` pesa ≈ 1,38 MB sin comprimir y ≈ 334 KB con gzip (12 solicitudes; Livewire 84 KB, CSS de Filament 67 KB, Inter 67 KB, `support.js` 64 KB, `echo.js` 24 KB). En Slow 3G son unos 28 s sin compresión y unos 9–11 s con gzip. Propuesta: fuentes del sistema (≈ −67 KB, probado), compresión + caché larga en el servidor web (implementación real) y revisar con el PO el presupuesto de 200 KB (realista con Filament: ≈ 250–270 KB en la primera visita). Detalle y propuesta para el ADR en [[Spike T-1-19 Peso del login en 3G]].
 - **Etiquetas de auditoría (bug de Dev 3, reportado por Dev 1):** `__()` interpreta los puntos de `login.succeeded` como anidación. Las claves de `lang/es/audit.php` usan `_` (`AuditEventType::translationKey()`); una prueba recorre todos los casos del enum.
-- _(completar durante el sprint: resultados de T-1-19, T-1-20 y T-1-23)_
+- **T-1-23 (cierre):** la primera ejecución real del CI en GitHub quedó en verde en el PR #1. El SM verificó por la API REST los 4 *check runs* (`pint`, `phpstan`, `pest`, `audit`) sobre el commit `7fd6d77`.
+- **Decisiones del SM sobre los *spikes*:** aplicadas en [[ADR-005 Stack PHP Laravel y Filament]] §4 (ver [[2026-11-27 Retrospectiva - Sprint 1]]).
 
 - **Dev 1 (T-1-01/T-1-06):** `StaffPanel::configure()` concentra login, guard, marca, colores y *middleware*; los *PanelProviders* solo definen id, ruta y descubrimiento. El *trait* `HasTemporaryPassword` agrega sus *casts* con `initializeHasTemporaryPassword()` (no hace falta tocar `casts()` de `User`) y ofrece `markPasswordAsTemporary()` (usa `colegio.contrasena_temporal_horas`), `clearTemporaryPassword()` y `temporaryPasswordExpired()`. Política: `Password::min(10)->uncompromised()->rules([new NotCommonPassword])`; la lista local se compara sin mayúsculas ni espacios extremos.
 - **Dev 2 (T-1-08/T-1-09):** tablas de spatie con `model_uuid` (UUID) y sin *teams*; la migración usa nombres literales. Permisos (21, `recurso.accion`) en `App\Enums\Permission`, uno por fila de la matriz; "Desbloquear / restablecer MFA" se separa en `accounts.unlock` y `mfa.reset`, y "Ver y corregir la ficha" en `staff.view`, `staff.edit` y `staff.edit_email` (solo TI). `StaffRole` incluye `student` (7 roles) sin permisos hasta la Fase 4. `priority()`: Dirección 100, Secretaría 90, Coordinación 80, TI 70, Oficina 60, Docente 50, Estudiante 10 (orden de la matriz; a confirmar con dirección). La matriz vive en `RolesAndPermissionsSeeder::matrix()` y la prueba mantiene una copia independiente. El *seeder* limpia la caché de spatie a mano porque `DatabaseSeeder` usa `WithoutModelEvents`.
@@ -253,8 +244,41 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 ## Daily Scrum
 _Enlazar aquí las notas diarias de `07-Reuniones`._
 
+## Cierre del sprint (27/11/2026)
+> Verificación del [[Scrum Master]] sobre la rama del PR #1 (commit `7fd6d77`).
+
+### Evidencias
+- **Calidad (local):** `pint --test` OK · `phpstan analyse` (nivel 6) 0 errores · `pest` **397/397** (991 aserciones) · `composer audit` sin vulnerabilidades.
+- **CI en GitHub:** los 4 trabajos en verde sobre el último commit del PR #1. Se cumple la condición de aceptación de la Review del S0.
+- **Escenarios Gherkin:** los 5 escenarios de HU-001, los 2 de HU-002, los 3 de HU-006, los 4 de HU-007 y los 2 de HU-013 tienen pruebas Pest con su nombre, más pruebas de rol sin acceso (403 en ambos paneles) y de auditoría sin contraseñas.
+- **Demostración:** `colegio:demo --force`, ejecutado contra una base temporal fuera del repositorio, crea 7 cuentas ficticias: una por rol, más `demo@`, que tiene los roles Coordinación y Docente. Dev 3 recorrió por HTTP el login de cada una (T-1-21).
+
+### Estado
+| Historia | Pts | Código y pruebas | DoD de experiencia | Observaciones |
+|---|---|---|---|---|
+| HU-001 | 5 | ✅ | ⏳ navegadores, Android, 3G y Lighthouse sin verificar | Peso del login ≈ 334 KB con gzip: **no cumple el RNF de 200 KB** (propuesta al PO). Mezcla de "usted" y "tú" en los textos de Filament (DEF-01). |
+| HU-007 | 5 | ✅ | ⏳ | — |
+| HU-002 | 1 | ✅ | ⏳ | La inactividad se configura con `COLEGIO_SESION_INACTIVIDAD_MINUTOS` (30 por defecto), que alimenta `session.lifetime`. `SESSION_LIFETIME` ya no se usa: es la variable única acordada, no un valor fijo en el código. Queda para TI como variable de entorno. |
+| HU-006 | 3 | ✅ | ⏳ | — |
+| HU-013 | 3 | ✅ | n/a (sin UI) | `actor_id` sin clave foránea, a propósito (el *trigger* impide `SET NULL`). |
+| **Total** | **17** | **17** | **pendiente** | |
+
+**Puntos terminados: 17, condicionados.** El código, las pruebas y el CI cumplen la DoD. Faltan los ítems de experiencia (Chrome, Firefox, Android, 3G simulada, contraste/Lighthouse): el entorno de los agentes no tiene navegador. **La DoD no se relaja.** El SM propone al PO hacer esa verificación manual con una persona con navegador en la Sprint Review, usando la lista de T-1-21. Si una historia falla, vuelve al backlog y la velocidad se corrige.
+
+### Tareas
+T-1-01 a T-1-18, T-1-20, T-1-22 y T-1-23: ✅ hechas. T-1-19: ✅ hecha, con resultado negativo frente al RNF. T-1-21: 🟡 parcial (recorrido por HTTP; falta el navegador real).
+
+### Impedimentos
+| Impedimento | Estado |
+|---|---|
+| Protección de `main` (TEC-20): la API sigue devolviendo 403 a la integración | **Abierto**: lo tiene que activar el dueño del repositorio, y ya hay CI verde para exigirlo |
+| Sin navegador gráfico en el entorno de los agentes (T-1-19, T-1-21) | **Abierto** → verificación manual en la Review (acción de la retro) |
+
+### Defectos y deuda detectados
+Registrados en [[Backlog tecnico#Defectos y deuda del Sprint 1]]: DEF-01 (tono), DEF-02 (*throttle* por IP), TEC-21 (fuentes del sistema), TEC-22 (helpers de MFA para las pruebas).
+
 ## Sprint Review
 _Pendiente — usar [[Plantilla Sprint Review]]._
 
 ## Retrospectiva
-_Pendiente — usar [[Plantilla Retrospectiva]]._
+[[2026-11-27 Retrospectiva - Sprint 1]]

@@ -3,7 +3,7 @@ tipo: paquete
 sprint: "[[Sprint 1 - Login base]]"
 developer: Dev 1
 agente: php-senior-developer
-estado: por hacer
+estado: terminado
 tags: [sprint, paquete, dev1]
 ---
 # Sprint 1 · Dev 1
@@ -71,3 +71,6 @@ php artisan colegio:demo            # base de demostración con datos ficticios 
 - [ ] Textos de UI en `lang/es`, en español claro.
 - [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.
 - [ ] Reporte final: tareas hechas, pruebas ejecutadas y resultado, impedimentos y deuda técnica. Sin commits ni push (los hace quien invoca).
+
+## Cierre (27/11/2026)
+Todas las tareas hechas (T-1-01 a T-1-07) en las oleadas 1–3. Pruebas de HU-001, HU-002 y HU-006 en verde. La variable de inactividad es `COLEGIO_SESION_INACTIVIDAD_MINUTOS` (sustituye a `SESSION_LIFETIME`). Pendiente: la verificación manual en navegador (DoD de experiencia). Detalle en [[Sprint 1 - Login base#Cierre del sprint (27/11/2026)]] y [[2026-11-27 Retrospectiva - Sprint 1]].

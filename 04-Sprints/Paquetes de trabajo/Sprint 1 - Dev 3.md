@@ -3,7 +3,7 @@ tipo: paquete
 sprint: "[[Sprint 1 - Login base]]"
 developer: Dev 3
 agente: php-senior-developer
-estado: por hacer
+estado: terminado
 tags: [sprint, paquete, dev3]
 ---
 # Sprint 1 · Dev 3
@@ -68,3 +68,6 @@ php artisan colegio:demo            # base de demostración con datos ficticios 
 - [ ] Textos de UI en `lang/es`, en español claro.
 - [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.
 - [ ] Reporte final: tareas hechas, pruebas ejecutadas y resultado, impedimentos y deuda técnica. Sin commits ni push (los hace quien invoca).
+
+## Cierre (27/11/2026)
+Tareas T-1-15 a T-1-20 hechas; T-1-21 parcial (sin navegador). *Spikes*: MFA por rol viable (ver [[Spike T-1-20 MFA por rol]]); el login pesa ≈ 334 KB con gzip y no cumple el RNF (ver [[Spike T-1-19 Peso del login en 3G]]). Corrigió el bug de las etiquetas de auditoría con punto. Detalle en [[Sprint 1 - Login base#Cierre del sprint (27/11/2026)]] y [[2026-11-27 Retrospectiva - Sprint 1]].

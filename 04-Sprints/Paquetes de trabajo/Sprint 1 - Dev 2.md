@@ -3,7 +3,7 @@ tipo: paquete
 sprint: "[[Sprint 1 - Login base]]"
 developer: Dev 2
 agente: php-senior-developer
-estado: por hacer
+estado: terminado
 tags: [sprint, paquete, dev2]
 ---
 # Sprint 1 · Dev 2
@@ -78,3 +78,6 @@ php artisan colegio:demo            # base de demostración con datos ficticios 
 - [ ] Textos de UI en `lang/es`, en español claro.
 - [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.
 - [ ] Reporte final: tareas hechas, pruebas ejecutadas y resultado, impedimentos y deuda técnica. Sin commits ni push (los hace quien invoca).
+
+## Cierre (27/11/2026)
+Todas las tareas hechas (T-1-08 a T-1-14, T-1-22, T-1-23). Matriz RBAC con 21 permisos y 147 celdas probadas; `notPath` de Pint eliminado; CI sin filtro `paths` y en verde en GitHub (PR #1). Sigue pendiente la protección de `main` (TEC-20), que está en manos del dueño del repositorio. Detalle en [[Sprint 1 - Login base#Cierre del sprint (27/11/2026)]] y [[2026-11-27 Retrospectiva - Sprint 1]].
