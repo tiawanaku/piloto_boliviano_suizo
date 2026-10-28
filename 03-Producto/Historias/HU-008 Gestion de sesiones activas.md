@@ -12,7 +12,7 @@ tags: [historia, fase1, seguridad]
 ---
 # HU-008 · Ver y cerrar sesiones activas
 
-> **Reordenada** en la [[2026-10-28 Revision del Product Owner]]: sale del Sprint 2. Tras las [[2026-10-28 Decisiones de la direccion]] queda **después del MVP de inicio de clases 2027**. El riesgo principal ya lo cubren la expiración por inactividad ([[HU-002 Cerrar sesion]]), el cierre de todas las sesiones al cambiar o recuperar la contraseña ([[HU-003 Recuperar contrasena]], [[HU-029 Mi cuenta datos y cambio de contrasena]]) y la desactivación ([[HU-011 Desactivar cuenta]]).
+> **Reordenada** en la [[2026-10-28 Revision del Product Owner]]: sale del Sprint 2. Tras las [[2026-10-28 Decisiones de la direccion]] queda **después del MVP del piloto**. El riesgo principal ya lo cubren la expiración por inactividad ([[HU-002 Cerrar sesion]]), el cierre de todas las sesiones al cambiar o recuperar la contraseña ([[HU-003 Recuperar contrasena]], [[HU-029 Mi cuenta datos y cambio de contrasena]]) y la desactivación ([[HU-011 Desactivar cuenta]]).
 
 > **Como** docente que inició sesión en una cabina de internet
 > **quiero** ver mis sesiones abiertas y cerrarlas a distancia

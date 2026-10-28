@@ -24,7 +24,7 @@ Como colegio 100 % virtual, la **puerta de entrada** es el login. El personal (a
 - Redirección al panel según rol.
 - Recuperación de contraseña por correo.
 - Bloqueo temporal por intentos fallidos.
-- MFA (TOTP) obligatorio para roles administrativos.
+- MFA (TOTP) obligatorio para roles administrativos (docentes: sin MFA en la Fase 1, pendiente).
 - Ver y cerrar sesiones activas.
 - Ver mis datos de cuenta y cambiar mi contraseña.
 
@@ -44,7 +44,7 @@ Como colegio 100 % virtual, la **puerta de entrada** es el login. El personal (a
 | [[HU-004 Bloqueo por intentos fallidos]] | Bloqueo | 3 | S2 |
 | [[HU-005 MFA para personal administrativo]] | MFA | 8 | S2 |
 | [[HU-029 Mi cuenta datos y cambio de contrasena]] | Mi cuenta y cambio de contraseña | 3 | S2 |
-| [[HU-008 Gestion de sesiones activas]] | Sesiones | 5 | — (primera tras la Fase 1) |
+| [[HU-008 Gestion de sesiones activas]] | Sesiones (sin ubicación aproximada) | 5 | — (después del MVP del piloto) |
 | **Total** | | **38** | 33 en S1–S2 |
 
 ## Diseño y técnica

@@ -20,7 +20,7 @@ tags: [historia, fase1, autenticacion]
 ## Criterios de aceptación
 ```gherkin
 Escenario: Inicio de sesión exitoso
-  Dado que tengo una cuenta activa con correo "ana.perez@colegio.edu.bo"
+  Dado que tengo una cuenta activa con correo "ana.perez@colegio-piloto.test"
   Cuando ingreso ese correo y mi contraseña correcta y presiono "Ingresar"
   Entonces accedo a la plataforma
   Y soy redirigida a mi panel según mi rol (ver HU-007)

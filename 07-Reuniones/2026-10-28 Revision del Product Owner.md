@@ -83,6 +83,8 @@ Volver a [[Reuniones MOC]] · Backlog: [[Backlog del producto]] · DoR: [[Defini
 - **00-Inicio / 02-Scrum:** [[Inicio]] (próximo sprint = Sprint 0), [[Metricas agiles]] e [[Incremento]] actualizados.
 
 ## Decisiones pendientes para la dirección del colegio
+
+> ✅ **Actualización:** la dirección respondió el mismo día y aclaró que es un **piloto con datos ficticios**. Ver [[2026-10-28 Decisiones de la direccion]]. Estado: 1 ✅ Gestión 2027 (escenario simulado) · 2 ✅ sistema propio · 3 ◐ tutores con acceso propio ([[EP-09 Acceso de tutores]]); consentimiento pendiente · 4 ✅ RUDE obligatorio · 5 ⏳ credenciales pendientes (Fase 4) · 6 ✅ plantel 1–15 + 1–50 · 7 ◐ cupo y carga horaria se aplican; valores pendientes · 8 ⏳ datos obligatorios del personal · 9 ⏳ MFA docentes (fuera de la Fase 1) · 10 ✅ Sprint 3 = 14/12–24/12 (SM).
 1. **¿Con qué gestión arranca el colegio en la plataforma?** ¿Clases de febrero de 2027 (habría que acelerar o reducir las Fases 2–4) o gestión 2028? Esto define el orden de las Fases 2–4.
 2. **¿LMS propio o integrado?** Bloquea el contenido del aula (HU-032 y siguientes). Requiere un ADR con el Scrum Master y los Developers.
 3. **Tutores:** texto y medio del consentimiento (firma en la oficina o aceptación en línea), ¿más de un tutor por estudiante?, ¿el docente ve el contacto del tutor?, ¿los tutores tendrán acceso propio a futuro?
@@ -95,6 +97,8 @@ Volver a [[Reuniones MOC]] · Backlog: [[Backlog del producto]] · DoR: [[Defini
 10. **Para el Scrum Master:** duración real del Sprint 3 (2 semanas como los demás, o un acuerdo explícito por los feriados).
 
 ## Orden final del backlog
+
+> ⚠️ Orden **superado** por el reordenamiento del MVP del piloto en [[2026-10-28 Decisiones de la direccion]]. El orden vigente está en [[Backlog del producto]].
 | # | ID | Pts | Sprint / fase |
 |---|---|---|---|
 | 1 | [[HU-001 Iniciar sesion con correo institucional\|HU-001]] | 5 | S1 |

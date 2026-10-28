@@ -34,7 +34,7 @@ Volver a [[Inicio]] · Concepto: [[Product Backlog]] · Dueño: [[Product Owner]
 | 12 | [[HU-010 Asignar roles al personal\|HU-010]] | Asignar roles al personal | EP-02 | 3 | refinada | S3 |
 | 13 | [[HU-011 Desactivar cuenta\|HU-011]] | Desactivar cuenta | EP-02 | 2 | refinada | S3 |
 | 14 | [[HU-014 Consultar bitacora de auditoria\|HU-014]] | Consultar bitácora de auditoría | EP-08 | 5 | refinada | S3 |
-| | | **🎯 MVP inicio de clases Gestión 2027 — Fases 2–3 (39 pts)** | | | | |
+| | | **🎯 MVP del piloto (escenario: inicio de clases 2027) — Fases 2–3 (39 pts)** | | | | |
 | 15 | [[HU-015 Registrar gestion academica\|HU-015]] | Registrar gestión académica | EP-03 | 3 | backlog | MVP |
 | 16 | [[HU-016 Configurar niveles grados y paralelos\|HU-016]] | Configurar niveles, grados y paralelos (con cupo) | EP-03 | 5 | backlog | MVP |
 | 17 | [[HU-017 Catalogo de materias\|HU-017]] | Catálogo de materias | EP-03 | 3 | backlog | MVP |
@@ -64,10 +64,10 @@ Volver a [[Inicio]] · Concepto: [[Product Backlog]] · Dueño: [[Product Owner]
 | 37 | [[HU-027 Consulta rapida para oficina de informacion\|HU-027]] | Consulta rápida para oficina de información | EP-07 | 5 | idea | — |
 | 38 | [[HU-028 Registro de atenciones\|HU-028]] | Registro de atenciones en oficina | EP-07 | 3 | idea | — |
 
-**Total del backlog:** 38 historias · 164 pts. Fase 1 en sprints (S1–S3): 54 pts. MVP de inicio de clases 2027: 39 pts (Sprints 4–5 previstos, desde el 04/01/2027).
+**Total del backlog:** 38 historias · 164 pts. Fase 1 en sprints (S1–S3): 54 pts. MVP del piloto: 39 pts (Sprints 4–5 previstos, desde el 04/01/2027; fechas referenciales).
 
-### MVP para el inicio de clases de la Gestión 2027
-Lo **imprescindible** para el primer día de clases: el colegio tiene la gestión, la estructura, las aulas, las materias y los docentes asignados; los estudiantes están registrados con su tutor y matriculados; y cada docente ve sus aulas y sus estudiantes. La ficha del aula (HU-019), las sesiones activas (HU-008) y todo el acceso de estudiantes y tutores (Fase 4) quedan **después** del inicio de clases. Ver [[2026-10-28 Decisiones de la direccion]].
+### MVP del piloto (escenario simulado: inicio de clases de la Gestión 2027)
+🧪 Es el **mínimo para demostrar el piloto** con datos ficticios, no una fecha de salida real. Lo imprescindible para simular el primer día de clases: el colegio tiene la gestión, la estructura, las aulas, las materias y los docentes asignados; los estudiantes están registrados con su tutor y matriculados; y cada docente ve sus aulas y sus estudiantes. La ficha del aula (HU-019), las sesiones activas (HU-008) y todo el acceso de estudiantes y tutores (Fase 4) quedan **después** del MVP. Ver [[2026-10-28 Decisiones de la direccion]].
 
 > El orden sigue valor y dependencias, no la numeración de épicas.
 

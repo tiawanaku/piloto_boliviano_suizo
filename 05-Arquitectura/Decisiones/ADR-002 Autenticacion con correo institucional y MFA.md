@@ -20,9 +20,9 @@ El personal necesita acceder a datos sensibles (estudiantes menores). No debe ex
 | C. SSO con el proveedor de correo institucional | Sin contraseñas propias | Dependencia de proveedor; más complejo para la Fase 1 |
 
 ## Decisión (propuesta)
-**Opción B.** MFA **obligatorio** para roles administrativos y **opcional** para docentes en la Fase 1. Evaluar SSO (opción C) como mejora futura.
+**Opción B.** MFA **obligatorio** para roles administrativos. Para docentes, **sin MFA en la Fase 1**: si se exige, se decide más adelante (pendiente de la dirección, [[2026-10-28 Decisiones de la direccion]]). Evaluar SSO (opción C) como mejora futura.
 
 ## Consecuencias
 - Requiere correos institucionales para todo el personal (supuesto en [[Riesgos y supuestos]]).
 - Flujo de restablecimiento de MFA por Soporte TI ([[HU-005 MFA para personal administrativo]]).
-- Revisar en la review del Sprint 2 si MFA pasa a ser obligatorio para docentes.
+- MFA para docentes: decisión pendiente de la dirección, fuera de la Fase 1.

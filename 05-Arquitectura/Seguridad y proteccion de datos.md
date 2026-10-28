@@ -37,6 +37,7 @@ Un colegio virtual concentra **datos de menores de edad** y toda su operación o
 - Referencia: OWASP Top 10 y OWASP ASVS (nivel 2).
 
 ## Privacidad
+- 🧪 **En el piloto solo se usan datos ficticios**; lo siguiente describe el diseño, el cumplimiento legal completo queda para una eventual implementación real.
 - Recolectar el **mínimo** de datos necesarios.
 - Acceso a datos de estudiantes solo por roles con necesidad ([[Roles y permisos RBAC]]).
 - Informar a familias qué datos se guardan y para qué, y registrar el consentimiento del tutor ([[HU-033 Registrar estudiante y tutor]]).

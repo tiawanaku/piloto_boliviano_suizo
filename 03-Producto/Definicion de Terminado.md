@@ -38,6 +38,11 @@ composer audit                      # sin vulnerabilidades altas/críticas
 - [ ] Mensajes en español claro, sin jerga técnica.
 - [ ] Probado en red lenta simulada (3G).
 
+## Alcance piloto
+- [ ] Solo **datos ficticios** (seeders/factories), dominio `@colegio-piloto.test`; ningún dato real de personas ni de menores.
+- [ ] Los correos se capturan en el entorno de demostración (sin envío a personas reales).
+- El "ambiente de pruebas" es el entorno de demostración del piloto; **no hay producción**. Cómo se monta lo decide el [[Scrum Master]] con los Developers.
+
 ## Entrega
 - [ ] Desplegado en el ambiente de pruebas (staging).
 - [ ] Aceptado por el [[Product Owner]].

@@ -14,7 +14,7 @@ Volver a [[Inicio]] · Historias: [[HU-001 Iniciar sesion con correo institucion
 │                                      │
 │  Correo institucional                │
 │  ┌────────────────────────────────┐  │
-│  │ nombre@colegio.edu.bo          │  │
+│  │ nombre@colegio-piloto.test          │  │
 │  └────────────────────────────────┘  │
 │  Contraseña                          │
 │  ┌──────────────────────────┐ ┌───┐  │

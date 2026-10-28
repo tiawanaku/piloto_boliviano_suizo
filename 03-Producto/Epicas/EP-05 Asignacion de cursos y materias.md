@@ -37,7 +37,9 @@ flowchart LR
 - Una materia de un aula tiene un docente titular (y opcionalmente un suplente).
 - Un estudiante está matriculado en una sola aula por gestión.
 - Las asignaciones pertenecen a una gestión; al cerrar la gestión quedan como histórico.
-- Todo estudiante tiene al menos un tutor registrado con consentimiento antes de matricularse.
+- Todo estudiante tiene **RUDE** y al menos un tutor registrado con consentimiento antes de matricularse.
+- Cada paralelo tiene un **cupo** configurable y cada docente una **carga horaria semanal máxima** configurable; ambos se aplican.
+- HU-020, HU-021, HU-022, HU-033, HU-023 forman parte del **MVP del piloto** ([[Backlog del producto]]).
 - Las credenciales de la app se generan en [[HU-034 Credenciales del estudiante para el tutor]] (EP-06).
 
 ## Relacionado

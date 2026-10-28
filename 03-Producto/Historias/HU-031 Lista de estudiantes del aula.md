@@ -46,4 +46,4 @@ Escenario: Aula ajena
 - Datos de menores: mínimo necesario ([[Seguridad y proteccion de datos]]).
 - **Decisión pendiente** de la dirección: ¿el docente puede ver el contacto del tutor?
 - Depende de [[HU-023 Matricular estudiantes en aula]] y [[HU-022 Docente ve sus aulas asignadas]]; no depende de la ficha del aula ([[HU-019 Panel del aula virtual]]), que queda fuera del MVP.
-- Forma parte del **MVP de inicio de clases 2027**: el docente necesita conocer a sus estudiantes desde el primer día.
+- Forma parte del **MVP del piloto** (escenario inicio de clases 2027): el docente necesita conocer a sus estudiantes desde el primer día.

@@ -20,7 +20,7 @@ El colegio **crea y controla** las cuentas del personal: no hay auto-registro. S
 | [[HU-030 Listado y ficha del personal]] | Listado y ficha del personal | 3 | S3 |
 | [[HU-010 Asignar roles al personal]] | Asignar roles | 3 | S3 |
 | [[HU-011 Desactivar cuenta]] | Desactivar cuenta | 2 | S3 |
-| [[HU-012 Carga masiva de personal]] | Carga masiva (CSV) | 8 | — |
+| [[HU-012 Carga masiva de personal]] | Carga masiva (CSV) — prioridad baja (plantel ≤ 65) | 8 | — |
 | **Total** | | **21** | 13 en S3 |
 
 ## Relacionado

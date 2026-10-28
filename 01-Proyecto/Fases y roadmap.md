@@ -7,6 +7,8 @@ aliases: [Roadmap, Fases]
 
 Volver a [[Inicio]] · [[Vision del producto]] · [[Backlog del producto]]
 
+> 🧪 **Proyecto piloto / demostración.** No es una puesta en producción real del colegio: se trabaja con **datos 100 % ficticios** (personas, estudiantes, RUDE y correos inventados, dominio `@colegio-piloto.test`), sin despliegue a producción ni compromisos operativos reales. La **Gestión 2027** es el escenario simulado del piloto, no una fecha de salida. Ver [[2026-10-28 Decisiones de la direccion]].
+
 > El roadmap es una **previsión**, no un contrato. Se ajusta en cada [[Sprint Review]] según lo aprendido (adaptación — ver [[Pilares de Scrum]]).
 
 ## Fase 1 — Acceso del personal (en curso)
@@ -25,9 +27,13 @@ Volver a [[Inicio]] · [[Vision del producto]] · [[Backlog del producto]]
 **Meta:** cada aula virtual tiene sus materias y cada materia su docente; los docentes ven sus aulas al ingresar.
 - [[EP-05 Asignacion de cursos y materias]]
 
+### 🎯 MVP del piloto (escenario: inicio de clases de la Gestión 2027)
+Mínimo para **demostrar** el piloto con datos ficticios: gestión, estructura con cupos, materias, aulas, materias y docentes asignados (con carga horaria máxima), estudiantes registrados con RUDE y tutor, matrícula y "Mis aulas" con la lista de estudiantes del docente. 10 historias, 39 pts (HU-015, 016, 017, 018, 020, 021, 022, 033, 023, 031). Ver [[Backlog del producto]].
+
 ## Fase 4 — Aplicativo de estudiantes
 **Meta:** estudiantes matriculados acceden a su app y ven sus aulas y materias.
 - [[EP-06 App de estudiantes]]
+- [[EP-09 Acceso de tutores]]
 
 ## Fase 5 — Oficina de información y mejora continua
 **Meta:** la oficina física atiende consultas con datos de la plataforma; se incorporan reportes y mejoras.
@@ -62,8 +68,9 @@ gantt
 |---|---|---|
 | H1 — Personal puede ingresar | HU-001..HU-007 y HU-029 terminadas (HU-008 queda primera tras la Fase 1) | Fin de Sprint 2 (11/12/2026) |
 | H2 — Personal gestionado por el colegio | HU-009, HU-010, HU-011, HU-030 y HU-014 terminadas (HU-012 según tamaño del plantel) | Fin de Sprint 3 (24/12/2026) |
-| H3 — Aulas virtuales listas | EP-03 + EP-04 | Fin de Fase 2 |
+| H3 — Aulas virtuales listas | HU-015 a HU-018 | Fin de Fase 2 |
+| H3b — MVP del piloto demostrable | Las 10 historias del MVP (39 pts) | Sprints 4–5 (enero de 2027, referencial) |
 | H4 — Docentes asignados y estudiantes matriculados | EP-05 | Fin de Fase 3 |
-| H5 — Estudiantes en la app | EP-06 (MVP) | Fin de Fase 4 |
+| H5 — Estudiantes y tutores en la app | EP-06 (MVP) + EP-09 | Fin de Fase 4 |
 
-> ⚠️ **Calendario escolar (revisión del PO, 2026-10-28):** con este roadmap la Fase 3 termina hacia marzo de 2027 y la Fase 4 hacia mayo de 2027, después del inicio habitual de clases en Bolivia (febrero). La dirección debe decidir con qué gestión arranca el colegio en la plataforma. Ver [[2026-10-28 Revision del Product Owner]].
+> **Calendario (actualizado):** la dirección eligió la Gestión 2027 como escenario. Como es un **piloto**, no hay fecha de salida real: el MVP se ordenó para que el escenario "inicio de clases 2027" pueda demostrarse primero, y las Fases 4–5 siguen después sin presión de calendario. Ver [[2026-10-28 Decisiones de la direccion]].

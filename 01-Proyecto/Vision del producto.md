@@ -7,6 +7,8 @@ aliases: [Visión, Product Vision]
 
 Volver a [[Inicio]]
 
+> 🧪 **Proyecto piloto / demostración.** No es una puesta en producción real del colegio: se trabaja con **datos 100 % ficticios** (personas, estudiantes, RUDE y correos inventados, dominio `@colegio-piloto.test`), sin despliegue a producción ni compromisos operativos reales. La **Gestión 2027** es el escenario simulado del piloto, no una fecha de salida. Ver [[2026-10-28 Decisiones de la direccion]].
+
 ## Declaración de visión
 > **Para** estudiantes, familias, docentes y personal de un colegio que funciona **100 % en línea**,
 > **que** necesitan enseñar, aprender y gestionar la vida escolar sin aulas físicas,
@@ -42,5 +44,7 @@ Detalle: [[Fases y roadmap]].
 - % de personal que ingresa sin ayuda en su primer intento (meta ≥ 90 %).
 - Tiempo medio de inicio de sesión < 10 s en 3G.
 - 0 incidentes de acceso no autorizado.
-- % de aulas virtuales con docentes asignados al inicio de la gestión (meta 100 %).
+- % de aulas virtuales con docentes asignados al inicio de la gestión simulada 2027 (meta 100 %, con datos ficticios del piloto).
+
+> En el piloto, las métricas se miden en demostraciones y pruebas con usuarios del colegio sobre datos ficticios; no son indicadores de operación real.
 - Satisfacción del personal (encuesta) ≥ 4/5.

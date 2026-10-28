@@ -5,6 +5,8 @@ aliases: [Home, Mapa principal]
 ---
 # 🏫 Segundo Cerebro — Colegio Virtual
 
+> 🧪 **Piloto con datos ficticios** — sin producción real. Ver [[2026-10-28 Decisiones de la direccion]].
+>
 > Base de conocimiento para construir, con **Scrum**, la plataforma de un colegio **100 % virtual**: sin aulas físicas, con oficinas físicas solo para información y atención al público.
 
 ## 🧭 Mapa del vault

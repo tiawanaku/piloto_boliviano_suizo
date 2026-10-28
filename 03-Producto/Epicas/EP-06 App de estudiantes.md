@@ -23,7 +23,8 @@ Aplicativo **separado** del portal del personal ([[ADR-003 Separar acceso de per
 | **Total** | | **26** | |
 
 ## Consideraciones
-- Estudiantes menores de edad: credenciales entregadas por el colegio a la familia; sin correo personal obligatorio.
+- Estudiantes menores de edad: credenciales entregadas por el colegio a la familia; sin correo personal obligatorio. Formato y entrega **aún no definidos** (pendiente para la Fase 4).
+- Los tutores tendrán acceso propio: [[EP-09 Acceso de tutores]].
 - Recuperación de acceso a través del tutor o de secretaría ([[HU-034 Credenciales del estudiante para el tutor]]).
 - Formato: PWA o app nativa Android → candidato a ADR.
 - Ver [[Accesibilidad y conectividad]].

@@ -6,6 +6,8 @@ tags: [proyecto, contexto]
 
 Volver a [[Inicio]] · Relacionado: [[Vision del producto]] · [[Stakeholders]]
 
+> 🧪 **Proyecto piloto / demostración.** No es una puesta en producción real del colegio: se trabaja con **datos 100 % ficticios** (personas, estudiantes, RUDE y correos inventados, dominio `@colegio-piloto.test`), sin despliegue a producción ni compromisos operativos reales. La **Gestión 2027** es el escenario simulado del piloto, no una fecha de salida. Ver [[2026-10-28 Decisiones de la direccion]].
+
 ## Modelo del colegio
 - **Netamente virtual**: no existen aulas físicas. Clases, tareas, evaluaciones y comunicación ocurren en la plataforma.
 - **Oficinas físicas solo para información**: orientación a familias, consultas de inscripción, entrega de documentación. Ver [[EP-07 Oficina de informacion]].
@@ -30,13 +32,18 @@ flowchart TD
     P1 --> E[Estudiantes matriculados]
 ```
 
+## Escala del piloto
+- Plantel **administrativo: 1 a 15 personas**; plantel **docente: 1 a 50 personas** (≤ 65 cuentas del personal). Datos ficticios.
+- Número de estudiantes: por definir; se simula con datos ficticios.
+- Gestión simulada: **2027**.
+
 ## Actores y canales de acceso
 | Actor | Canal | Fase |
 |---|---|---|
 | Plantel administrativo | Portal web del personal | 1 |
 | Docentes | Portal web del personal (y móvil responsive) | 1 |
 | Estudiantes | **Aplicativo de estudiantes** (móvil + web) | 4 |
-| Padres / tutores | Sin acceso propio por ahora: se registran con su consentimiento ([[HU-033 Registrar estudiante y tutor]]) y reciben las credenciales del estudiante ([[HU-034 Credenciales del estudiante para el tutor]]). Acceso de consulta: por decidir | 3–4 / futuro |
+| Padres / tutores | **Acceso propio** ([[EP-09 Acceso de tutores]]); se registran con su consentimiento en [[HU-033 Registrar estudiante y tutor]] | 3 (registro) / 4 (acceso) |
 | Personal de oficina de información | Portal web del personal (rol propio) | 1 / 5 |
 
 ## Restricciones y realidades
