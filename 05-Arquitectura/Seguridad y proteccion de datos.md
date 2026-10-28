@@ -30,9 +30,9 @@ Un colegio virtual concentra **datos de menores de edad** y toda su operación o
 | Auditoría | [[HU-013 Registro de auditoria de accesos]] |
 
 ## Buenas prácticas generales
-- HTTPS en todo; cabeceras de seguridad (HSTS, CSP).
+- HTTPS en todo; cabeceras de seguridad (HSTS, CSP). 🧪 Piloto: las cabeceras se aplican siempre; HTTPS y HSTS solo si la demostración se publica fuera del equipo local.
 - Protección CSRF; validación de entradas; consultas parametrizadas.
-- Secretos fuera del código (variables de entorno / gestor de secretos).
+- Secretos fuera del código (variables de entorno / gestor de secretos). 🧪 Piloto: `.env` local sin versionar; gestor de secretos solo en una implementación real.
 - Dependencias revisadas automáticamente.
 - Referencia: OWASP Top 10 y OWASP ASVS (nivel 2).
 

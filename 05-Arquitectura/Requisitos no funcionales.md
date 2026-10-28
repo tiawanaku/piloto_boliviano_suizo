@@ -19,5 +19,5 @@ Volver a [[Vision de arquitectura]]
 | Accesibilidad | Inclusión | Pautas WCAG 2.1 nivel AA ([[Accesibilidad y conectividad]]) |
 | Compatibilidad | Dispositivos variados | Navegadores modernos, Android 8+ |
 | Respaldo | Recuperación ante desastres | **Fuera del alcance del piloto** (datos ficticios, se regeneran con *seeders*); referencia real: backup diario, restauración trimestral |
-| Trazabilidad | Auditoría | Eventos de acceso y cambios sensibles retenidos 1 año |
+| Trazabilidad | Auditoría | Eventos de acceso y cambios sensibles registrados e inmutables. Retención/purga de 1 año: **fuera del alcance del piloto** (referencia para implementación real) |
 | Idioma | Interfaz | Español; preparado para otros idiomas en el futuro |

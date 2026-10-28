@@ -6,7 +6,7 @@ tags: [moc, arquitectura]
 
 Volver a [[Inicio]]
 
-> Stack decidido en el [[Sprint 0 - Preparacion]]: **PHP 8.3 + Laravel 13 + Filament 5** con PostgreSQL. Ver [[ADR-005 Stack PHP Laravel y Filament]] y la guía práctica [[Stack tecnologico]].
+> Stack decidido en el [[Sprint 0 - Preparacion]]: **PHP 8.3 + Laravel 13 + Filament 5** con SQLite en el piloto (PostgreSQL para una implementación real). Ver [[ADR-005 Stack PHP Laravel y Filament]] y la guía práctica [[Stack tecnologico]].
 
 ## Vista de contexto
 ```mermaid
@@ -24,7 +24,7 @@ flowchart TB
         AUTH[Módulo de identidad<br/>login · MFA · sesiones]
         ACAD[Módulo académico<br/>gestiones · aulas · asignaciones]
         AUD[Auditoría]
-        DB[(PostgreSQL)]
+        DB[(SQLite · piloto)]
     end
     MAIL[✉️ Correo institucional]
     P --> WEB
@@ -57,7 +57,7 @@ flowchart TB
 |---|---|
 | Lenguaje / framework | PHP 8.3+ · Laravel 13 |
 | Portal del personal (frontend + backend) | Filament 5 (Livewire 4, Alpine.js, Tailwind CSS 4), paneles `admin` y `docente` |
-| Base de datos | PostgreSQL 16+ (SQLite en memoria para pruebas) |
+| Base de datos | SQLite en el piloto (archivo para la demo, memoria para pruebas); PostgreSQL para una implementación real |
 | Autenticación | Login de Filament personalizado (correo institucional), MFA TOTP nativo de Filament, sesiones en base de datos |
 | Autorización | `spatie/laravel-permission` + Policies de Laravel |
 | Auditoría | Tabla propia `audit_events` inmutable |

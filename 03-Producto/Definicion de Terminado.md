@@ -14,7 +14,7 @@ Una historia está **terminada** solo si cumple **todo** lo siguiente:
 - [ ] Pruebas unitarias para la lógica nueva (cobertura de lo nuevo ≥ 80 %).
 - [ ] Pruebas automatizadas de los [[Criterios de aceptacion]]: cada escenario Gherkin tiene al menos una prueba **Pest** con su nombre.
 - [ ] Sin errores de análisis estático ni vulnerabilidades altas/críticas en dependencias.
-- [ ] CI de GitHub Actions en verde (formato, análisis estático, pruebas en SQLite y PostgreSQL, cobertura, auditoría de dependencias).
+- [ ] CI de GitHub Actions en verde (formato, análisis estático, pruebas en SQLite, cobertura, auditoría de dependencias).
 
 ### Comandos del stack
 Ejecutar desde `app-colegio/` antes de pedir revisión ([[Stack tecnologico]]):
@@ -44,7 +44,7 @@ composer audit                      # sin vulnerabilidades altas/críticas
 - El "ambiente de pruebas" es el entorno de demostración del piloto; **no hay producción**. Cómo se monta lo decide el [[Scrum Master]] con los Developers.
 
 ## Entrega
-- [ ] Desplegado en el ambiente de pruebas (staging).
+- [ ] Demostrable en el entorno de demostración del piloto (`php artisan colegio:demo` + `composer dev`) con datos ficticios.
 - [ ] Aceptado por el [[Product Owner]].
 - [ ] Documentación actualizada (este vault: historia, ADR si aplica, guía de usuario si aplica).
 

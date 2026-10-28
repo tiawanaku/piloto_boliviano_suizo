@@ -60,6 +60,6 @@ Escenario: Gestión cerrada o sin permiso
 
 ## Notas
 - Toda asignación, reemplazo o retiro queda en auditoría.
-- **Carga horaria máxima:** la dirección decidió aplicarla; el valor es configurable y aún no está definido ([[2026-10-28 Decisiones de la direccion]]). Las horas de cada materia vienen del catálogo ([[HU-017 Catalogo de materias]]). Interpretación del PO: el máximo **bloquea**; confirmar con la dirección si se necesita una excepción autorizada.
+- **Carga horaria máxima:** la dirección decidió aplicarla; el valor es configurable y aún no está definido ([[2026-10-28 Decisiones de la direccion]]). Las horas de cada materia vienen del catálogo ([[HU-017 Catalogo de materias]]). **Confirmado por la dirección: el máximo bloquea la asignación** (sin excepciones en el piloto).
 - El tablero de "materias sin docente" sirve para medir la meta de la visión: 100 % de aulas con docentes al inicio de la gestión ([[Vision del producto]]).
 - Si se desactiva la cuenta de un docente con asignaciones vigentes ([[HU-011 Desactivar cuenta]]), sus materias pasan a "sin docente".

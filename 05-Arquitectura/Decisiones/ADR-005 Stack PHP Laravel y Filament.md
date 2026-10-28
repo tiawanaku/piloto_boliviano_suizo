@@ -34,10 +34,12 @@ Volver a [[Vision de arquitectura]] · Resumen práctico: [[Stack tecnologico]] 
 | `spatie/laravel-activitylog` | 5.1.3 | **^8.4** | Descartado: incompatible con PHP 8.3 |
 | `laravel/sanctum` | 4.3.3 | ^8.2 | Reservado para la API de la Fase 4 si se elige |
 
+> 🧪 **Actualización 2026-10-28 — alcance piloto.** La dirección aclaró que el proyecto es un **piloto/demostración con datos ficticios**, sin producción ([[2026-10-28 Decisiones de la direccion]]). Se simplificó la infraestructura (base de datos, correo, ambientes, respaldos) **sin tocar la calidad del código**: pruebas Pest, Pint, Larastan y CI se mantienen igual. Las secciones afectadas lo indican.
+
 ## Decisión
 
 ### 1. Lenguaje, framework y versiones
-- **PHP 8.3** como mínimo (`"php": "^8.3"`), en desarrollo, CI y servidores. Migrar a PHP 8.4 es una mejora planificada (permite Pest 5), no un requisito de la Fase 1.
+- **PHP 8.3** como mínimo (`"php": "^8.3"`), en desarrollo, CI y en el equipo donde se haga la demostración. Migrar a PHP 8.4 es una mejora planificada (permite Pest 5), no un requisito de la Fase 1.
 - **Laravel 13** (`laravel/framework:^13.39`).
 - **Filament 5** (`filament/filament:^5.11`) para el portal del personal, que incluye:
   - **Livewire 4** (componentes del lado del servidor; sin SPA propia ni API para el portal).
@@ -47,12 +49,11 @@ Volver a [[Vision de arquitectura]] · Resumen práctico: [[Stack tecnologico]] 
 - Zona horaria `America/La_Paz`, `APP_LOCALE=es`, `APP_FALLBACK_LOCALE=en`.
 
 ### 2. Base de datos
-- **PostgreSQL 16 o superior** en staging y producción.
-  - Motivo principal: la bitácora de auditoría debe ser **inmutable** ([[HU-013 Registro de auditoria de accesos]]). PostgreSQL permite reforzarlo en la base de datos con un *trigger* que rechaza `UPDATE`/`DELETE` y con permisos por rol de base de datos, además de tipos `jsonb` (contexto del evento) e `inet` (IP) indexables.
-  - DDL transaccional (migraciones que fallan no dejan el esquema a medias), índices parciales (p. ej. usuarios activos), buen soporte de UUID.
-  - Libre, sin licencias, disponible en cualquier VPS o servicio administrado.
-- **SQLite en memoria** para la suite de pruebas local (rápida). En CI se ejecuta además la suite completa contra **PostgreSQL** (servicio de GitHub Actions) para detectar diferencias de dialecto y probar el *trigger* de auditoría.
-- MySQL 8 queda como alternativa aceptable si el hosting lo impusiera; el código no usará SQL específico salvo en migraciones aisladas (el *trigger*).
+- **Piloto: SQLite** en todos los entornos: desarrollo, demostración (archivo `database/database.sqlite`) y pruebas (`:memory:`).
+  - Basta para la escala del piloto (≤ 65 cuentas del personal y estudiantes ficticios) y para una demostración con pocos usuarios a la vez (modo WAL).
+  - No requiere instalar ni operar un servidor de base de datos ni Docker: `php artisan colegio:demo` regenera todo con datos ficticios (`migrate:fresh --seed`).
+  - Admite el *trigger* que hace **inmutable** la bitácora ([[HU-013 Registro de auditoria de accesos]]), las claves foráneas y JSON. La suite completa corre igual en local y en CI, con un solo motor.
+- **Implementación real (fuera del piloto): PostgreSQL 16+**, por su concurrencia, `jsonb`/`inet` indexables y permisos por rol de base de datos. Para que el cambio sea barato, el código **no usa SQL específico** salvo en la migración del *trigger*, que trae ramas para `sqlite` y `pgsql`. MySQL 8 sería una alternativa aceptable. No se agrega PostgreSQL vía Docker ni un trabajo de CI con PostgreSQL en el piloto: costaría mantenimiento sin aportar a la demostración.
 - Identificadores: **UUID** (`HasUuids` de Eloquent, ordenables por tiempo) para `users` y entidades de dominio, como pide el [[Modelo de dominio]]. Implica usar `foreignUuid('user_id')` en la tabla `sessions` y configurar `spatie/laravel-permission` con clave morfológica UUID.
 
 ### 3. Paneles Filament
@@ -86,7 +87,7 @@ Volver a [[Vision de arquitectura]] · Resumen práctico: [[Stack tecnologico]] 
 | Recuperación de contraseña | `->passwordReset()` de Filament con el *password broker* de Laravel: token de un uso, `expire = 30` min, respuesta idéntica exista o no el correo, límite 3 solicitudes/hora por correo e IP (`RateLimiter`). Al restablecer: se borran las demás sesiones del usuario, se desbloquea la cuenta y se envía correo de confirmación | [[HU-003 Recuperar contrasena]] |
 | Bloqueo por intentos fallidos | Filament ya limita intentos por IP en el formulario; además un servicio propio `AccountLockout` con columnas `failed_login_attempts`, `last_failed_login_at`, `locked_until` (5 fallos en 15 min → 15 min de bloqueo, umbrales en `config/colegio.php`), notificación por correo al titular y acción "Desbloquear" para Soporte TI | [[HU-004 Bloqueo por intentos fallidos]] |
 | MFA (TOTP) | **MFA nativo de Filament** con app autenticadora (`pragmarx/google2fa` + QR con `chillerlan/php-qrcode`), con **códigos de recuperación** (configurar 10). Obligatorio para usuarios con algún rol administrativo (aunque entren por `/docente`); los docentes sin rol administrativo **no** usan MFA en la Fase 1 (decisión de la dirección del 2026-10-28). Acción "Restablecer MFA" para Soporte TI (borra secreto y códigos; queda auditada). **(spike)**: confirmar en Sprint 2 cómo exigir MFA por rol y no solo por panel, y la cantidad de códigos | [[HU-005 MFA para personal administrativo]] |
-| Sesiones activas | Tabla `sessions` de Laravel (`user_id`, `ip_address`, `user_agent`, `last_activity`) mostrada en una página Filament "Mi cuenta > Sesiones"; cerrar una o todas las demás = borrar filas. La "ubicación aproximada" requiere GeoIP: se propone al PO mostrar solo IP y navegador en Fase 1 | [[HU-008 Gestion de sesiones activas]] |
+| Sesiones activas | Tabla `sessions` de Laravel (`user_id`, `ip_address`, `user_agent`, `last_activity`) mostrada en una página Filament "Mi cuenta > Sesiones"; cerrar una o todas las demás = borrar filas. Sin "ubicación aproximada": se muestran navegador, sistema operativo, IP y último uso (propuesta aceptada por el PO) | [[HU-008 Gestion de sesiones activas]] |
 
 - La pantalla de login debe cumplir el presupuesto de < 200 KB ([[Requisitos no funcionales]]). **(spike)** medir el peso real del login de Filament en Sprint 1 y aplicar compresión/caché de recursos si se excede.
 - No hay auto-registro (no se habilita `->registration()`).
@@ -109,7 +110,7 @@ Volver a [[Vision de arquitectura]] · Resumen práctico: [[Stack tecnologico]] 
   - `owen-it/laravel-auditing` 14 encaja para cambios de modelos, pero su esquema no cubre bien intentos fallidos sin usuario ni la inmutabilidad requerida.
 - Columnas: `id` (UUID), `occurred_at`, `event_type`, `actor_id` (nullable), `subject_type`/`subject_id` (nullable), `email_attempted` (nullable), `result`, `ip_address`, `user_agent`, `context` (`jsonb`, **sin** contraseñas, tokens ni secretos).
 - Fuentes: *listeners* de eventos de Laravel (`Login`, `Failed`, `Logout`, `Lockout`, `PasswordReset`), eventos propios de dominio (`RoleAssigned`, `AccountDeactivated`, `MfaReset`, `AccountUnlocked`…) y el manejador de 403.
-- **Inmutabilidad** en tres capas: el modelo `AuditEvent` lanza excepción en `updating`/`deleting`; la *Policy* niega `update`/`delete`; en PostgreSQL un *trigger* rechaza `UPDATE`/`DELETE`. Retención 1 año mediante un comando programado que solo puede ejecutar el usuario de mantenimiento de base de datos.
+- **Inmutabilidad** en tres capas: el modelo `AuditEvent` lanza excepción en `updating`/`deleting`; la *Policy* niega `update`/`delete`; un *trigger* de base de datos (SQLite en el piloto; rama `pgsql` lista para una implementación real) rechaza `UPDATE`/`DELETE`. La purga por retención (1 año) queda **fuera del alcance del piloto**: los datos ficticios se regeneran con *seeders*.
 - Consulta ([[HU-014 Consultar bitacora de auditoria]]): `AuditEventResource` de solo lectura con filtros (usuario, tipo, rango de fechas), orden descendente y acción de exportación a CSV por *streaming* que a su vez registra un evento `audit.exported`.
 - Si en fases futuras se necesitan diffs de cambios de modelos académicos, se reevaluará `owen-it/laravel-auditing` en un ADR nuevo.
 
@@ -118,14 +119,14 @@ Volver a [[Vision de arquitectura]] · Resumen práctico: [[Stack tecnologico]] 
 - **Larastan 3 (PHPStan 2) nivel 6** desde el primer commit, sin *baseline*. Meta: nivel 8 al cierre de la Fase 2 (acuerdo en retrospectiva).
 - **Laravel Pint** con el *preset* `laravel`.
 - `composer audit` sin vulnerabilidades altas/críticas.
-- **GitHub Actions** (`.github/workflows/app-colegio.yml` en la raíz del repositorio, `working-directory: app-colegio`): trabajos `pint --test`, `phpstan analyse`, `pest` con SQLite y con PostgreSQL de servicio, cobertura con `pcov` (`--coverage --min=80`) y `composer audit`. El PR no se integra si algún trabajo falla.
+- **GitHub Actions** (`.github/workflows/app-colegio.yml` en la raíz del repositorio, `working-directory: app-colegio`): trabajos `pint --test`, `phpstan analyse`, `pest` con SQLite y cobertura con `pcov` (`--coverage --min=80`), y `composer audit`. En el piloto no hay trabajo de despliegue. El PR no se integra si algún trabajo falla.
 - La [[Definicion de Terminado]] la ajusta el PO con estos comandos (propuesta del Scrum Master).
 
 ### 8. Colas, correo y tareas programadas
-- **Colas con driver `database`** al inicio (sin Redis); todas las notificaciones por correo implementan `ShouldQueue`. Worker con `php artisan queue:work` supervisado (systemd/Supervisor). Redis (la extensión ya está disponible) queda como optimización si la carga lo exige.
-- **Caché `database`** al inicio; misma nota sobre Redis.
-- **Correo:** SMTP del dominio institucional en staging/producción; `MAIL_MAILER=log` (o Mailpit) en desarrollo. Plantillas Markdown de Laravel en español.
-- *Scheduler* de Laravel (`routes/console.php`) para limpieza de tokens, sesiones vencidas y retención de auditoría.
+- **Colas con driver `database`** (sin Redis); todas las notificaciones por correo implementan `ShouldQueue`. En el piloto el *worker* se levanta con `composer dev` (servidor, cola y logs juntos), sin Supervisor.
+- **Caché `database`**.
+- **Correo:** nunca sale a personas reales. Por defecto `MAIL_MAILER=log`; **Mailpit** es opcional para mostrar los correos en una demostración. Las pruebas usan `Notification::fake()`. Plantillas Markdown de Laravel en español. SMTP institucional: solo en una eventual implementación real.
+- *Scheduler*: en el piloto solo `auth:clear-resets`; la limpieza productiva y la retención de auditoría quedan fuera del alcance.
 
 ### 9. App de estudiantes (Fase 4) — recomendación, decisión abierta
 | Opción | Pros | Contras |
@@ -146,6 +147,8 @@ piloto_boliviano_suizo/          ← raíz del repositorio = vault de Obsidian
     ├── composer.json  phpstan.neon  pint.json  phpunit.xml
     └── .env.example             ← nunca se versiona .env
 ```
+- **Ambientes del piloto:** desarrollo local y un **entorno de demostración** que es la misma aplicación ejecutada en un equipo (o servidor compartido, si se quiere) con `php artisan colegio:demo` y `composer dev`. No hay staging, producción ni despliegue continuo. HTTPS solo si la demostración se publica fuera del equipo; dominio de ejemplo `colegio-piloto.test`.
+- **Datos:** solo ficticios, generados por *seeders* y *factories*: correos `@colegio-piloto.test`, hasta 15 administrativos y 50 docentes ficticios, con al menos una cuenta por rol.
 - El código vive separado del vault. Se recomienda excluir `app-colegio/` en Obsidian (*Settings → Files and links → Excluded files*) para que `vendor/` y `node_modules/` no se indexen.
 - `.gitignore` de `app-colegio/` (el de Laravel) excluye `vendor/`, `node_modules/`, `.env`, `storage/*.key`.
 
@@ -153,7 +156,7 @@ piloto_boliviano_suizo/          ← raíz del repositorio = vault de Obsidian
 | Tema | Elegida | Alternativas descartadas |
 |---|---|---|
 | Framework | Laravel 13 + Filament 5 | Laravel 12 + Filament 4 (soporte más corto); Symfony + EasyAdmin (menos productivo para el equipo y sin MFA nativo) |
-| Base de datos | PostgreSQL | MySQL 8 (válido; menor apoyo a inmutabilidad y `jsonb`); SQLite en producción (no apto para concurrencia) |
+| Base de datos | SQLite en el piloto (PostgreSQL para una implementación real) | PostgreSQL desde el piloto (infraestructura sin valor para la demo); MySQL 8 (válido para una implementación real) |
 | Paneles | `admin` + `docente` | Un panel único (mezcla UX docente y administrativa); un panel por rol (duplicación) |
 | Autorización | spatie/laravel-permission + Policies | Filament Shield (permisos CRUD genéricos); roles propios (reinventar caché y API probadas) |
 | Auditoría | Tabla propia | spatie/activitylog (PHP 8.4); owen-it/laravel-auditing (orientado a modelos) |
@@ -168,10 +171,11 @@ piloto_boliviano_suizo/          ← raíz del repositorio = vault de Obsidian
 - ⚠️ Personalizar el login y el flujo de MFA por rol exige conocer los internos de Filament → *spikes* en Sprint 1 y Sprint 2.
 - ⚠️ Livewire es más "conversador" que HTML estático: vigilar peso y latencia en 3G ([[Accesibilidad y conectividad]]).
 - ⚠️ PHP 8.3 impide usar Pest 5 y spatie/activitylog 5; revisar la subida a PHP 8.4 en la retrospectiva de la Fase 1.
-- ✅ La escala del personal (≤ 65 cuentas) cabe holgadamente en un solo servidor con colas y caché en base de datos; no se requiere optimización de rendimiento especial en la Fase 1.
+- ✅ La escala del piloto (≤ 65 cuentas del personal) cabe holgadamente en SQLite con colas y caché en base de datos; no se requiere optimización de rendimiento.
 - 🔮 **Tutores con acceso propio (épica futura):** el diseño lo permite sin rehacer nada: una sola tabla `users` con perfiles (`StaffMember`, futuros `Student` y `Guardian`), roles de spatie y paneles separados. Se añadirá un rol `guardian` y un panel/perfil `tutor` (o el mismo canal que elija el ADR de la app de estudiantes, §9) con su propio guard si conviene, sin acceso a `admin` ni `docente`.
 - 🔮 **Aula virtual propia (sin LMS externo):** las Fases 2–4 se construyen como módulos Laravel/Filament del mismo proyecto; el contenido del aula requerirá su propio ADR de diseño (almacenamiento de archivos, límites de tamaño para 3G).
-- ⚠️ Se necesita un servidor con PHP-FPM 8.3, PostgreSQL 16+, worker de colas y *cron* para el *scheduler* (supuesto a validar en [[Riesgos y supuestos]]).
+- ✅ Piloto sin infraestructura: basta un equipo con PHP 8.3 y Composer.
+- ⚠️ Una implementación real requeriría un ADR de infraestructura: PostgreSQL, servidor con PHP-FPM, *worker* supervisado, *cron*, SMTP institucional, respaldos y monitoreo.
 
 ## Revisión
 - Fin del Sprint 2: confirmar MFA por rol y peso del login (resultados de los *spikes*).

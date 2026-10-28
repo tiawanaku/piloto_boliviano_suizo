@@ -30,7 +30,7 @@ Actualizado en: [[Vision del producto]], [[Contexto del colegio virtual]], [[Fas
 | 4 | RUDE **obligatorio** | Ningún estudiante se registra sin RUDE | [[HU-033 Registrar estudiante y tutor]] incluye el escenario "RUDE obligatorio" y valida el formato. En el piloto los RUDE son ficticios. |
 | 5 | Credenciales de estudiantes **no definidas** (Fase 4) | No bloquea las Fases 1–3 | [[HU-034 Credenciales del estudiante para el tutor]] queda en backlog con la decisión pendiente; podrían entregarse a través de la cuenta del tutor. |
 | 6 | Plantel administrativo **1–15**, docente **1–50** | Escala pequeña (≤ 65 cuentas) | Escala registrada en [[Contexto del colegio virtual]], [[Requisitos no funcionales]] y [[Stakeholders]]. [[HU-012 Carga masiva de personal]] pasa a **prioridad baja** (ver la propuesta 2 del SM). |
-| 7 | Cupo por paralelo y carga horaria máxima por docente: **se aplican**, con valores **configurables** aún no definidos | El PO interpreta que ambos **bloquean** la acción (no solo advierten) | Cupo en [[HU-016 Configurar niveles grados y paralelos]] (por defecto, editable por paralelo) y en [[HU-023 Matricular estudiantes en aula]] (bloquea la matrícula o el cambio a un paralelo lleno). Carga máxima en [[HU-021 Asignar docente a materia]] (bloquea, muestra las horas usadas y disponibles). **Confirmar** con la dirección si se necesita una excepción autorizada. |
+| 7 | Cupo por paralelo y carga horaria máxima por docente: **se aplican**, con valores **configurables** aún no definidos | **Confirmado por la dirección: ambos bloquean la acción** (no solo advierten) | Cupo en [[HU-016 Configurar niveles grados y paralelos]] (por defecto, editable por paralelo) y en [[HU-023 Matricular estudiantes en aula]] (bloquea la matrícula o el cambio a un paralelo lleno). Carga máxima en [[HU-021 Asignar docente a materia]] (bloquea, muestra las horas usadas y disponibles). Sin excepciones en el piloto. |
 | 8 | MFA para docentes: **pendiente, fuera de la Fase 1** | Docentes sin MFA en la Fase 1 | Actualizados [[HU-005 MFA para personal administrativo]], [[ADR-002 Autenticacion con correo institucional y MFA]] y [[Roles y permisos RBAC]]. Queda como idea en el parking lot del backlog. |
 
 ## Propuestas del Scrum Master ([[2026-10-28 Sprint Planning tecnico - Scrum Master]])
@@ -90,5 +90,5 @@ Propuestas del PO; la decisión técnica es del SM con los Developers. Solo se m
 | Acción | Responsable | Fecha |
 |---|---|---|
 | Revisar los ajustes por alcance piloto y las notas sobre HU-008 y HU-012 | Scrum Master | Sprint Planning del S0 |
-| Confirmar con la dirección que cupo y carga horaria **bloquean** | Product Owner | Taller del 03/11/2026 |
+| ~~Confirmar con la dirección que cupo y carga horaria bloquean~~ → **confirmado: bloquean** | Product Owner | Resuelto 28/10/2026 |
 | Refinar el MVP del piloto (re-estimar HU-016, HU-020, HU-021 y HU-033) | PO + Developers | Refinamiento del S3 |

@@ -7,21 +7,23 @@ aliases: [Stack, Stack tecnico, Convenciones de codigo]
 
 Volver a [[Vision de arquitectura]] · Decisión: [[ADR-005 Stack PHP Laravel y Filament]]
 
+> 🧪 **Alcance piloto** ([[2026-10-28 Decisiones de la direccion]]): sin staging ni producción; datos ficticios. La calidad del código no cambia.
+>
 > Guía práctica para los [[Developers]]. El *por qué* de cada elección está en el ADR-005; aquí está el *qué* y el *cómo*.
 
 ## Componentes y versiones
 | Capa | Componente | Versión | Notas |
 |---|---|---|---|
-| Lenguaje | PHP | 8.3+ (local 8.3.6) | Extensiones: `pdo_pgsql`, `pdo_sqlite`, `intl`, `mbstring`, `zip`, `sodium` |
+| Lenguaje | PHP | 8.3+ (local 8.3.6) | Extensiones: `pdo_sqlite`, `intl`, `mbstring`, `zip`, `sodium` |
 | Framework | Laravel | 13.x (13.39.0) | Proyecto en `app-colegio/` |
 | UI del personal | Filament | 5.x (5.11.0) | Paneles `admin` y `docente` |
 | Componentes | Livewire / Alpine.js | 4.x / incluido | Vienen con Filament |
 | Estilos | Tailwind CSS | 4.x | Solo para tema propio (Vite) |
-| Base de datos | PostgreSQL | 16+ | Staging y producción |
-| Base de datos (tests) | SQLite en memoria | — | Local; en CI también PostgreSQL |
+| Base de datos | SQLite | 3 | Desarrollo y demostración (`database/database.sqlite`); pruebas en `:memory:`. PostgreSQL solo en una implementación real |
 | Sesiones / caché / colas | Driver `database` | — | Redis como mejora futura |
-| Correo | SMTP institucional | — | `log` o Mailpit en desarrollo |
-| Servidor | Nginx + PHP-FPM | 8.3 | Worker de colas + *cron* del *scheduler* |
+| Correo | driver `log` (Mailpit opcional) | — | Ningún correo sale a personas reales |
+| Ejecución | `composer dev` | — | Servidor, cola y logs; demo con `php artisan colegio:demo` |
+| Datos | *Seeders* ficticios | — | `@colegio-piloto.test`, ≤ 15 administrativos y ≤ 50 docentes |
 | CI | GitHub Actions | — | `.github/workflows/app-colegio.yml` |
 
 ## Paquetes Composer
@@ -46,6 +48,7 @@ Ejecutar desde `app-colegio/`. Todos deben pasar antes de abrir un PR ([[Definic
 vendor/bin/pint --test                      # formato (sin modificar); usar `vendor/bin/pint` para corregir
 vendor/bin/phpstan analyse                  # Larastan nivel 6 (phpstan.neon)
 vendor/bin/pest                             # suite completa (SQLite en memoria)
+php artisan colegio:demo                    # regenera la base de demostración con datos ficticios
 vendor/bin/pest --coverage --min=80         # cobertura (requiere pcov/xdebug; se mide en CI)
 composer audit                              # vulnerabilidades en dependencias
 ```
@@ -113,14 +116,14 @@ Incluye HU-001..HU-014 y las historias de Fase 1 que el PO añadió en la [[2026
 | [[HU-005 MFA para personal administrativo]] | MFA de app autenticadora de Filament con códigos de recuperación, `User` implementa las interfaces de MFA de Filament, exigencia por rol administrativo, códigos incorrectos suman en `AccountLockout` (HU-004), acción `ResetMfa` (`UserPolicy::resetMfa`) |
 | [[HU-006 Cambio de contrasena en primer ingreso]] | Columnas `must_change_password`/`temporary_password_expires_at`, *middleware* `EnsurePasswordIsChanged`, página `Pages/ChangePassword`, regla `Password::min(10)->uncompromised()` |
 | [[HU-007 Panel segun rol]] | `AdminPanelProvider`, `DocentePanelProvider`, `User::canAccessPanel()`, columna `primary_role`, `LoginResponse` propio, ítem del menú de usuario "Cambiar de panel", vista 403 en español + registro en auditoría |
-| [[HU-008 Gestion de sesiones activas]] (reordenada por el PO para después de la Fase 1) | Página `Pages/ActiveSessions` (tabla sobre `sessions`), acciones "Cerrar" y "Cerrar todas las demás" |
+| [[HU-008 Gestion de sesiones activas]] (después del MVP del piloto) | Página `Pages/ActiveSessions` (tabla sobre `sessions`: navegador y sistema operativo derivados del `user_agent`, IP y último uso; **sin ubicación**, sin servicios externos), acciones "Cerrar" y "Cerrar todas las demás" |
 | [[HU-029 Mi cuenta datos y cambio de contrasena]] (nueva, Sprint 2) | Página de perfil de Filament (`->profile()`) personalizada: datos, roles y estado MFA; cambio de contraseña con contraseña actual, misma regla de política y cierre de las demás sesiones |
 | [[HU-030 Listado y ficha del personal]] (nueva, Sprint 3) | `Admin/Resources/UserResource` (lista con búsqueda/filtros, vista y edición) + `StaffMember`; CI único; cambio de correo solo con `UserPolicy::changeEmail` (Soporte TI) y auditado |
 | [[HU-009 Invitar personal]] | `Admin/Resources/UserResource` (crear), modelo `StaffMember`, *Action* `InviteStaffMember`, notificación con enlace firmado de 72 h, página pública de activación |
 | [[HU-010 Asignar roles al personal]] | Campo de roles en `UserResource` (spatie), `UserPolicy::assignRole` con regla de roles altos, evento `RoleAssigned`/`RoleRevoked` → auditoría |
 | [[HU-011 Desactivar cuenta]] | Acciones `DeactivateAccount`/`ReactivateAccount` con motivo, borrado de sesiones del usuario, sin borrado físico (`UserPolicy::delete` siempre `false`) |
 | [[HU-012 Carga masiva de personal]] | Importador CSV (`ImportAction` de Filament o *Action* propia con vista previa), reutiliza `InviteStaffMember`, envío en cola |
-| [[HU-013 Registro de auditoria de accesos]] | Tabla `audit_events`, modelo inmutable `AuditEvent`, servicio `AuditLogger`, *listeners* de `Login`/`Failed`/`Logout`/`Lockout`, *trigger* PostgreSQL anti `UPDATE`/`DELETE` |
+| [[HU-013 Registro de auditoria de accesos]] | Tabla `audit_events`, modelo inmutable `AuditEvent`, servicio `AuditLogger`, *listeners* de `Login`/`Failed`/`Logout`/`Lockout`, *trigger* anti `UPDATE`/`DELETE` (SQLite; rama `pgsql` preparada) |
 | [[HU-014 Consultar bitacora de auditoria]] | `Admin/Resources/AuditEventResource` de solo lectura, filtros (usuario, tipo, fechas), exportación CSV por *streaming* auditada, `AuditEventPolicy` (Dirección y Soporte TI) |
 
 ## Relacionado
