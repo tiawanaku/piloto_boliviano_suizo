@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages\Auth;
 
+use App\Enums\AccountStatus;
 use App\Models\User;
 use App\Rules\InstitutionalEmail;
 use Filament\Actions\Action;
@@ -68,20 +69,36 @@ class Login extends BaseLogin
 
     /**
      * Se ejecuta con credenciales ya verificadas (dentro del timebox de
-     * Filament). Una contraseña temporal vencida impide el ingreso con un
-     * mensaje propio (HU-006); el intento se registra como fallido.
+     * Filament), así que el estado de la cuenta solo se revela a quien conoce
+     * la contraseña. Cada rechazo dispara Failed y queda auditado (HU-013).
+     *
+     * - Pendiente o desactivada: "Tu cuenta no está activa…" (HU-001).
+     * - Contraseña temporal vencida: pedir una nueva a secretaría (HU-006).
+     * - Activa con algún panel: se acepta aunque entre por el login del otro
+     *   panel; StaffLoginResponse la lleva a su panel principal (HU-007).
+     * - Resto (p. ej. bloqueada, sin roles): mensaje genérico.
      */
     protected function isUserAllowedToAccessPanel(Authenticatable $user): bool
     {
         $this->rejectionMessage = null;
 
-        if ($user instanceof User && $user->temporaryPasswordExpired()) {
+        if (! $user instanceof User) {
+            return parent::isUserAllowedToAccessPanel($user);
+        }
+
+        if (in_array($user->status, [AccountStatus::Pending, AccountStatus::Deactivated], true)) {
+            $this->rejectionMessage = __('auth.login.inactive');
+
+            return false;
+        }
+
+        if ($user->temporaryPasswordExpired()) {
             $this->rejectionMessage = __('auth.login.temporary_password_expired');
 
             return false;
         }
 
-        return parent::isUserAllowedToAccessPanel($user);
+        return $user->primaryPanelId() !== null;
     }
 
     protected function throwFailureValidationException(): never

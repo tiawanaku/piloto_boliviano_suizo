@@ -18,10 +18,20 @@ enum AuditEventType: string
     case Logout = 'logout';
     case AccessDenied = 'access.denied';
     case AuditExported = 'audit.exported';
+    case PasswordChanged = 'password.changed';
 
+    /**
+     * Etiqueta en español. El punto del valor se cambia por "_" en la clave de
+     * traducción: __() interpreta los puntos como anidación.
+     */
     public function label(): string
     {
-        return __('audit.event_type.'.$this->value);
+        return __('audit.event_type.'.$this->translationKey());
+    }
+
+    public function translationKey(): string
+    {
+        return str_replace('.', '_', $this->value);
     }
 
     /**

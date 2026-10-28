@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Exceptions\RecordAccessDenied;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -20,4 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
+
+        // Todo 403 queda en la bitácora (access.denied) y luego se muestra errors/403.
+        $exceptions->render(new RecordAccessDenied);
     })->create();

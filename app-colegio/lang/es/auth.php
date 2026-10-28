@@ -18,6 +18,7 @@ return [
 
     'login' => [
         'failed' => 'Correo o contraseña incorrectos.',
+        'inactive' => 'Tu cuenta no está activa. Comunícate con secretaría o la oficina de información.',
         'temporary_password_expired' => 'Tu contraseña temporal venció. Solicita una nueva a secretaría.',
         'email' => [
             'label' => 'Correo institucional',

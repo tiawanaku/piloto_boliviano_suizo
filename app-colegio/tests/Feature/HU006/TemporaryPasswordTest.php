@@ -9,6 +9,7 @@ use App\Filament\Pages\Auth\Login;
 use App\Models\AuditEvent;
 use App\Models\User;
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Livewire\Livewire;
@@ -77,6 +78,42 @@ it('Contraseña temporal: al definir una contraseña válida accede al panel', f
         ->and(Hash::check('lluvia-en-el-altiplano-42', $user->password))->toBeTrue();
 
     $this->get('/admin')->assertOk();
+});
+
+it('Contraseña temporal: el cambio queda auditado sin la contraseña ni su hash', function () {
+    $user = hu006TemporaryUser();
+    $this->actingAs($user);
+    Filament::setCurrentPanel(Filament::getPanel('admin'));
+
+    Livewire::test(ChangeTemporaryPassword::class)
+        ->fillForm(['password' => 'lluvia-en-el-altiplano-42', 'passwordConfirmation' => 'lluvia-en-el-altiplano-42'])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    $event = AuditEvent::query()->where('event_type', AuditEventType::PasswordChanged)->sole();
+    $hash = $user->refresh()->password;
+
+    expect($event->actor_id)->toBe($user->id)
+        ->and($event->subject_id)->toBe($user->id)
+        ->and($event->email_attempted)->toBe($user->email)
+        ->and($event->result)->toBe(AuditEvent::RESULT_SUCCESS);
+
+    foreach ((array) DB::table('audit_events')->where('id', $event->id)->first() as $value) {
+        expect((string) $value)->not->toContain('lluvia-en-el-altiplano-42')
+            ->not->toContain(HU006_TEMPORAL)
+            ->not->toContain($hash);
+    }
+});
+
+it('una contraseña rechazada no se audita como cambio', function () {
+    $this->actingAs(hu006TemporaryUser());
+    Filament::setCurrentPanel(Filament::getPanel('admin'));
+
+    Livewire::test(ChangeTemporaryPassword::class)
+        ->fillForm(['password' => 'Corta-9x', 'passwordConfirmation' => 'Corta-9x'])
+        ->call('save');
+
+    expect(AuditEvent::query()->where('event_type', AuditEventType::PasswordChanged)->exists())->toBeFalse();
 });
 
 it('Política de contraseña: la página muestra qué requisito no se cumple', function (string $password, string $message) {

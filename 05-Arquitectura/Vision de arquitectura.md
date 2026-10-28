@@ -82,6 +82,9 @@ Detalle y justificación: [[ADR-005 Stack PHP Laravel y Filament]] · Versiones,
 - [[ADR-004 Control de acceso basado en roles]]
 - [[ADR-005 Stack PHP Laravel y Filament]]
 
+## Spikes
+- [[Spike T-1-20 MFA por rol]] (Sprint 1): MFA solo para roles administrativos en Filament 5
+
 ## Criterios usados para elegir el stack (ver ADR-005)
 - Conocimiento del equipo y facilidad de contratar en el medio local.
 - Bibliotecas maduras de autenticación (hash de contraseñas, TOTP, sesiones).

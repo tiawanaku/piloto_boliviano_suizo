@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages\Auth;
 
+use App\Enums\AuditEventType;
 use App\Models\User;
+use App\Services\AuditLogger;
 use Closure;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
@@ -76,6 +78,15 @@ class ChangeTemporaryPassword extends SimplePage
 
         $user->password = $data['password'];
         $user->clearTemporaryPassword()->save();
+
+        // Sin la contraseña ni su hash: solo quién, cuándo y el motivo.
+        app(AuditLogger::class)->record(
+            AuditEventType::PasswordChanged,
+            actor: $user,
+            subject: $user,
+            email: $user->email,
+            context: ['reason' => 'temporary_password', 'panel' => Filament::getCurrentOrDefaultPanel()->getId()],
+        );
 
         $this->keepSessionAfterPasswordChange($user);
 
