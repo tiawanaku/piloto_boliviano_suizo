@@ -64,6 +64,9 @@ Volver a [[Inicio]] · Concepto: [[Product Backlog]] · Dueño: [[Product Owner]
 
 > El orden sigue valor y dependencias, no la numeración de épicas: p. ej. la ficha del aula (HU-019, EP-04) va después de las asignaciones (EP-05) porque sin materias ni docentes no muestra nada útil.
 
+## Trabajo técnico
+- [[Backlog tecnico]] — habilitadores técnicos (`TEC-nn`) que el Scrum Master planifica junto a las historias que los necesitan, sin cambiar este orden.
+
 ## Épicas
 - [[EP-01 Login plantel administrativo y docentes]] — Fase 1
 - [[EP-02 Gestion de usuarios y roles]] — Fase 1

@@ -16,6 +16,7 @@ Volver a [[Vision de arquitectura]] · Resumen práctico: [[Stack tecnologico]] 
 - El colegio decidió que el **backend y el frontend del portal del personal** se construyan en **PHP con Filament** (paneles de administración sobre Laravel).
 - La Fase 1 ([[EP-01 Login plantel administrativo y docentes]], [[EP-02 Gestion de usuarios y roles]], [[EP-08 Seguridad y auditoria]]) es casi toda identidad y seguridad: login con correo institucional, MFA TOTP, bloqueo, sesiones, RBAC y auditoría ([[ADR-002 Autenticacion con correo institucional y MFA]], [[ADR-004 Control de acceso basado en roles]]).
 - Requisitos no funcionales relevantes: interfaz en español, redes lentas (3G), WCAG 2.1 AA, trazabilidad de 1 año ([[Requisitos no funcionales]]).
+- Escala confirmada por la dirección (2026-10-28): plantel administrativo de 1 a 15 personas y plantel docente de 1 a 50. La plataforma arranca con la **Gestión 2027**. El aula virtual será un **sistema propio** (sin LMS externo) y los **tutores tendrán acceso propio** en una épica futura.
 - Entorno verificado: PHP **8.3.6** con `pdo_pgsql`, `pdo_mysql`, `pdo_sqlite`, `intl`, `mbstring`, `zip`, `gd`, `sodium`, `redis`; Argon2id disponible; Composer instalado; **sin** `pcov`/`xdebug` (la cobertura se mide en CI).
 
 ### Versiones verificadas (Packagist, 2026-10-28)
@@ -58,7 +59,7 @@ Volver a [[Vision de arquitectura]] · Resumen práctico: [[Stack tecnologico]] 
 | Panel | Ruta | Para quién | MFA |
 |---|---|---|---|
 | `admin` | `/admin` | Dirección, Secretaría académica, Coordinación pedagógica, Soporte TI, Oficina de información | **Obligatorio** |
-| `docente` | `/docente` | Docentes | Opcional en Fase 1 ([[ADR-002 Autenticacion con correo institucional y MFA]]) |
+| `docente` | `/docente` | Docentes | No en la Fase 1 (decisión de la dirección; pendiente para una fase posterior — [[ADR-002 Autenticacion con correo institucional y MFA]]) |
 | `estudiante` | — | Fase 4, ver §9 | — |
 
 - Ambos paneles usan el **mismo guard `web`** y la **misma sesión**: iniciar sesión una vez da acceso a todos los paneles que el usuario puede usar.
@@ -84,7 +85,7 @@ Volver a [[Vision de arquitectura]] · Resumen práctico: [[Stack tecnologico]] 
 | Cierre de sesión e inactividad | Logout de Filament (invalida y regenera la sesión). `SESSION_DRIVER=database`, `SESSION_LIFETIME=30` (inactividad, configurable por TI vía configuración), cookies `HttpOnly`, `Secure`, `SameSite=Lax`; *middleware* `Cache-Control: no-store` en los paneles para que "atrás" no muestre datos | [[HU-002 Cerrar sesion]] |
 | Recuperación de contraseña | `->passwordReset()` de Filament con el *password broker* de Laravel: token de un uso, `expire = 30` min, respuesta idéntica exista o no el correo, límite 3 solicitudes/hora por correo e IP (`RateLimiter`). Al restablecer: se borran las demás sesiones del usuario, se desbloquea la cuenta y se envía correo de confirmación | [[HU-003 Recuperar contrasena]] |
 | Bloqueo por intentos fallidos | Filament ya limita intentos por IP en el formulario; además un servicio propio `AccountLockout` con columnas `failed_login_attempts`, `last_failed_login_at`, `locked_until` (5 fallos en 15 min → 15 min de bloqueo, umbrales en `config/colegio.php`), notificación por correo al titular y acción "Desbloquear" para Soporte TI | [[HU-004 Bloqueo por intentos fallidos]] |
-| MFA (TOTP) | **MFA nativo de Filament** con app autenticadora (`pragmarx/google2fa` + QR con `chillerlan/php-qrcode`), con **códigos de recuperación** (configurar 10). Obligatorio para usuarios con rol administrativo, opcional para Docente. Acción "Restablecer MFA" para Soporte TI (borra secreto y códigos; queda auditada). **(spike)**: confirmar en Sprint 2 cómo exigir MFA por rol y no solo por panel, y la cantidad de códigos | [[HU-005 MFA para personal administrativo]] |
+| MFA (TOTP) | **MFA nativo de Filament** con app autenticadora (`pragmarx/google2fa` + QR con `chillerlan/php-qrcode`), con **códigos de recuperación** (configurar 10). Obligatorio para usuarios con algún rol administrativo (aunque entren por `/docente`); los docentes sin rol administrativo **no** usan MFA en la Fase 1 (decisión de la dirección del 2026-10-28). Acción "Restablecer MFA" para Soporte TI (borra secreto y códigos; queda auditada). **(spike)**: confirmar en Sprint 2 cómo exigir MFA por rol y no solo por panel, y la cantidad de códigos | [[HU-005 MFA para personal administrativo]] |
 | Sesiones activas | Tabla `sessions` de Laravel (`user_id`, `ip_address`, `user_agent`, `last_activity`) mostrada en una página Filament "Mi cuenta > Sesiones"; cerrar una o todas las demás = borrar filas. La "ubicación aproximada" requiere GeoIP: se propone al PO mostrar solo IP y navegador en Fase 1 | [[HU-008 Gestion de sesiones activas]] |
 
 - La pantalla de login debe cumplir el presupuesto de < 200 KB ([[Requisitos no funcionales]]). **(spike)** medir el peso real del login de Filament en Sprint 1 y aplicar compresión/caché de recursos si se excede.
@@ -167,6 +168,9 @@ piloto_boliviano_suizo/          ← raíz del repositorio = vault de Obsidian
 - ⚠️ Personalizar el login y el flujo de MFA por rol exige conocer los internos de Filament → *spikes* en Sprint 1 y Sprint 2.
 - ⚠️ Livewire es más "conversador" que HTML estático: vigilar peso y latencia en 3G ([[Accesibilidad y conectividad]]).
 - ⚠️ PHP 8.3 impide usar Pest 5 y spatie/activitylog 5; revisar la subida a PHP 8.4 en la retrospectiva de la Fase 1.
+- ✅ La escala del personal (≤ 65 cuentas) cabe holgadamente en un solo servidor con colas y caché en base de datos; no se requiere optimización de rendimiento especial en la Fase 1.
+- 🔮 **Tutores con acceso propio (épica futura):** el diseño lo permite sin rehacer nada: una sola tabla `users` con perfiles (`StaffMember`, futuros `Student` y `Guardian`), roles de spatie y paneles separados. Se añadirá un rol `guardian` y un panel/perfil `tutor` (o el mismo canal que elija el ADR de la app de estudiantes, §9) con su propio guard si conviene, sin acceso a `admin` ni `docente`.
+- 🔮 **Aula virtual propia (sin LMS externo):** las Fases 2–4 se construyen como módulos Laravel/Filament del mismo proyecto; el contenido del aula requerirá su propio ADR de diseño (almacenamiento de archivos, límites de tamaño para 3G).
 - ⚠️ Se necesita un servidor con PHP-FPM 8.3, PostgreSQL 16+, worker de colas y *cron* para el *scheduler* (supuesto a validar en [[Riesgos y supuestos]]).
 
 ## Revisión

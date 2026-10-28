@@ -124,9 +124,9 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Pruebas:** el secreto se guarda cifrado y no aparece en `toArray()`.
 
 #### T-2-13 · MFA obligatorio para administrativos — Dev 3
-- **Qué:** según T-1-20: un usuario con algún rol administrativo sin MFA es enviado a la activación (QR + confirmar código + 10 códigos de respaldo) antes de cualquier pantalla, en ambos paneles; para docentes la activación es opcional desde "Mi cuenta".
+- **Qué:** según T-1-20: un usuario con algún rol administrativo sin MFA es enviado a la activación (QR + confirmar código + 10 códigos de respaldo) antes de cualquier pantalla, en ambos paneles. **Docentes sin rol administrativo: sin MFA en la Fase 1** (decisión de la dirección, 2026-10-28; queda pendiente para una fase posterior), así que no se construye activación opcional.
 - **Archivos:** `app/Filament/Support/StaffPanel.php`, `app/Http/Middleware/EnsureMfaIsConfigured.php` (si Filament no lo cubre), `lang/es/mfa.php`, `tests/Feature/HU005/MfaEnrollmentTest.php`.
-- **Pruebas (HU-005):** "Activación obligatoria en el primer ingreso", "Abandonar la activación" (cualquier URL vuelve a la activación); docente sin MFA entra normal.
+- **Pruebas (HU-005):** "Activación obligatoria en el primer ingreso", "Abandonar la activación" (cualquier URL vuelve a la activación); docente sin rol administrativo entra sin que se le pida MFA.
 
 #### T-2-14 · Ingreso con código, respaldo y código incorrecto — Dev 3
 - **Qué:** desafío TOTP tras la contraseña; código de respaldo de un solo uso; código incorrecto o vencido → "Código incorrecto. Revisa la hora de tu celular e inténtalo de nuevo" y `AccountLockout::registerFailure()`; eventos `mfa.challenge_failed`, `mfa.recovery_code_used`.

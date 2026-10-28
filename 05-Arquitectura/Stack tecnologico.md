@@ -83,7 +83,7 @@ Roles (nombres técnicos): `director`, `academic_secretary`, `pedagogical_coordi
 | Elemento | Convención | Ejemplo |
 |---|---|---|
 | Paneles | `app/Providers/Filament/{Admin,Docente}PanelProvider.php` | `AdminPanelProvider` |
-| Resources | `app/Filament/{Admin,Docente}/Resources/<Model>Resource` (singular) | `Admin/Resources/UserResource` |
+| Resources | `app/Filament/{Admin,Docente}/Resources/<Modelos>/<Model>Resource.php` con subcarpetas `Pages/`, `Schemas/`, `Tables/`, `Actions/` (estructura de Filament 5) | `Admin/Resources/Users/UserResource.php`, `Users/Tables/UsersTable.php` |
 | Páginas propias | `app/Filament/Pages/...` (compartidas) o `app/Filament/<Panel>/Pages` | `Pages/Auth/Login`, `Pages/ChangePassword`, `Pages/ActiveSessions` |
 | Policies | `app/Policies/<Model>Policy` | `UserPolicy`, `AuditEventPolicy` |
 | Lógica de negocio | `app/Actions/<Contexto>/<Verbo><Objeto>` (una acción = una clase invocable) | `Actions/Staff/InviteStaffMember` |

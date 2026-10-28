@@ -43,9 +43,10 @@ gantt
     Sprint 0 Preparación          :s0, 2026-11-02, 14d
     Sprint 1 Login base           :s1, after s0, 14d
     Sprint 2 Seguridad del login  :s2, after s1, 14d
-    Sprint 3 Gestión de personal  :s3, after s2, 14d
+    Sprint 3 Gestión de personal  :s3, after s2, 11d
+    Pausa de fin de año           :crit, pausa, 2026-12-28, 5d
     section Fase 2 · Estructura y aulas
-    Sprints 4-5                   :f2, after s3, 28d
+    Sprints 4-5                   :f2, 2027-01-04, 28d
     section Fase 3 · Asignaciones
     Sprints 6-7                   :f3, after f2, 28d
     section Fase 4 · App estudiantes
@@ -55,10 +56,12 @@ gantt
 ```
 
 ## Hitos
+> Fechas de sprints confirmadas por el Scrum Master el 2026-10-28: Sprint 3 del 14/12 al 24/12/2026, pausa de fin de año del 28/12/2026 al 01/01/2027 y Fase 2 desde el 04/01/2027 ([[2026-10-28 Sprint Planning tecnico - Scrum Master]]).
+
 | Hito | Criterio | Fecha tentativa |
 |---|---|---|
-| H1 — Personal puede ingresar | HU-001..HU-007 y HU-029 terminadas (HU-008 queda primera tras la Fase 1) | Fin de Sprint 2 |
-| H2 — Personal gestionado por el colegio | HU-009, HU-010, HU-011, HU-030 y HU-014 terminadas (HU-012 según tamaño del plantel) | Fin de Sprint 3 |
+| H1 — Personal puede ingresar | HU-001..HU-007 y HU-029 terminadas (HU-008 queda primera tras la Fase 1) | Fin de Sprint 2 (11/12/2026) |
+| H2 — Personal gestionado por el colegio | HU-009, HU-010, HU-011, HU-030 y HU-014 terminadas (HU-012 según tamaño del plantel) | Fin de Sprint 3 (24/12/2026) |
 | H3 — Aulas virtuales listas | EP-03 + EP-04 | Fin de Fase 2 |
 | H4 — Docentes asignados y estudiantes matriculados | EP-05 | Fin de Fase 3 |
 | H5 — Estudiantes en la app | EP-06 (MVP) | Fin de Fase 4 |

@@ -104,8 +104,9 @@ Volver a [[Sprints MOC]] · Épica: [[EP-02 Gestion de usuarios y roles]]
 
 #### T-3-08 · `InviteStaffMember` y correo de invitación — Dev 2
 - **Qué:** migración `add_invitation_columns_to_users_table` (`invited_at`, `invited_by`); `App\Actions\Staff\InviteStaffMember` (transacción: `User` en `Pending` sin contraseña usable + `StaffMember` + roles vía `SyncStaffRoles`); `StaffInvitationNotification` (en cola) con URL firmada temporal de 72 h que incluye `invited_at` (reenviar invalida la anterior); evento `staff.invited`.
-- **Archivos:** `database/migrations/2026_12_14_110000_add_invitation_columns_to_users_table.php`, `app/Actions/Staff/InviteStaffMember.php`, `app/Notifications/StaffInvitationNotification.php`, `lang/es/invitation.php`, `tests/Feature/HU009/InviteStaffActionTest.php`.
+- **Archivos:** `database/migrations/2026_12_14_110000_add_invitation_columns_to_users_table.php`, `app/Models/Concerns/HasInvitation.php`, `app/Actions/Staff/InviteStaffMember.php`, `app/Notifications/StaffInvitationNotification.php`, `lang/es/invitation.php`, `tests/Feature/HU009/InviteStaffActionTest.php`.
 - **Pruebas (HU-009):** "Invitación enviada" (estado pendiente, correo con enlace de 72 h, auditado).
+- **Integración:** *casts* en el trait `app/Models/Concerns/HasInvitation.php` (de Dev 2); Dev 1 agrega el `use` en `User`.
 
 #### T-3-09 · Página "Invitar personal" — Dev 2
 - **Qué:** `CreateUser` usa `UserForm` y delega en `InviteStaffMember`; correo duplicado → "Ya existe una cuenta con este correo" con enlace a esa ficha; autorizado por `UserPolicy::create`.

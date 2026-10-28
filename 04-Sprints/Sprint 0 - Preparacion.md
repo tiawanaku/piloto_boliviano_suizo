@@ -19,7 +19,7 @@ Volver a [[Sprints MOC]]
 - [ ] Confirmar [[Equipo Scrum del proyecto]] (PO, SM, Developers) y acuerdos de trabajo.
 - [ ] Taller de visión con dirección → validar [[Vision del producto]].
 - [ ] Taller de roles y permisos con dirección y secretaría → validar [[Roles y permisos RBAC]].
-- [ ] Decidir stack tecnológico → ADR ([[Vision de arquitectura]]).
+- [x] Decidir stack tecnológico → [[ADR-005 Stack PHP Laravel y Filament]] (ver [[Stack tecnologico]]).
 - [ ] Repositorio, ramas, revisión de código, CI/CD.
 - [ ] Ambiente de pruebas (staging) con HTTPS.
 - [ ] Correo saliente desde el dominio institucional (necesario para [[HU-003 Recuperar contrasena]]).

@@ -41,6 +41,8 @@ flowchart LR
 ## ⚡ Accesos rápidos
 
 - [[Backlog del producto]] — lista priorizada de todo el trabajo
+- [[Backlog tecnico]] · [[Paquetes MOC]] — habilitadores técnicos y paquetes de trabajo por developer
+- [[ADR-005 Stack PHP Laravel y Filament]] · [[Stack tecnologico]] — stack PHP 8.3 + Laravel 13 + Filament 5
 - [[EP-01 Login plantel administrativo y docentes]] — épica en curso
 - [[Definicion de Terminado]] · [[Definicion de Listo]]
 - [[Roles y permisos RBAC]] · [[Flujo de autenticacion]]
