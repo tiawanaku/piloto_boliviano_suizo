@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(RolesAndPermissionsSeeder::class);
+
         // Contraseña ficticia de demostración ("password"), igual a la de la factory.
         User::factory()->create([
             'name' => 'Cuenta de demostración',

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\AccountStatus;
+use App\Models\Concerns\HasTemporaryPassword;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -14,9 +15,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * Cuenta del personal del colegio (identificador UUID).
+ * Roles y permisos con spatie/laravel-permission (ver App\Enums\StaffRole).
  *
  * @property string $id
  * @property string $name
@@ -28,7 +31,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasUuids, Notifiable;
+    use HasFactory, HasRoles, HasTemporaryPassword, HasUuids, Notifiable;
 
     /**
      * Valores por defecto: una cuenta nueva queda pendiente hasta activarse.

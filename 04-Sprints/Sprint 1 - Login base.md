@@ -43,7 +43,7 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - [ ] HU-007 · Paneles vacíos por rol
 - [ ] HU-002 · Logout y expiración por inactividad
 - [ ] HU-006 · Flujo de contraseña temporal
-- [ ] HU-013 · Tabla/evento de auditoría
+- [x] HU-013 · Tabla/evento de auditoría
 - [ ] Script de creación de cuentas semilla (temporal hasta [[HU-009 Invitar personal]])
 ### En progreso
 ### En revisión
@@ -83,6 +83,7 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 | T-1-23 | Deuda: CI sin filtro `paths` y primera ejecución en GitHub | TEC-19 | Dev 2 | T-1-22 |
 
 #### T-1-01 · `StaffPanel` (configuración compartida) — Dev 1 ⚠️ debe completarse primero (día 1)
+- [x] Hecho (Dev 1). Por ahora usa `->login()` de Filament; T-1-02 la cambia por `Pages\Auth\Login`.
 - **Qué:** clase `App\Filament\Support\StaffPanel::configure(Panel $panel): Panel` con lo común a `admin` y `docente`: página de login (`Pages\Auth\Login`), *middleware* de autenticación compartido, marca y colores. Ambos *PanelProviders* la invocan (cambio de una línea; luego los *providers* pasan a Dev 2).
 - **Archivos:** `app/Filament/Support/StaffPanel.php`, `app/Providers/Filament/AdminPanelProvider.php`, `app/Providers/Filament/DocentePanelProvider.php` (solo esa línea).
 - **Pruebas:** las de `tests/Feature/Panels/PanelAccessTest.php` siguen en verde.
@@ -108,6 +109,7 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Pruebas:** cabeceras presentes en `/admin/login`.
 
 #### T-1-06 · Política de contraseñas y columnas de contraseña temporal — Dev 1
+- [x] Hecho (Dev 1), salvo el registro de `Password::defaults()` en `AppServiceProvider` (pasa a la oleada siguiente, junto con T-1-04).
 - **Qué:** migración `add_temporary_password_columns_to_users_table` (`must_change_password` bool, `temporary_password_expires_at` nullable); trait `App\Models\Concerns\HasTemporaryPassword` (*casts* y `temporaryPasswordExpired()`); `Password::defaults()` en `AppServiceProvider` (mín. 10, `uncompromised()`), regla `NotCommonPassword` con lista local `resources/data/common-passwords.txt`; mensajes en `lang/es/passwords.php`.
 - **Archivos:** `database/migrations/2026_11_16_100000_add_temporary_password_columns_to_users_table.php`, `app/Models/Concerns/HasTemporaryPassword.php`, `app/Providers/AppServiceProvider.php`, `app/Rules/NotCommonPassword.php`, `resources/data/common-passwords.txt`, `tests/Unit/Rules/PasswordPolicyTest.php`.
 - **Pruebas (HU-006):** "Política de contraseña" (menos de 10 caracteres y contraseña común, cada una con su mensaje). `uncompromised()` se simula con `Http::fake()`.
@@ -121,11 +123,13 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 #### T-1-08 · spatie/laravel-permission y enums — Dev 2 ⚠️ temprano (día 1–2)
 - **Qué:** `composer require spatie/laravel-permission:^8.3`; publicar config y migración adaptadas a UUID (`model_morph_key` = `model_uuid`, columnas `uuid`); `User` usa `HasRoles`. Enums `App\Enums\StaffRole` (7 roles, `label()`, `isAdministrative()`, `priority()`) y `App\Enums\Permission` (permisos de la matriz, p. ej. `staff.invite`, `roles.assign_high`, `accounts.deactivate`, `accounts.unlock`, `mfa.reset`, `audit.view`, `staff.view`, `staff.edit_email`).
 - **Archivos:** `composer.json`, `composer.lock`, `config/permission.php`, `database/migrations/2026_11_16_090000_create_permission_tables.php`, `app/Models/User.php`, `app/Enums/StaffRole.php`, `app/Enums/Permission.php`, `lang/es/roles.php`, `lang/es/permissions.php`, `tests/Unit/Enums/StaffRoleTest.php`.
+- [x] Hecho (Dev 2). El paquete ya estaba en `composer.json`/`composer.lock` (8.3.2); no hubo descargas. `User` también incorpora `HasTemporaryPassword` (Dev 1).
 
 #### T-1-09 · *Seeder* de la matriz RBAC — Dev 2
 - **Qué:** `RolesAndPermissionsSeeder` idempotente que replica [[Roles y permisos RBAC]] validada en el [[2026-11-03 Taller - Roles y permisos]]; llamado desde `DatabaseSeeder` y desde el despliegue.
 - **Archivos:** `database/seeders/RolesAndPermissionsSeeder.php`, `database/seeders/DatabaseSeeder.php`, `tests/Feature/Rbac/PermissionMatrixTest.php`.
 - **Pruebas:** *dataset* Pest rol × permiso que verifica cada celda de la matriz; ejecutar el *seeder* dos veces no duplica.
+- [x] Hecho (Dev 2). `tests/Feature/Rbac/PermissionMatrixTest.php`: 147 celdas, idempotencia y asignación a usuario UUID.
 
 #### T-1-10 · *Factories*, *helpers* y cuentas semilla — Dev 2
 - **Qué:** estados de `UserFactory`: `active()`, `pending()`, `deactivated()`, `withTemporaryPassword()`, `withRoles(StaffRole ...)`; *helper* global `actingAsStaff(StaffRole ...$roles)` en `tests/Pest.php`; comando `colegio:crear-cuenta {correo} {--rol=*}` (solo correos ficticios del dominio configurado) que crea una cuenta activa con contraseña temporal (72 h) y la muestra una sola vez (temporal hasta [[HU-009 Invitar personal]]).
@@ -156,21 +160,25 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Qué:** migración `create_audit_events_table` (UUID, `occurred_at`, `event_type`, `actor_id` nullable, `subject_type`/`subject_id` nullable, `email_attempted`, `result`, `ip_address` (`ipAddress()`), `user_agent`, `context` json/jsonb; índices por fecha, tipo y actor); enum `AuditEventType`; modelo `AuditEvent` que lanza excepción en `updating`/`deleting`; servicio `App\Services\AuditLogger::record()` que filtra claves sensibles (`password`, `token`, `secret`, `code`…).
 - **Archivos:** `database/migrations/2026_11_16_080000_create_audit_events_table.php`, `app/Models/AuditEvent.php`, `app/Enums/AuditEventType.php`, `app/Services/AuditLogger.php`, `lang/es/audit.php`, `tests/Unit/Services/AuditLoggerTest.php`.
 - **Pruebas:** registra un evento con contexto; nunca guarda claves sensibles; `update()`/`delete()` lanzan excepción.
+- [x] Hecho (Dev 3). API: `app(AuditLogger::class)->record(AuditEventType $type, actor:, subject:, email:, result:, context:)`; IP y navegador salen de `request()`. Resultados en `AuditEvent::RESULT_SUCCESS|FAILURE|DENIED` (por defecto según el tipo). Tipos: `login.succeeded`, `login.failed`, `logout`, `access.denied`, `audit.exported`.
 
 #### T-1-16 · *Trigger* de inmutabilidad — Dev 3
 - **Qué:** migración que crea los *triggers* que rechazan `UPDATE`/`DELETE` en `audit_events`: rama `sqlite` (`BEFORE UPDATE/DELETE … SELECT RAISE(ABORT, …)`), usada en el piloto, y rama `pgsql` (función + *trigger*) preparada para una implementación real. Sin purga por retención (fuera del alcance del piloto).
 - **Archivos:** `database/migrations/2026_11_16_080100_add_immutability_trigger_to_audit_events.php`, `tests/Feature/HU013/AuditImmutabilityDatabaseTest.php` (corre en la suite normal con SQLite).
 - **Pruebas (HU-013):** "Inmutabilidad" a nivel de base de datos (`DB::table()->update()` falla).
+- [x] Hecho (Dev 3). Probado `migrate:fresh` y `rollback` en SQLite en archivo; la rama `pgsql` (función + *triggers* `UPDATE`/`DELETE` por fila y `TRUNCATE`) no se ejecuta en el piloto.
 
 #### T-1-17 · *Listeners* de login y logout — Dev 3
 - **Qué:** *listeners* descubiertos automáticamente para `Illuminate\Auth\Events\Login`, `Failed`, `Logout`: registran fecha/hora, correo intentado, resultado, IP y navegador; nunca la contraseña.
 - **Archivos:** `app/Listeners/RecordSuccessfulLogin.php`, `app/Listeners/RecordFailedLogin.php`, `app/Listeners/RecordLogout.php`, `tests/Feature/HU013/LoginAuditTest.php`.
 - **Pruebas (HU-013):** "Registro de intento" (éxito y fallo vía página de login de Filament con `Livewire::test`), la contraseña no aparece en ninguna columna.
+- [x] Hecho (Dev 3). Las pruebas usan `getLoginRouteAction()` del panel, así siguen valiendo cuando T-1-02 cambie la página de login.
 
 #### T-1-18 · *Policy* de auditoría — Dev 3
 - **Qué:** `AuditEventPolicy`: `update`/`delete`/`create` siempre `false`; `viewAny`/`view` con permiso `audit.view` (para HU-014).
 - **Archivos:** `app/Policies/AuditEventPolicy.php`, `tests/Feature/HU013/AuditPolicyTest.php`.
 - **Pruebas (HU-013):** "Inmutabilidad" a nivel de aplicación.
+- [x] Hecho (Dev 3). `viewAny`/`view` exigen `Permission::AuditView` y cuenta activa; prueba con la matriz sembrada (`RolesAndPermissionsSeeder`): solo `director` e `it_support`.
 
 #### T-1-19 · Spike: peso del login en 3G — Dev 3 (timebox 1 día)
 - **Qué:** medir `/admin/login` en el entorno local/demostración con `php artisan optimize` y recursos compilados, usando Chrome DevTools (perfil "Slow 3G") y Lighthouse: bytes transferidos, tiempo hasta interactivo. Si supera 200 KB / 10 s, proponer medidas en la aplicación (recursos mínimos, fuentes del sistema); la compresión del servidor web se anota como recomendación para una implementación real.
@@ -188,16 +196,22 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Qué:** quitar los 20 `notPath` de `pint.json` y ejecutar `vendor/bin/pint` para aplicar `declare(strict_types=1)` y el formato a los archivos del esqueleto; eliminar `tests/Unit/ExampleTest.php` (prueba trivial). Integrar **antes** de que Dev 1 edite `AppServiceProvider.php` (T-1-06) y `config/session.php` (T-1-04), y antes de que Dev 2 edite `bootstrap/app.php` (T-1-14).
 - **Archivos:** `pint.json`, `tests/Unit/ExampleTest.php` y, solo por formato, los 20 archivos listados en `notPath` (excepción acordada a la regla de dueños: cambio mecánico, un solo PR, avisando al equipo).
 - **Terminado:** `pint.json` sin `notPath`; `pint --test`, `phpstan` y `pest` en verde.
+- [x] Hecho (Dev 2). Pint reformateó los 19 archivos (strict types; migraciones de caché/colas con formato de clase); `tests/Unit/ExampleTest.php` eliminado.
 
 #### T-1-23 · CI sin filtro `paths` y primera ejecución — Dev 2
 - **Qué:** en `.github/workflows/app-colegio.yml`, quitar el filtro `paths` del disparador `pull_request` para que los 4 trabajos siempre informen (dejarlo en `push` es opcional); abrir el primer PR y verificar en GitHub los 4 trabajos en verde. Con eso el SM pide al administrador del repositorio la protección de `main` (TEC-20).
 - **Archivos:** `.github/workflows/app-colegio.yml`.
 - **Terminado:** enlace a una ejecución en verde anotado en "Decisiones técnicas"; un PR que solo toca el vault también muestra los 4 trabajos.
+- [x] Workflow sin `paths` en `pull_request` (se mantiene en `push` a `main`) (Dev 2). Pendiente: la primera ejecución en GitHub la verifica el coordinador en el PR #1.
 
 ## Decisiones técnicas
 - **Heredado del Sprint 0 (13/11):** `User` usa los atributos de Laravel 13 `#[Fillable]` y `#[Hidden]`; las columnas nuevas se agregan ahí (o en *traits* con sus *casts*), no con `$fillable`/`$hidden`. Los *PanelProviders* ya usan `PreventRequestForgery` (nombre de Laravel 13 para la protección CSRF).
 - **Taller de roles (03/11):** no registró decisiones. T-1-09 parte de la matriz vigente en [[Roles y permisos RBAC]]; los cambios posteriores se cargan en el *seeder*.
+- **Auditoría (T-1-15 a T-1-18, Dev 3):** `audit_events.actor_id` **sin clave foránea** a `users`: un `ON DELETE SET NULL` sería un `UPDATE` que el *trigger* rechaza, y el registro debe sobrevivir a la cuenta. `AuditLogger` elimina (no enmascara) las claves de contexto que contienen `password`, `token`, `secret`, `otp`, `recovery`, `credential`, `api_key`, `authorization`, `cookie`, o que son `code`/`*_code(s)`, a cualquier profundidad; el correo se guarda en minúsculas. Los *listeners* son síncronos (no `ShouldQueue`) para no perder eventos. Un login fallido de una cuenta existente guarda la cuenta como `subject` (no como `actor`). La prueba unitaria de `AuditLogger` declara `uses(TestCase, RefreshDatabase)` en el propio archivo porque `tests/Pest.php` solo enlaza `Feature` y `Unit/Models`.
 - _(completar durante el sprint: resultados de T-1-19, T-1-20 y T-1-23)_
+
+- **Dev 1 (T-1-01/T-1-06):** `StaffPanel::configure()` concentra login, guard, marca, colores y *middleware*; los *PanelProviders* solo definen id, ruta y descubrimiento. El *trait* `HasTemporaryPassword` agrega sus *casts* con `initializeHasTemporaryPassword()` (no hace falta tocar `casts()` de `User`) y ofrece `markPasswordAsTemporary()` (usa `colegio.contrasena_temporal_horas`), `clearTemporaryPassword()` y `temporaryPasswordExpired()`. Política: `Password::min(10)->uncompromised()->rules([new NotCommonPassword])`; la lista local se compara sin mayúsculas ni espacios extremos.
+- **Dev 2 (T-1-08/T-1-09):** tablas de spatie con `model_uuid` (UUID) y sin *teams*; la migración usa nombres literales. Permisos (21, `recurso.accion`) en `App\Enums\Permission`, uno por fila de la matriz; "Desbloquear / restablecer MFA" se separa en `accounts.unlock` y `mfa.reset`, y "Ver y corregir la ficha" en `staff.view`, `staff.edit` y `staff.edit_email` (solo TI). `StaffRole` incluye `student` (7 roles) sin permisos hasta la Fase 4. `priority()`: Dirección 100, Secretaría 90, Coordinación 80, TI 70, Oficina 60, Docente 50, Estudiante 10 (orden de la matriz; a confirmar con dirección). La matriz vive en `RolesAndPermissionsSeeder::matrix()` y la prueba mantiene una copia independiente. El *seeder* limpia la caché de spatie a mano porque `DatabaseSeeder` usa `WithoutModelEvents`.
 
 ## Riesgos del sprint
 - Definición final de roles pendiente con dirección → usar roles base de [[Roles y permisos RBAC]].

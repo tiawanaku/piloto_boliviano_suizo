@@ -4,10 +4,9 @@
 name: app-colegio
 
 on:
+  # Sin filtro `paths` (T-1-23, TEC-19): los 4 trabajos informan en todo PR,
+  # también en los que solo tocan el vault, para poder exigirlos en `main`.
   pull_request:
-    paths:
-      - 'app-colegio/**'
-      - '.github/workflows/app-colegio.yml'
   push:
     branches: [main]
     paths:
