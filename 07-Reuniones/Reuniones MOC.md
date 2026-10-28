@@ -29,4 +29,5 @@ SORT file.name DESC
 - [[2026-11-03 Taller - Roles y permisos]]
 - [[2026-11-13 Sprint Review - Sprint 0]]
 - [[2026-11-13 Retrospectiva - Sprint 0]]
+- [[2026-11-27 Sprint Review - Sprint 1]]
 - [[2026-11-27 Retrospectiva - Sprint 1]]

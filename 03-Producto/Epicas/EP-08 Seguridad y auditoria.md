@@ -2,7 +2,7 @@
 tipo: epica
 id: EP-08
 tags: [epica, transversal, seguridad]
-estado: lista
+estado: en-progreso
 fase: transversal
 prioridad: alta
 ---

@@ -23,6 +23,8 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 | [[HU-029 Mi cuenta datos y cambio de contrasena]] | 3 |
 | **Total** | **19** |
 
+> ✅ **Confirmado por el PO** en la [[2026-11-27 Sprint Review - Sprint 1]]: se mantienen el objetivo y los 19 pts. HU-004 suma el límite por IP y HU-005 la contraseña temporal al restablecer el MFA. Si hay que recortar, sale primero HU-029. Sigue vigente la Sprint Planning con el equipo.
+>
 > Se confirmará en la [[Sprint Planning]] según la velocidad real del Sprint 1.
 >
 > Revisión del PO (2026-10-28): la previsión anterior (21 pts) superaba la velocidad estimada (15–20). [[HU-008 Gestion de sesiones activas]] pasa al backlog, primera tras la Fase 1, y entra [[HU-029 Mi cuenta datos y cambio de contrasena]]. Si hay que recortar, la siguiente en salir es HU-029. Ver [[2026-10-28 Revision del Product Owner]].

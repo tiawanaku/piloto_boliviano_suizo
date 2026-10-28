@@ -17,12 +17,12 @@ Volver a [[Inicio]] · Concepto: [[Product Backlog]] · Dueño: [[Product Owner]
 
 | # | ID | Historia | Épica | Pts | Estado | Sprint / meta |
 |---|---|---|---|---|---|---|
-| | | **Fase 1 · Sprint 1 — Login base (17 pts)** | | | | |
-| 1 | [[HU-001 Iniciar sesion con correo institucional\|HU-001]] | Iniciar sesión con correo institucional | EP-01 | 5 | lista | [[Sprint 1 - Login base\|S1]] |
-| 2 | [[HU-007 Panel segun rol\|HU-007]] | Redirección al panel según rol | EP-01 | 5 | lista | S1 |
-| 3 | [[HU-002 Cerrar sesion\|HU-002]] | Cerrar sesión | EP-01 | 1 | lista | S1 |
-| 4 | [[HU-006 Cambio de contrasena en primer ingreso\|HU-006]] | Cambio de contraseña en primer ingreso | EP-01 | 3 | lista | S1 |
-| 5 | [[HU-013 Registro de auditoria de accesos\|HU-013]] | Registro de auditoría de accesos | EP-08 | 3 | lista | S1 |
+| | | **Fase 1 · Sprint 1 — Login base (17 pts, aceptado con condición)** | | | | |
+| 1 | [[HU-001 Iniciar sesion con correo institucional\|HU-001]] | Iniciar sesión con correo institucional | EP-01 | 5 | aceptada-condicional | [[Sprint 1 - Login base\|S1]] |
+| 2 | [[HU-007 Panel segun rol\|HU-007]] | Redirección al panel según rol | EP-01 | 5 | aceptada-condicional | S1 |
+| 3 | [[HU-002 Cerrar sesion\|HU-002]] | Cerrar sesión | EP-01 | 1 | aceptada-condicional | S1 |
+| 4 | [[HU-006 Cambio de contrasena en primer ingreso\|HU-006]] | Cambio de contraseña en primer ingreso | EP-01 | 3 | aceptada-condicional | S1 |
+| 5 | [[HU-013 Registro de auditoria de accesos\|HU-013]] | Registro de auditoría de accesos | EP-08 | 3 | aceptada-condicional | S1 |
 | | | **Fase 1 · Sprint 2 — Seguridad del login (19 pts)** | | | | |
 | 6 | [[HU-003 Recuperar contrasena\|HU-003]] | Recuperar contraseña | EP-01 | 5 | refinada | [[Sprint 2 - Seguridad del login\|S2]] |
 | 7 | [[HU-004 Bloqueo por intentos fallidos\|HU-004]] | Bloqueo por intentos fallidos | EP-01 | 3 | refinada | S2 |

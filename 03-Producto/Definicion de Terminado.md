@@ -35,7 +35,7 @@ composer audit                      # sin vulnerabilidades altas/críticas
 ## Experiencia de usuario
 - [ ] Funciona en Chrome, Firefox y en móvil (Android) — vista responsive.
 - [ ] Accesibilidad básica: etiquetas, contraste, navegación con teclado ([[Accesibilidad y conectividad]]).
-- [ ] Mensajes en español claro, sin jerga técnica.
+- [ ] Mensajes en español claro, sin jerga técnica, tratando al usuario de **tú** en toda la interfaz (incluidas las traducciones de Filament).
 - [ ] Probado en red lenta simulada (3G).
 
 ## Alcance piloto

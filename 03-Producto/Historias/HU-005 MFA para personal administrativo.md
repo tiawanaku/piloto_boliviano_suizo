@@ -51,10 +51,18 @@ Escenario: Restablecer MFA
   Dado que soy Soporte TI
   Cuando restablezco el MFA de un usuario tras verificar su identidad
   Entonces el usuario deberá configurarlo de nuevo en su próximo ingreso
-  Y la acción queda en auditoría
+  Y su contraseña pasa a ser una contraseña temporal que veo una sola vez y entrego por un canal verificado
+  Y en su próximo ingreso debe definir una nueva contraseña (HU-006) antes de configurar el MFA
+  Y la acción queda en auditoría, sin la contraseña
+
+Escenario: Docentes sin MFA en la Fase 1
+  Dado que solo tengo el rol Docente
+  Cuando inicio sesión o abro "Mi cuenta"
+  Entonces no se me pide ni se me ofrece configurar el MFA
 ```
 
 ## Notas
 - Estándar TOTP (RFC 6238), compatible con Google Authenticator, Microsoft Authenticator, Aegis, etc.
-- Para docentes: **sin MFA en la Fase 1**. Si se exige a docentes, se decide después y entra como historia aparte (decisión de la dirección, [[2026-10-28 Decisiones de la direccion]]; ver [[ADR-002 Autenticacion con correo institucional y MFA]]).
+- Contraseña temporal al restablecer el MFA: aceptada en la [[2026-11-27 Sprint Review - Sprint 1]]. Cierra la ventana en la que alguien con solo la contraseña podría vincular su propia app. Si los Developers la estiman por encima de 8 pts, se mantiene igual y sale HU-029 del Sprint 2.
+- Para docentes: **sin MFA en la Fase 1**, ni obligatorio ni voluntario. La decisión sigue **pendiente para la dirección**; el PO no la toma. Si se exige a docentes, se decide después y entra como historia aparte (decisión de la dirección, [[2026-10-28 Decisiones de la direccion]]; ver [[ADR-002 Autenticacion con correo institucional y MFA]]).
 - Estimación alta (8) por incertidumbre en UX de la activación → considerar dividir si en refinamiento sube.

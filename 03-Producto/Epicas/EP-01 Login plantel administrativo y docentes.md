@@ -2,7 +2,7 @@
 tipo: epica
 id: EP-01
 tags: [epica, fase1, autenticacion]
-estado: lista
+estado: en-progreso
 fase: 1
 prioridad: alta
 ---

@@ -63,6 +63,7 @@ Registrados en el cierre del [[Sprint 1 - Login base]] ([[2026-11-27 Retrospecti
 | — | T-1-21 | Verificación manual en navegador (Chrome, Firefox, Android, 3G, Lighthouse): el entorno de los agentes no la permite → la hace una persona en cada Sprint Review con la lista de verificación del sprint | Cada Review |
 
 ## Propuestas al Product Owner
+> **Respondidas por el PO** en la [[2026-11-27 Sprint Review - Sprint 1]]: se aceptan (1) el RNF de peso, (2) el tono "tú", (3) el límite por IP y (4) la contraseña temporal al restablecer el MFA. Sobre (5), en la Fase 1 no se ofrece MFA a docentes y la decisión sigue pendiente para la dirección.
 - ✅ **HU-008 sin "ubicación aproximada":** aceptada por el PO ([[2026-10-28 Decisiones de la direccion]]).
 - **(1) RNF de peso del login (Sprint 1):** Filament no baja de ≈ 230–270 KB con gzip en la primera visita. Propuesta: redefinir el RNF como "primera visita < 300 KB comprimidos y < 10 s en 3G; visitas siguientes < 50 KB". Mientras el PO no decida, HU-001 queda con el RNF incumplido y se informa en la Review. Alternativa descartada: un login sin Livewire, que duplicaría MFA, límites de intentos y auditoría.
 - **(2) Tono de la interfaz:** "tú" en toda la aplicación (DEF-01).

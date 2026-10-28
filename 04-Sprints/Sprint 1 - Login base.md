@@ -278,7 +278,7 @@ T-1-01 a T-1-18, T-1-20, T-1-22 y T-1-23: ✅ hechas. T-1-19: ✅ hecha, con res
 Registrados en [[Backlog tecnico#Defectos y deuda del Sprint 1]]: DEF-01 (tono), DEF-02 (*throttle* por IP), TEC-21 (fuentes del sistema), TEC-22 (helpers de MFA para las pruebas).
 
 ## Sprint Review
-_Pendiente — usar [[Plantilla Sprint Review]]._
+[[2026-11-27 Sprint Review - Sprint 1]]: las 5 historias quedan **aceptadas con condición** (17 pts). Faltan el PR #1 revisado por una persona y fusionado, y la verificación en un navegador real por parte del usuario.
 
 ## Retrospectiva
 [[2026-11-27 Retrospectiva - Sprint 1]]
