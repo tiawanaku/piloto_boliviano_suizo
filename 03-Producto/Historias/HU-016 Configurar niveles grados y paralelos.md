@@ -5,7 +5,8 @@ epica: "[[EP-03 Estructura academica]]"
 sprint: ""
 puntos: 5
 estado: backlog
-orden: 16
+prioridad: media
+orden: 18
 tags: [historia, fase2]
 ---
 # HU-016 · Configurar niveles, grados y paralelos
@@ -13,20 +14,45 @@ tags: [historia, fase2]
 Épica: [[EP-03 Estructura academica]]
 
 ## Historia
-> **Como** coordinación académica
-> **quiero** definir los niveles, grados y paralelos que se ofrecen en la gestión
+> **Como** coordinadora pedagógica
+> **quiero** definir los niveles, grados y paralelos que el colegio ofrece en una gestión
 > **para** contar con la estructura sobre la que se crearán las aulas virtuales.
 
 ## Criterios de aceptación
 ```gherkin
-Escenario: Estructura
-  Cuando defino Secundaria > 1.º > paralelos A y B para la Gestión 2027
-  Entonces la estructura queda disponible para crear aulas (HU-018)
+Escenario: Definir estructura
+  Dado que la "Gestión 2027" está planificada o activa
+  Cuando defino Secundaria > 1.º > paralelos A y B
+  Entonces la estructura queda disponible para generar aulas (HU-018)
+
+Escenario: Paralelo duplicado
+  Dado que 1.º de Secundaria ya tiene el paralelo "A" en la Gestión 2027
+  Cuando intento crear otro paralelo "A" en ese grado y gestión
+  Entonces veo "Ese paralelo ya existe en este grado"
 
 Escenario: Copiar de la gestión anterior
-  Cuando elijo "copiar estructura de la gestión anterior"
-  Entonces se replica la estructura y puedo ajustarla
+  Dado que existe una gestión anterior con estructura
+  Cuando elijo "Copiar estructura de la gestión anterior"
+  Entonces se replican niveles, grados y paralelos en la gestión nueva
+  Y puedo ajustarlos antes de generar las aulas
+
+Escenario: Sin gestión anterior
+  Dado que es la primera gestión registrada
+  Entonces la opción "Copiar estructura" no está disponible y se explica por qué
+
+Escenario: Quitar un paralelo en uso
+  Dado que el paralelo "B" ya tiene aula virtual con materias o estudiantes
+  Cuando intento eliminarlo
+  Entonces no se elimina
+  Y veo qué lo está usando y que solo puedo desactivarlo
+
+Escenario: Gestión cerrada
+  Dado que la gestión está cerrada
+  Cuando intento modificar su estructura
+  Entonces la acción no está permitida (ver HU-015)
 ```
 
 ## Notas
-Configurable para adaptarse a la normativa ([[Marco normativo Bolivia]]).
+- Niveles y grados cambian poco (catálogo normativo); los **paralelos** pertenecen a cada gestión.
+- Configurable para adaptarse a la normativa ([[Marco normativo Bolivia]]).
+- Permisos: Dirección, Secretaría académica y Coordinación pedagógica ([[Roles y permisos RBAC]]).
