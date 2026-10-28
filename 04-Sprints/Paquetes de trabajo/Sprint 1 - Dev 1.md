@@ -44,7 +44,9 @@ Solo tú modificas estos archivos en este sprint (rutas bajo `app-colegio/`, sal
 Si necesitas cambiar un archivo de otro paquete, **no lo edites**: repórtalo como impedimento o coordínalo con su dueño.
 
 ## Dependencias con otros paquetes
+- Espera a que Dev 2 integre T-1-22 (formato del esqueleto, día 1) antes de editar `AppServiceProvider.php` y `config/session.php`; T-1-01 puede empezar en paralelo.
 - En T-1-01 tocas una línea de cada *PanelProvider*; después son de Dev 2.
+- `User` usa los atributos `#[Fillable]`/`#[Hidden]` de Laravel 13: declara las columnas nuevas ahí o en tu *trait*.
 - `User.php` es de Dev 2: entregas el trait `HasTemporaryPassword` y Dev 2 agrega el `use` (T-1-10 lo necesita).
 - T-1-03 espera la redirección de Dev 2 (T-1-12); mientras tanto, prueba solo la autenticación.
 - Dev 3 (T-1-19) mide el login cuando tu T-1-02 esté integrada.

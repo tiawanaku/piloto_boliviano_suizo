@@ -3,7 +3,7 @@ tipo: paquete
 sprint: "[[Sprint 0 - Preparacion]]"
 developer: Dev 2
 agente: php-senior-developer
-estado: en revisión
+estado: terminado
 tags: [sprint, paquete, dev2]
 ---
 # Sprint 0 · Dev 2
@@ -61,3 +61,6 @@ php artisan colegio:demo            # base de demostración con datos ficticios 
 - [ ] Textos de UI en `lang/es`, en español claro.
 - [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.
 - [ ] Reporte final: tareas hechas, pruebas ejecutadas y resultado, impedimentos y deuda técnica. Sin commits ni push (los hace quien invoca).
+
+## Cierre (13/11/2026)
+T-0-05, T-0-06 y T-0-08 hechas; **T-0-07 parcial**: la plantilla de PR está lista, pero la protección de `main` necesita un administrador del repositorio (403). Deuda que pasa al Sprint 1: `notPath` de Pint (TEC-18 → T-1-22), filtro `paths` y primera ejecución del CI en GitHub (TEC-19 → T-1-23), protección de `main` (TEC-20, impedimento del SM). Detalle en [[Sprint 0 - Preparacion#Cierre del sprint (13/11/2026)]] y [[2026-11-13 Retrospectiva - Sprint 0]].

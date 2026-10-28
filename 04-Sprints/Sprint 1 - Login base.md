@@ -52,7 +52,7 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 >
 > **Terminado técnico común:** `vendor/bin/pint --test`, `vendor/bin/phpstan analyse`, `vendor/bin/pest` en verde (CI con SQLite); solo datos ficticios `@colegio-piloto.test`; cada escenario Gherkin de la historia tiene al menos una prueba Pest con su nombre; prueba con un rol sin acceso cuando aplica; textos en `lang/es`; PR revisado.
 >
-> Reparto: **Dev 1** = login, sesión y contraseña (HU-001, HU-002, HU-006, TEC-13) · **Dev 2** = roles y paneles (TEC-10, TEC-11, HU-007) · **Dev 3** = auditoría y *spikes* (TEC-12, HU-013, TEC-14, TEC-15).
+> Reparto: **Dev 1** = login, sesión y contraseña (HU-001, HU-002, HU-006, TEC-13) · **Dev 2** = roles y paneles, más la deuda del S0 (TEC-10, TEC-11, HU-007, TEC-18, TEC-19) · **Dev 3** = auditoría y *spikes* (TEC-12, HU-013, TEC-14, TEC-15).
 
 | ID | Tarea | Relacionada | Dev | Depende de |
 |---|---|---|---|---|
@@ -77,6 +77,8 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 | T-1-19 | Spike: peso del login en 3G | TEC-14 | Dev 3 | T-1-02 |
 | T-1-20 | Spike: MFA por rol en Filament 5 | TEC-15 | Dev 3 | T-1-11 |
 | T-1-21 | Verificación de la DoD de experiencia en el entorno de demostración | Todas | Dev 3 | resto del sprint |
+| T-1-22 | Deuda: quitar `notPath` de Pint y la prueba trivial ⚠️ **primero** (día 1, mañana) | TEC-18 | Dev 2 | — |
+| T-1-23 | Deuda: CI sin filtro `paths` y primera ejecución en GitHub | TEC-19 | Dev 2 | T-1-22 |
 
 #### T-1-01 · `StaffPanel` (configuración compartida) — Dev 1 ⚠️ debe completarse primero (día 1)
 - **Qué:** clase `App\Filament\Support\StaffPanel::configure(Panel $panel): Panel` con lo común a `admin` y `docente`: página de login (`Pages\Auth\Login`), *middleware* de autenticación compartido, marca y colores. Ambos *PanelProviders* la invocan (cambio de una línea; luego los *providers* pasan a Dev 2).
@@ -180,8 +182,20 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 - **Qué:** en el entorno de demostración (`colegio:demo`), recorrer HU-001, HU-002, HU-006, HU-007 en Chrome, Firefox y Android, con red 3G simulada, navegación por teclado y contraste (Lighthouse Accesibilidad ≥ 90).
 - **Entregable:** lista de verificación en esta nota; defectos como tareas o *bugs*.
 
+#### T-1-22 · Pint sin exclusiones — Dev 2 ⚠️ debe completarse primero (día 1, mañana)
+- **Qué:** quitar los 20 `notPath` de `pint.json` y ejecutar `vendor/bin/pint` para aplicar `declare(strict_types=1)` y el formato a los archivos del esqueleto; eliminar `tests/Unit/ExampleTest.php` (prueba trivial). Integrar **antes** de que Dev 1 edite `AppServiceProvider.php` (T-1-06) y `config/session.php` (T-1-04), y antes de que Dev 2 edite `bootstrap/app.php` (T-1-14).
+- **Archivos:** `pint.json`, `tests/Unit/ExampleTest.php` y, solo por formato, los 20 archivos listados en `notPath` (excepción acordada a la regla de dueños: cambio mecánico, un solo PR, avisando al equipo).
+- **Terminado:** `pint.json` sin `notPath`; `pint --test`, `phpstan` y `pest` en verde.
+
+#### T-1-23 · CI sin filtro `paths` y primera ejecución — Dev 2
+- **Qué:** en `.github/workflows/app-colegio.yml`, quitar el filtro `paths` del disparador `pull_request` para que los 4 trabajos siempre informen (dejarlo en `push` es opcional); abrir el primer PR y verificar en GitHub los 4 trabajos en verde. Con eso el SM pide al administrador del repositorio la protección de `main` (TEC-20).
+- **Archivos:** `.github/workflows/app-colegio.yml`.
+- **Terminado:** enlace a una ejecución en verde anotado en "Decisiones técnicas"; un PR que solo toca el vault también muestra los 4 trabajos.
+
 ## Decisiones técnicas
-_(completar durante el sprint: resultados de T-1-19 y T-1-20)_
+- **Heredado del Sprint 0 (13/11):** `User` usa los atributos de Laravel 13 `#[Fillable]` y `#[Hidden]`; las columnas nuevas se agregan ahí (o en *traits* con sus *casts*), no con `$fillable`/`$hidden`. Los *PanelProviders* ya usan `PreventRequestForgery` (nombre de Laravel 13 para la protección CSRF).
+- **Taller de roles (03/11):** no registró decisiones. T-1-09 parte de la matriz vigente en [[Roles y permisos RBAC]]; los cambios posteriores se cargan en el *seeder*.
+- _(completar durante el sprint: resultados de T-1-19, T-1-20 y T-1-23)_
 
 ## Riesgos del sprint
 - Definición final de roles pendiente con dirección → usar roles base de [[Roles y permisos RBAC]].

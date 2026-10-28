@@ -17,7 +17,7 @@ Un paquete por developer y sprint, para los agentes `php-senior-developer`. Cada
 - Las tareas marcadas ⚠️ **primero/temprano** desbloquean a otros: se integran antes que el resto.
 - Integración frecuente (PR pequeños, al menos uno por tarea) para reducir conflictos.
 
-## Sprint 0 · Preparación (02/11 – 13/11/2026)
+## Sprint 0 · Preparación (02/11 – 13/11/2026) — ✅ terminado (T-0-07 parcial; ver [[Sprint 0 - Preparacion#Cierre del sprint (13/11/2026)]])
 | Paquete | Foco | Orden / dependencias |
 |---|---|---|
 | [[Sprint 0 - Dev 1]] | Proyecto, identidad base, paneles | **Va primero:** T-0-01 bloquea a todos |
@@ -28,7 +28,7 @@ Un paquete por developer y sprint, para los agentes `php-senior-developer`. Cada
 | Paquete | Foco | Orden / dependencias |
 |---|---|---|
 | [[Sprint 1 - Dev 1]] | HU-001, HU-002, HU-006, TEC-13 | **T-1-01 primero** (día 1); T-1-03 espera la redirección de Dev 2 |
-| [[Sprint 1 - Dev 2]] | TEC-10, TEC-11, HU-007 | T-1-08 temprano; *PanelProviders* tras T-1-01; T-1-14 espera `AuditLogger` de Dev 3 |
+| [[Sprint 1 - Dev 2]] | Deuda del S0 (TEC-18, TEC-19), TEC-10, TEC-11, HU-007 | **T-1-22 primero** (día 1, formato del esqueleto); T-1-08 temprano; *PanelProviders* tras T-1-01; T-1-14 espera `AuditLogger` de Dev 3 |
 | [[Sprint 1 - Dev 3]] | TEC-12, HU-013, *spikes* TEC-14/TEC-15 | **T-1-15 temprano** (lo usa Dev 2); *spikes* tras login y roles |
 
 ## Sprint 2 · Seguridad del login (30/11 – 11/12/2026)

@@ -3,7 +3,7 @@ tipo: sprint
 numero: 0
 inicio: 2026-11-02
 fin: 2026-11-13
-estado: planificado
+estado: terminado
 tags: [sprint, fase1]
 ---
 # Sprint 0 · Preparación
@@ -22,10 +22,10 @@ Volver a [[Sprints MOC]]
 - [ ] Taller de visión con dirección → validar [[Vision del producto]].
 - [ ] Taller de roles y permisos con dirección y secretaría → validar [[Roles y permisos RBAC]].
 - [x] Decidir stack tecnológico → [[ADR-005 Stack PHP Laravel y Filament]] (ver [[Stack tecnologico]]).
-- [ ] Repositorio, ramas, revisión de código, CI.
-- [ ] Entorno de demostración con datos ficticios (`php artisan colegio:demo`).
-- [ ] Correo capturado (driver `log` o Mailpit), sin envíos a personas reales (necesario para [[HU-003 Recuperar contrasena]]).
-- [ ] Cuentas ficticias de demostración `@colegio-piloto.test` (≥ 1 por rol).
+- [ ] Repositorio, ramas, revisión de código, CI. → CI listo pero **sin ejecutar aún en GitHub**; protección de `main` pendiente (impedimento).
+- [x] Entorno de demostración con datos ficticios (`php artisan colegio:demo`).
+- [x] Correo capturado (driver `log` o Mailpit), sin envíos a personas reales (necesario para [[HU-003 Recuperar contrasena]]).
+- [ ] Cuentas ficticias de demostración `@colegio-piloto.test` (≥ 1 por rol). → Existe `demo@colegio-piloto.test`; una por rol llega con los roles (T-1-10) y `DemoStaffSeeder` (T-2-11).
 - [ ] Refinar historias de Sprint 1 y 2 hasta cumplir [[Definicion de Listo]].
 - [ ] Acordar la [[Definicion de Terminado]].
 
@@ -125,3 +125,39 @@ Proyecto en `app-colegio/` con CI en verde; `php artisan colegio:demo` levanta e
 - **Archivos:** `app/Console/Commands/PrepareDemo.php`, `README.md` (sección de demostración), `tests/Feature/Commands/PrepareDemoTest.php`.
 - **Pruebas:** el comando deja la base con la cuenta de demostración; en `production` termina con error sin tocar datos.
 - [x] **Estado (Dev 3, 2026-10-28):** terminada. `php artisan colegio:demo [--force]`: se niega en `production` antes de tocar nada, pide confirmación (salvo `--force`), crea el archivo SQLite si falta, ejecuta `migrate:fresh --seed --force` y muestra las URL de `/admin` y `/docente`, una tabla con las cuentas ficticias (leídas de la base, así incluye los *seeders* futuros) y la contraseña ficticia. Textos en `lang/es/demo.php` (archivo nuevo, no listado en el paquete). Guía "Cómo hacer la demostración" en el README. Pruebas en `tests/Feature/Commands/PrepareDemoTest.php`: usan una base SQLite temporal en archivo porque `migrate:fresh` no puede correr dentro de la transacción de `RefreshDatabase`.
+
+## Cierre del sprint (13/11/2026)
+> Verificación del [[Scrum Master]] sobre la rama integrada. Se ejecutaron los comandos de calidad y se arrancó el proyecto desde cero, siguiendo solo `app-colegio/README.md`, en una copia limpia (`git archive`) fuera del repositorio. Retrospectiva: [[2026-11-13 Retrospectiva - Sprint 0]].
+
+### Resultado
+- **Objetivo del sprint: cumplido, con dos pendientes de CI.** El proyecto Laravel 13.39 + Filament 5.11 corre en `app-colegio/` con PHP 8.3.6, SQLite, locale `es` y zona `America/La_Paz`. El panel `/admin` responde con la cuenta ficticia `demo@colegio-piloto.test`.
+- **Calidad (local):** `pint --test` OK · `phpstan analyse` (nivel 6) 0 errores · `pest` **43/43** (109 aserciones) · `composer audit` sin vulnerabilidades.
+- **Arranque desde cero con el README:** `composer install`, `.env`, `key:generate`, `migrate --seed`, `npm install` y `composer dev` funcionan. Con el servidor en marcha, `/admin/login` → 200, `/admin` sin sesión → 302 al login, `colegio:correo-prueba` → el *worker* procesa la cola y el correo queda en `storage/logs/laravel.log`, y `colegio:demo --force` regenera la base y muestra las cuentas. (En este contenedor Composer corre como *root* y necesita `COMPOSER_ALLOW_SUPERUSER=1`; es propio del entorno, no del proyecto.)
+- **Pendientes:** el CI todavía **no se ejecutó en GitHub** (el YAML es válido) y falta la protección de `main`. Por eso el criterio "CI de GitHub Actions en verde" de la [[Definicion de Terminado]] solo se verificó con los mismos comandos en local.
+
+### Estado de las tareas
+| ID | Estado | Evidencia / observaciones |
+|---|---|---|
+| T-0-01 | ✅ hecha | Laravel 13.39, Filament 5.11, Pest 4, Larastan y Pint instalados; `config/colegio.php` con las claves de la Fase 1; script `composer quality`. Impedimento resuelto: el proxy bloqueaba descargas de GitHub y PHPStan se tomó del commit oficial de Packagist vía la caché de Composer. |
+| T-0-02 | ✅ hecha | `User` con UUID, `AccountStatus` (por defecto `pending`), Argon2id y `sessions.user_id` UUID; 7 pruebas en `tests/Unit/Models/UserTest.php`. |
+| T-0-03 | ✅ hecha | Paneles `admin` (por defecto) y `docente`; `canAccessPanel()` provisional (solo cuentas activas); 4 escenarios en `PanelAccessTest`. |
+| T-0-04 | ✅ hecha | `lang/es` (auth, passwords, validation, pagination, mail); login de Filament en español. Dev 3 creó además `lang/es/demo.php` para los textos de `colegio:demo` (T-0-11): se acepta y se agrega a su paquete. |
+| T-0-05 | ✅ hecha | `phpunit.xml` (SQLite en memoria), `tests/Pest.php`, `phpstan.neon` nivel 6, `pint.json` con `declare_strict_types`. **Deuda:** `pint.json` excluye 20 archivos del esqueleto con `notPath` (TEC-18); `tests/Unit/ExampleTest.php` es una prueba trivial que conviene eliminar. |
+| T-0-06 | ⚠️ hecha, sin ejecutar | Workflow con 4 trabajos (`pint`, `phpstan`, `pest` con cobertura ≥ 80 %, `audit`). Todavía no corrió en GitHub. **Deuda:** el filtro `paths` dejaría bloqueados los PR que solo tocan el vault si los trabajos pasan a ser obligatorios (TEC-19). |
+| T-0-07 | 🟡 parcial | Plantilla de PR con la DoD hecha. La protección de `main` necesita un administrador del repositorio (la API de GitHub devuelve 403) → **impedimento abierto** (TEC-20). |
+| T-0-08 | ✅ hecha | Pruebas de humo: inicio, `/up`, migraciones y `config:cache`. |
+| T-0-09 | ✅ hecha | `.env.example` del piloto y README de arranque. Arranque desde cero verificado por el SM. `composer dev` necesita `npm install`; el README lo indica y ofrece una alternativa sin npm. |
+| T-0-10 | ✅ hecha | Cola y caché `database`, correo `log`, plantilla en español, `colegio:correo-prueba` (solo dominio ficticio) y `auth:clear-resets` diario. |
+| T-0-11 | ✅ hecha | `colegio:demo` (confirmación, `--force`, se niega en `production`) con sus pruebas; guía de demostración en el README. |
+
+### Impedimentos
+| Impedimento | Estado | Responsable |
+|---|---|---|
+| El proxy del entorno bloquea descargas desde GitHub (dists de Composer) | Resuelto con caché de Composer; vigilar al agregar paquetes en S1 (`spatie/laravel-permission`) | Dev 1 / SM |
+| Protección de `main` necesita un administrador del repositorio (403) | **Abierto** → se pide al dueño del repositorio después de TEC-19 | SM |
+| El CI no se ejecutó todavía en GitHub | **Abierto** → primera ejecución en el S1 (T-1-23) | Dev 2 |
+
+### Observaciones para la Sprint Review
+- Demostrable: `php artisan colegio:demo` y entrar a `/admin` con la cuenta ficticia. Aún no hay historias de usuario: el valor del S0 es la base técnica.
+- El taller de roles y permisos ([[2026-11-03 Taller - Roles y permisos]]) no tiene decisiones registradas → T-1-09 parte de la matriz vigente en [[Roles y permisos RBAC]] (riesgo ya previsto en el S1).
+

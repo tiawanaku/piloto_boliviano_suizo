@@ -65,3 +65,6 @@ php artisan colegio:demo            # base de demostración con datos ficticios 
 - [ ] Textos de UI en `lang/es`, en español claro.
 - [ ] Tareas marcadas en la nota del sprint y decisiones técnicas anotadas.
 - [ ] Reporte final: tareas hechas, pruebas ejecutadas y resultado, impedimentos y deuda técnica. Sin commits ni push (los hace quien invoca).
+
+## Cierre (13/11/2026)
+Todas las tareas hechas (T-0-01, T-0-02, T-0-03). Impedimento resuelto: el proxy bloqueaba descargas de GitHub y PHPStan se instaló desde la caché de Composer (commit oficial de Packagist). Verificado por el SM: `pint`, `phpstan` y `pest` en verde. Detalle en [[Sprint 0 - Preparacion#Cierre del sprint (13/11/2026)]] y [[2026-11-13 Retrospectiva - Sprint 0]].
