@@ -27,4 +27,5 @@ SORT file.name DESC
 - [[2026-10-28 Revision del Product Owner]]
 - [[2026-10-28 Sprint Planning tecnico - Scrum Master]]
 - [[2026-11-03 Taller - Roles y permisos]]
+- [[2026-11-13 Sprint Review - Sprint 0]]
 - [[2026-11-13 Retrospectiva - Sprint 0]]

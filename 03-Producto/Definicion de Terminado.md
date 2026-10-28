@@ -50,4 +50,6 @@ composer audit                      # sin vulnerabilidades altas/críticas
 
 > Ajuste técnico del 2026-10-28: el [[Scrum Master]] añadió los comandos del stack ([[ADR-005 Stack PHP Laravel y Filament]]) sin relajar ningún criterio.
 >
+> Acuerdo explícito del PO (2026-11-13, [[2026-11-13 Sprint Review - Sprint 0]]): por el alcance piloto se confirman (1) el CI solo con SQLite y (2) "demostrable en el entorno de demostración" en lugar de "desplegado en staging". Siguen obligatorios el PR revisado y el CI de GitHub en verde: el Sprint 0 no los demostró y son condición para aceptar las historias desde el Sprint 1.
+>
 > La DoD se revisa en cada [[Sprint Retrospective]]. Solo se endurece, nunca se relaja sin acuerdo explícito.

@@ -15,6 +15,8 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 ## 🎯 Objetivo del sprint
 **"El personal administrativo y docente puede iniciar sesión con su correo institucional, definir su propia contraseña y llegar a su panel según su rol; cada acceso queda registrado."**
 
+> Confirmado por el PO en la [[2026-11-13 Sprint Review - Sprint 0]]. Alcance piloto: se demuestra con cuentas ficticias `@colegio-piloto.test` mediante `colegio:demo`. Condición de aceptación: cada historia entra por PR con el CI de GitHub en verde.
+
 ## Capacidad
 | Developer | Días disponibles | Notas |
 |---|---|---|
