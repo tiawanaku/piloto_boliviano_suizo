@@ -83,6 +83,7 @@ Detalle y justificación: [[ADR-005 Stack PHP Laravel y Filament]] · Versiones,
 - [[ADR-005 Stack PHP Laravel y Filament]]
 
 ## Spikes
+- [[Spike T-1-19 Peso del login en 3G]] (Sprint 1): peso y tiempo del login de Filament en redes lentas
 - [[Spike T-1-20 MFA por rol]] (Sprint 1): MFA solo para roles administrativos en Filament 5
 
 ## Criterios usados para elegir el stack (ver ADR-005)
