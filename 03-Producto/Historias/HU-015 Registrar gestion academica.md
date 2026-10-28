@@ -5,9 +5,9 @@ epica: "[[EP-03 Estructura academica]]"
 sprint: ""
 puntos: 3
 estado: backlog
-prioridad: media
-orden: 17
-tags: [historia, fase2]
+prioridad: alta
+orden: 15
+tags: [historia, fase2, mvp-2027]
 ---
 # HU-015 · Registrar gestión académica
 

@@ -5,9 +5,9 @@ epica: "[[EP-04 Aulas virtuales]]"
 sprint: ""
 puntos: 2
 estado: backlog
-prioridad: media
-orden: 27
-tags: [historia, fase3]
+prioridad: alta
+orden: 24
+tags: [historia, fase3, mvp-2027]
 ---
 # HU-031 · Lista de estudiantes del aula
 
@@ -24,7 +24,7 @@ tags: [historia, fase3]
 ```gherkin
 Escenario: Ver lista
   Dado que soy docente con al menos una materia en "1.º Secundaria A — 2027"
-  Cuando abro la pestaña "Estudiantes" del aula
+  Cuando abro la tarjeta del aula desde "Mis aulas" (HU-022)
   Entonces veo a los estudiantes con matrícula vigente, ordenados por apellido
   Y solo veo nombre completo y estado de matrícula (sin CI, fecha de nacimiento ni datos del tutor)
 
@@ -45,4 +45,5 @@ Escenario: Aula ajena
 ## Notas
 - Datos de menores: mínimo necesario ([[Seguridad y proteccion de datos]]).
 - **Decisión pendiente** de la dirección: ¿el docente puede ver el contacto del tutor?
-- Depende de [[HU-023 Matricular estudiantes en aula]].
+- Depende de [[HU-023 Matricular estudiantes en aula]] y [[HU-022 Docente ve sus aulas asignadas]]; no depende de la ficha del aula ([[HU-019 Panel del aula virtual]]), que queda fuera del MVP.
+- Forma parte del **MVP de inicio de clases 2027**: el docente necesita conocer a sus estudiantes desde el primer día.

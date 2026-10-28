@@ -6,7 +6,7 @@ sprint: ""
 puntos: 3
 estado: backlog
 prioridad: media
-orden: 24
+orden: 25
 tags: [historia, fase3]
 ---
 # HU-019 · Panel del aula virtual (materias y docentes)

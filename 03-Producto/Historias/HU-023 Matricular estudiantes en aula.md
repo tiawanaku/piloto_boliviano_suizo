@@ -5,9 +5,9 @@ epica: "[[EP-05 Asignacion de cursos y materias]]"
 sprint: ""
 puntos: 5
 estado: backlog
-prioridad: media
-orden: 26
-tags: [historia, fase3]
+prioridad: alta
+orden: 23
+tags: [historia, fase3, mvp-2027]
 ---
 # HU-023 · Matricular estudiantes en aula
 
@@ -28,6 +28,12 @@ Escenario: Matricular
   Cuando lo matriculo en "1.º Secundaria A — 2027"
   Entonces queda vinculado al aula y a sus materias
   Y aparece en la lista de estudiantes del aula (HU-031)
+
+Escenario: Paralelo sin cupo
+  Dado que 1.º A alcanzó su cupo (HU-016)
+  Cuando intento matricular a otro estudiante allí, o cambiarlo a ese paralelo
+  Entonces la matrícula no se registra
+  Y veo "1.º Secundaria A alcanzó su cupo (N). Elige otro paralelo o pide a coordinación que amplíe el cupo"
 
 Escenario: Estudiante no registrado
   Cuando busco a un estudiante que no existe
@@ -57,4 +63,4 @@ Escenario: Gestión cerrada o sin permiso
 ## Notas
 - Toda matrícula, cambio y retiro queda en auditoría.
 - Datos de menores: mínimo necesario ([[Seguridad y proteccion de datos]]).
-- Cupo máximo por paralelo: **decisión pendiente** de la dirección.
+- Cupo por paralelo: **se aplica** (decisión de la dirección, [[2026-10-28 Decisiones de la direccion]]); el valor es configurable en [[HU-016 Configurar niveles grados y paralelos]].

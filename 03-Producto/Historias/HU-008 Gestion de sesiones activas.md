@@ -6,13 +6,13 @@ sprint: ""
 puntos: 5
 estado: refinada
 prioridad: media
-orden: 15
+orden: 26
 roles: [administrativo, docente]
 tags: [historia, fase1, seguridad]
 ---
 # HU-008 · Ver y cerrar sesiones activas
 
-> **Reordenada** en la [[2026-10-28 Revision del Product Owner]]: sale del Sprint 2 y queda primera tras la Fase 1. El riesgo principal ya lo cubren la expiración por inactividad ([[HU-002 Cerrar sesion]]), el cierre de todas las sesiones al cambiar o recuperar la contraseña ([[HU-003 Recuperar contrasena]], [[HU-029 Mi cuenta datos y cambio de contrasena]]) y la desactivación ([[HU-011 Desactivar cuenta]]).
+> **Reordenada** en la [[2026-10-28 Revision del Product Owner]]: sale del Sprint 2. Tras las [[2026-10-28 Decisiones de la direccion]] queda **después del MVP de inicio de clases 2027**. El riesgo principal ya lo cubren la expiración por inactividad ([[HU-002 Cerrar sesion]]), el cierre de todas las sesiones al cambiar o recuperar la contraseña ([[HU-003 Recuperar contrasena]], [[HU-029 Mi cuenta datos y cambio de contrasena]]) y la desactivación ([[HU-011 Desactivar cuenta]]).
 
 > **Como** docente que inició sesión en una cabina de internet
 > **quiero** ver mis sesiones abiertas y cerrarlas a distancia
@@ -22,7 +22,7 @@ tags: [historia, fase1, seguridad]
 ```gherkin
 Escenario: Listar sesiones
   Cuando abro "Mi cuenta > Sesiones"
-  Entonces veo cada sesión activa con dispositivo/navegador, ubicación aproximada y último uso
+  Entonces veo cada sesión activa con navegador y sistema operativo, dirección IP y último uso
   Y la sesión actual aparece marcada
 
 Escenario: Cerrar otra sesión
@@ -38,3 +38,6 @@ Escenario: Sesión cerrada a distancia
   Cuando alguien intenta seguir usándola en ese dispositivo
   Entonces se le pide iniciar sesión de nuevo
 ```
+
+## Notas
+- Sin "ubicación aproximada" en esta versión: requiere geolocalizar la IP, aporta poco y añade riesgo de privacidad (propuesta del Scrum Master aceptada en [[2026-10-28 Decisiones de la direccion]]).

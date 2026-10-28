@@ -4,16 +4,16 @@ id: HU-032
 epica: "[[EP-04 Aulas virtuales]]"
 sprint: ""
 puntos: 5
-estado: idea
-prioridad: baja
-orden: 31
+estado: backlog
+prioridad: media
+orden: 30
 tags: [historia, fase4]
 ---
 # HU-032 · Anuncios del aula
 
 Épica: [[EP-04 Aulas virtuales]]
 
-> Surge de la división de [[HU-019 Panel del aula virtual]] en la [[2026-10-28 Revision del Product Owner]]. Queda en **idea** hasta que se decida si el aula usa un LMS propio o uno integrado (ver [[EP-04 Aulas virtuales]]). Estimación provisional del PO.
+> Surge de la división de [[HU-019 Panel del aula virtual]] en la [[2026-10-28 Revision del Product Owner]]. La dirección decidió un aula **propia** ([[2026-10-28 Decisiones de la direccion]]): pasa de *idea* a *backlog* como primera pieza de contenido del aula. Estimación provisional del PO.
 
 ## Historia
 > **Como** docente

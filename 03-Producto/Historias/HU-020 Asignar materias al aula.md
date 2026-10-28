@@ -5,9 +5,9 @@ epica: "[[EP-05 Asignacion de cursos y materias]]"
 sprint: ""
 puntos: 3
 estado: backlog
-prioridad: media
-orden: 21
-tags: [historia, fase3]
+prioridad: alta
+orden: 19
+tags: [historia, fase3, mvp-2027]
 ---
 # HU-020 · Asignar materias a las aulas virtuales
 

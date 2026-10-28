@@ -6,7 +6,7 @@ sprint: ""
 puntos: 8
 estado: backlog
 prioridad: media
-orden: 29
+orden: 28
 tags: [historia, fase4]
 ---
 # HU-024 · Login de estudiante en la app

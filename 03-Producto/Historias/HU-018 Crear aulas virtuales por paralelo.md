@@ -5,9 +5,9 @@ epica: "[[EP-04 Aulas virtuales]]"
 sprint: ""
 puntos: 5
 estado: backlog
-prioridad: media
-orden: 20
-tags: [historia, fase2]
+prioridad: alta
+orden: 18
+tags: [historia, fase2, mvp-2027]
 ---
 # HU-018 · Crear aulas virtuales por paralelo
 
@@ -47,5 +47,5 @@ Escenario: Gestión cerrada o sin permiso
 ```
 
 ## Notas
-- Aquí el aula es el **contenedor** (paralelo + gestión). El contenido pedagógico (recursos, tareas, clases) depende de la decisión **LMS propio o integrado** — pendiente, ver [[EP-04 Aulas virtuales]].
+- Aquí el aula es el **contenedor** (paralelo + gestión). El contenido pedagógico (recursos, tareas, clases) se construirá en el **sistema propio** del colegio, sin LMS externo (ver [[EP-04 Aulas virtuales]]).
 - La generación queda en auditoría.

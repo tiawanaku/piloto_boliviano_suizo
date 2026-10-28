@@ -6,7 +6,7 @@ sprint: ""
 puntos: 8
 estado: idea
 prioridad: baja
-orden: 32
+orden: 36
 tags: [historia, fase4]
 ---
 # HU-026 · Modo bajo consumo de datos

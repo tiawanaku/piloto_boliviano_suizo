@@ -56,5 +56,5 @@ Escenario: Restablecer MFA
 
 ## Notas
 - Estándar TOTP (RFC 6238), compatible con Google Authenticator, Microsoft Authenticator, Aegis, etc.
-- Para docentes: MFA **opcional** en Fase 1, decisión revisable ([[ADR-002 Autenticacion con correo institucional y MFA]]).
+- Para docentes: **sin MFA en la Fase 1**. Si se exige a docentes, se decide después y entra como historia aparte (decisión de la dirección, [[2026-10-28 Decisiones de la direccion]]; ver [[ADR-002 Autenticacion con correo institucional y MFA]]).
 - Estimación alta (8) por incertidumbre en UX de la activación → considerar dividir si en refinamiento sube.

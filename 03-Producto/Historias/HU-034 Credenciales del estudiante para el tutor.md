@@ -6,7 +6,7 @@ sprint: ""
 puntos: 5
 estado: backlog
 prioridad: media
-orden: 28
+orden: 27
 tags: [historia, fase4, menores]
 ---
 # HU-034 · Credenciales del estudiante para su tutor
@@ -51,4 +51,4 @@ Escenario: Auditoría
 
 ## Notas
 - Permisos: Secretaría académica y Dirección ([[Roles y permisos RBAC]]).
-- **Decisiones pendientes**: formato del usuario de estudiante, vigencia de la contraseña temporal, y si además de la hoja impresa se envía al celular o correo del tutor.
+- **Credenciales aún no definidas** por la dirección (pendiente para la Fase 4, [[2026-10-28 Decisiones de la direccion]]): formato del usuario, vigencia de la contraseña temporal y canal de entrega. Con el acceso propio de los tutores ([[EP-09 Acceso de tutores]]), podrían entregarse a través de su cuenta. Refinar antes de la Fase 4.

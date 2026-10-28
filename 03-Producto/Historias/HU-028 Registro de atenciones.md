@@ -6,7 +6,7 @@ sprint: ""
 puntos: 3
 estado: idea
 prioridad: baja
-orden: 34
+orden: 38
 tags: [historia, fase5]
 ---
 # HU-028 · Registro de atenciones en oficina

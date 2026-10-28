@@ -5,9 +5,9 @@ epica: "[[EP-05 Asignacion de cursos y materias]]"
 sprint: ""
 puntos: 5
 estado: backlog
-prioridad: media
-orden: 22
-tags: [historia, fase3]
+prioridad: alta
+orden: 20
+tags: [historia, fase3, mvp-2027]
 ---
 # HU-021 · Asignar docente a materia del aula
 
@@ -43,9 +43,15 @@ Escenario: Materias sin docente
   Cuando consulto el tablero de asignaciones de la gestión
   Entonces veo resaltadas las materias sin docente y su cantidad total
 
-Escenario: Carga horaria
-  Cuando una asignación hace que el docente supere la carga horaria semanal máxima definida por el colegio
-  Entonces veo una advertencia, pero puedo guardar
+Escenario: Carga horaria máxima
+  Dado que el colegio configuró la carga horaria semanal máxima por docente
+  Cuando una asignación haría que el docente supere ese máximo
+  Entonces la asignación no se registra
+  Y veo "Con esta materia, Docente X tendría N horas semanales; el máximo es M"
+
+Escenario: Ver la carga del docente
+  Cuando elijo a un docente para asignar
+  Entonces veo sus horas semanales asignadas y cuántas le quedan
 
 Escenario: Gestión cerrada o sin permiso
   Cuando intento asignar en una gestión cerrada, o sin ser Coordinación pedagógica o Dirección
@@ -54,5 +60,6 @@ Escenario: Gestión cerrada o sin permiso
 
 ## Notas
 - Toda asignación, reemplazo o retiro queda en auditoría.
+- **Carga horaria máxima:** la dirección decidió aplicarla; el valor es configurable y aún no está definido ([[2026-10-28 Decisiones de la direccion]]). Las horas de cada materia vienen del catálogo ([[HU-017 Catalogo de materias]]). Interpretación del PO: el máximo **bloquea**; confirmar con la dirección si se necesita una excepción autorizada.
 - El tablero de "materias sin docente" sirve para medir la meta de la visión: 100 % de aulas con docentes al inicio de la gestión ([[Vision del producto]]).
 - Si se desactiva la cuenta de un docente con asignaciones vigentes ([[HU-011 Desactivar cuenta]]), sus materias pasan a "sin docente".

@@ -5,9 +5,9 @@ epica: "[[EP-03 Estructura academica]]"
 sprint: ""
 puntos: 5
 estado: backlog
-prioridad: media
-orden: 18
-tags: [historia, fase2]
+prioridad: alta
+orden: 16
+tags: [historia, fase2, mvp-2027]
 ---
 # HU-016 · Configurar niveles, grados y paralelos
 
@@ -40,6 +40,17 @@ Escenario: Sin gestión anterior
   Dado que es la primera gestión registrada
   Entonces la opción "Copiar estructura" no está disponible y se explica por qué
 
+Escenario: Cupo por paralelo
+  Dado que el colegio configuró un cupo por defecto por paralelo
+  Cuando creo un paralelo
+  Entonces toma el cupo por defecto
+  Y puedo cambiarlo para ese paralelo a un número entero mayor a 0
+
+Escenario: Bajar el cupo por debajo de los matriculados
+  Dado que 1.º A tiene 30 estudiantes matriculados
+  Cuando intento fijar su cupo en 25
+  Entonces veo "El cupo no puede ser menor que los 30 estudiantes matriculados"
+
 Escenario: Quitar un paralelo en uso
   Dado que el paralelo "B" ya tiene aula virtual con materias o estudiantes
   Cuando intento eliminarlo
@@ -55,4 +66,5 @@ Escenario: Gestión cerrada
 ## Notas
 - Niveles y grados cambian poco (catálogo normativo); los **paralelos** pertenecen a cada gestión.
 - Configurable para adaptarse a la normativa ([[Marco normativo Bolivia]]).
+- **Cupo por paralelo:** la dirección decidió aplicarlo; el valor por defecto es configurable y aún no está definido ([[2026-10-28 Decisiones de la direccion]]). Re-estimar en refinamiento.
 - Permisos: Dirección, Secretaría académica y Coordinación pedagógica ([[Roles y permisos RBAC]]).

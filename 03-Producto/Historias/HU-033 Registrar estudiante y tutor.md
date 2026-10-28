@@ -5,9 +5,9 @@ epica: "[[EP-05 Asignacion de cursos y materias]]"
 sprint: ""
 puntos: 5
 estado: backlog
-prioridad: media
-orden: 25
-tags: [historia, fase3, menores]
+prioridad: alta
+orden: 22
+tags: [historia, fase3, menores, mvp-2027]
 ---
 # HU-033 · Registrar estudiante y su tutor
 
@@ -33,6 +33,11 @@ Escenario: Consentimiento obligatorio
   Cuando intento guardar sin registrar el consentimiento del tutor
   Entonces veo "Falta el consentimiento del tutor para el tratamiento de datos" y no se guarda
 
+Escenario: RUDE obligatorio
+  Cuando intento guardar a un estudiante sin código RUDE o con un RUDE de formato inválido
+  Entonces veo "El código RUDE es obligatorio" o "El código RUDE no tiene un formato válido"
+  Y no se guarda
+
 Escenario: Estudiante duplicado
   Cuando registro un RUDE o un CI que ya existe
   Entonces veo "Ya existe un estudiante con ese RUDE/CI" y el enlace a su ficha
@@ -54,5 +59,7 @@ Escenario: Sin permiso
 
 ## Notas
 - Se recolecta el **mínimo** necesario; el registro y cada cambio quedan en auditoría ([[Seguridad y proteccion de datos]] · Ley N.º 548 en [[Marco normativo Bolivia]]).
-- **RUDE**: Registro Único de Estudiantes del sistema educativo boliviano; confirmar con la dirección si es obligatorio para todos.
-- **Decisiones pendientes**: texto y medio del consentimiento (firma en oficina o aceptación en línea), más de un tutor por estudiante, quién ve los datos del tutor.
+- **RUDE obligatorio** para todo estudiante (decisión de la dirección, [[2026-10-28 Decisiones de la direccion]]). Es el Registro Único de Estudiantes del sistema educativo boliviano; el formato exacto a validar lo confirma secretaría.
+- El **mecanismo** de consentimiento sigue pendiente; esta historia solo registra que existe (fecha y medio). Si se decide en línea, ver [[HU-038 Consentimiento en linea del tutor]].
+- Los tutores tendrán acceso propio ([[EP-09 Acceso de tutores]]): registrar celular y correo con cuidado, porque serán su canal de invitación.
+- Pendiente: más de un tutor por estudiante, quién ve los datos del tutor.

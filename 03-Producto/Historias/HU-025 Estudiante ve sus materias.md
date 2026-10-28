@@ -6,7 +6,7 @@ sprint: ""
 puntos: 5
 estado: backlog
 prioridad: media
-orden: 30
+orden: 29
 tags: [historia, fase4]
 ---
 # HU-025 · Estudiante ve sus materias

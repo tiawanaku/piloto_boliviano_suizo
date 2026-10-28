@@ -5,8 +5,8 @@ epica: "[[EP-02 Gestion de usuarios y roles]]"
 sprint: ""
 puntos: 8
 estado: backlog
-prioridad: media
-orden: 16
+prioridad: baja
+orden: 35
 tags: [historia, fase1]
 ---
 # HU-012 · Carga masiva de personal (CSV)
@@ -47,4 +47,4 @@ Escenario: Confirmar importación
 
 ## Notas
 - Depende de [[HU-009 Invitar personal]] y [[HU-010 Asignar roles al personal]].
-- Su prioridad depende de cuántas personas tiene el plantel (**decisión pendiente** de la dirección). Si los Developers la estiman en más de 8, dividir en vista previa / importación y reporte.
+- **Prioridad baja:** el plantel es de 1–15 administrativos y 1–50 docentes (≤ 65 personas), así que invitarlas una por una con [[HU-009 Invitar personal]] toma pocas horas. Se reconsiderará si el plantel crece ([[2026-10-28 Decisiones de la direccion]]).

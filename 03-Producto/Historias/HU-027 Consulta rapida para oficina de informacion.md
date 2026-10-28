@@ -6,7 +6,7 @@ sprint: ""
 puntos: 5
 estado: idea
 prioridad: baja
-orden: 33
+orden: 37
 tags: [historia, fase5]
 ---
 # HU-027 · Consulta rápida para oficina de información
