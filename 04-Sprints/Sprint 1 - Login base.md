@@ -47,8 +47,146 @@ Volver a [[Sprints MOC]] · Épica: [[EP-01 Login plantel administrativo y docen
 ### En revisión
 ### Hecho
 
+## Tareas técnicas
+> Definidas por el [[Scrum Master]] el 2026-10-28 ([[2026-10-28 Sprint Planning tecnico - Scrum Master]]). Stack: [[ADR-005 Stack PHP Laravel y Filament]] · Convenciones: [[Stack tecnologico]] · Habilitadores: [[Backlog tecnico]] · Paquetes: [[Sprint 1 - Dev 1]], [[Sprint 1 - Dev 2]], [[Sprint 1 - Dev 3]]. Los Developers las ajustan en la [[Sprint Planning]].
+>
+> **Terminado técnico común:** `vendor/bin/pint --test`, `vendor/bin/phpstan analyse`, `vendor/bin/pest` en verde (CI con SQLite y PostgreSQL); cada escenario Gherkin de la historia tiene al menos una prueba Pest con su nombre; prueba con un rol sin acceso cuando aplica; textos en `lang/es`; PR revisado.
+>
+> Reparto: **Dev 1** = login, sesión y contraseña (HU-001, HU-002, HU-006, TEC-13) · **Dev 2** = roles y paneles (TEC-10, TEC-11, HU-007) · **Dev 3** = auditoría y *spikes* (TEC-12, HU-013, TEC-14, TEC-15).
+
+| ID | Tarea | Relacionada | Dev | Depende de |
+|---|---|---|---|---|
+| T-1-01 | Configuración compartida de paneles `StaffPanel` ⚠️ **primero** | HU-001, HU-007 | Dev 1 | — |
+| T-1-02 | Página de login personalizada: validaciones y mensajes | HU-001 | Dev 1 | T-1-01 |
+| T-1-03 | Login: estados de cuenta e ingreso exitoso | HU-001 | Dev 1 | T-1-02, T-1-12 |
+| T-1-04 | Cierre de sesión, inactividad y "atrás" | HU-002, TEC-13 | Dev 1 | T-1-01 |
+| T-1-05 | Cabeceras de seguridad | TEC-13 | Dev 1 | T-1-01 |
+| T-1-06 | Política de contraseñas y columnas de contraseña temporal | HU-006 | Dev 1 | — |
+| T-1-07 | Página "Cambiar contraseña" obligatoria | HU-006 | Dev 1 | T-1-01, T-1-06 |
+| T-1-08 | Instalar spatie/laravel-permission y enums de roles/permisos ⚠️ **temprano** | TEC-10 | Dev 2 | — |
+| T-1-09 | *Seeder* de la matriz RBAC | TEC-10 | Dev 2 | T-1-08, taller 03/11 |
+| T-1-10 | *Factories*, *helpers* de Pest y comando `colegio:crear-cuenta` | TEC-11 | Dev 2 | T-1-06, T-1-09 |
+| T-1-11 | Acceso a paneles por rol y rol principal | HU-007 | Dev 2 | T-1-09 |
+| T-1-12 | Redirección al panel principal tras el login | HU-007 | Dev 2 | T-1-11 |
+| T-1-13 | Cambio de panel y panel docente vacío | HU-007 | Dev 2 | T-1-12 |
+| T-1-14 | Página 403 en español y registro del acceso denegado | HU-007 | Dev 2 | T-1-11, T-1-15 |
+| T-1-15 | Tabla `audit_events`, modelo inmutable y `AuditLogger` ⚠️ **temprano** | TEC-12, HU-013 | Dev 3 | — |
+| T-1-16 | *Trigger* PostgreSQL de inmutabilidad | TEC-12, HU-013 | Dev 3 | T-1-15 |
+| T-1-17 | *Listeners* de intentos de login y logout | HU-013 | Dev 3 | T-1-15 |
+| T-1-18 | *Policy* de auditoría y pruebas de inmutabilidad | HU-013 | Dev 3 | T-1-15 |
+| T-1-19 | Spike: peso del login en 3G | TEC-14 | Dev 3 | T-1-02 |
+| T-1-20 | Spike: MFA por rol en Filament 5 | TEC-15 | Dev 3 | T-1-11 |
+| T-1-21 | Verificación de la DoD de experiencia en staging | Todas | Dev 3 | resto del sprint |
+
+#### T-1-01 · `StaffPanel` (configuración compartida) — Dev 1 ⚠️ debe completarse primero (día 1)
+- **Qué:** clase `App\Filament\Support\StaffPanel::configure(Panel $panel): Panel` con lo común a `admin` y `docente`: página de login (`Pages\Auth\Login`), *middleware* de autenticación compartido, marca y colores. Ambos *PanelProviders* la invocan (cambio de una línea; luego los *providers* pasan a Dev 2).
+- **Archivos:** `app/Filament/Support/StaffPanel.php`, `app/Providers/Filament/AdminPanelProvider.php`, `app/Providers/Filament/DocentePanelProvider.php` (solo esa línea).
+- **Pruebas:** las de `tests/Feature/Panels/PanelAccessTest.php` siguen en verde.
+
+#### T-1-02 · Login personalizado: validaciones y mensajes — Dev 1
+- **Qué:** `App\Filament\Pages\Auth\Login` extiende el login de Filament: etiquetas en español, contraseña con mostrar/ocultar, regla `InstitutionalEmail` (dominio de `config('colegio.dominio_institucional')`), mensaje genérico "Correo o contraseña incorrectos".
+- **Archivos:** `app/Filament/Pages/Auth/Login.php`, `app/Rules/InstitutionalEmail.php`, `lang/es/auth.php`, `tests/Feature/HU001/LoginValidationTest.php`, `tests/Unit/Rules/InstitutionalEmailTest.php`.
+- **Pruebas (HU-001):** "Credenciales incorrectas" (mismo mensaje con correo existente y no existente), "Correo no institucional", "Campos vacíos".
+
+#### T-1-03 · Login: estados de cuenta e ingreso exitoso — Dev 1
+- **Qué:** antes de autenticar, verificar `AccountStatus`: `Deactivated` → "Tu cuenta no está activa. Comunícate con secretaría o la oficina de información"; `Pending` → mismo mensaje genérico de cuenta no activa. Al ingresar, regenerar la sesión.
+- **Archivos:** `app/Filament/Pages/Auth/Login.php`, `lang/es/auth.php`, `tests/Feature/HU001/LoginSuccessTest.php`.
+- **Pruebas (HU-001):** "Inicio de sesión exitoso" (autenticado y redirigido al panel según rol — usa T-1-12), "Cuenta desactivada".
+
+#### T-1-04 · Cierre de sesión, inactividad y "atrás" — Dev 1
+- **Qué:** `SESSION_LIFETIME` leído de `config('colegio.sesion_inactividad_minutos')` en `config/session.php`; cookies `secure`, `http_only`, `same_site=lax`; *middleware* `PreventBackHistory` (`Cache-Control: no-store, private`) registrado en `StaffPanel`; logout de Filament invalida la sesión.
+- **Archivos:** `config/session.php`, `app/Http/Middleware/PreventBackHistory.php`, `app/Filament/Support/StaffPanel.php`, `tests/Feature/HU002/LogoutTest.php`.
+- **Pruebas (HU-002):** "Cerrar sesión manualmente" (fila de `sessions` eliminada, redirección al login, cabecera `no-store`), "Expiración por inactividad" (`$this->travel(31)->minutes()` → redirige al login).
+
+#### T-1-05 · Cabeceras de seguridad — Dev 1
+- **Qué:** *middleware* `SecurityHeaders`: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, HSTS solo en producción/staging, `Content-Security-Policy-Report-Only` compatible con Livewire/Alpine. Registrado en `StaffPanel`.
+- **Archivos:** `app/Http/Middleware/SecurityHeaders.php`, `app/Filament/Support/StaffPanel.php`, `tests/Feature/Security/SecurityHeadersTest.php`.
+- **Pruebas:** cabeceras presentes en `/admin/login`.
+
+#### T-1-06 · Política de contraseñas y columnas de contraseña temporal — Dev 1
+- **Qué:** migración `add_temporary_password_columns_to_users_table` (`must_change_password` bool, `temporary_password_expires_at` nullable); trait `App\Models\Concerns\HasTemporaryPassword` (*casts* y `temporaryPasswordExpired()`); `Password::defaults()` en `AppServiceProvider` (mín. 10, `uncompromised()`), regla `NotCommonPassword` con lista local `resources/data/common-passwords.txt`; mensajes en `lang/es/passwords.php`.
+- **Archivos:** `database/migrations/2026_11_16_100000_add_temporary_password_columns_to_users_table.php`, `app/Models/Concerns/HasTemporaryPassword.php`, `app/Providers/AppServiceProvider.php`, `app/Rules/NotCommonPassword.php`, `resources/data/common-passwords.txt`, `tests/Unit/Rules/PasswordPolicyTest.php`.
+- **Pruebas (HU-006):** "Política de contraseña" (menos de 10 caracteres y contraseña común, cada una con su mensaje). `uncompromised()` se simula con `Http::fake()`.
+- **Integración:** Dev 2 agrega `use HasTemporaryPassword;` en `User` (dueño de `User.php`).
+
+#### T-1-07 · Página "Cambiar contraseña" obligatoria — Dev 1
+- **Qué:** página `App\Filament\Pages\Auth\ChangeTemporaryPassword` y *middleware* `EnsurePasswordIsChanged` (registrado en `StaffPanel`) que redirige a ella mientras `must_change_password` sea verdadero; contraseña temporal vencida (> 72 h) bloquea el login con "Tu contraseña temporal venció. Solicita una nueva a secretaría". Indicador de fortaleza simple.
+- **Archivos:** `app/Filament/Pages/Auth/ChangeTemporaryPassword.php`, `resources/views/filament/pages/auth/change-temporary-password.blade.php` (si hace falta), `app/Http/Middleware/EnsurePasswordIsChanged.php`, `app/Filament/Support/StaffPanel.php`, `app/Filament/Pages/Auth/Login.php`, `tests/Feature/HU006/TemporaryPasswordTest.php`.
+- **Pruebas (HU-006):** "Contraseña temporal" (cualquier URL del panel redirige al cambio), "Contraseña temporal vencida".
+
+#### T-1-08 · spatie/laravel-permission y enums — Dev 2 ⚠️ temprano (día 1–2)
+- **Qué:** `composer require spatie/laravel-permission:^8.3`; publicar config y migración adaptadas a UUID (`model_morph_key` = `model_uuid`, columnas `uuid`); `User` usa `HasRoles`. Enums `App\Enums\StaffRole` (7 roles, `label()`, `isAdministrative()`, `priority()`) y `App\Enums\Permission` (permisos de la matriz, p. ej. `staff.invite`, `roles.assign_high`, `accounts.deactivate`, `accounts.unlock`, `mfa.reset`, `audit.view`, `staff.view`, `staff.edit_email`).
+- **Archivos:** `composer.json`, `composer.lock`, `config/permission.php`, `database/migrations/2026_11_16_090000_create_permission_tables.php`, `app/Models/User.php`, `app/Enums/StaffRole.php`, `app/Enums/Permission.php`, `lang/es/roles.php`, `lang/es/permissions.php`, `tests/Unit/Enums/StaffRoleTest.php`.
+
+#### T-1-09 · *Seeder* de la matriz RBAC — Dev 2
+- **Qué:** `RolesAndPermissionsSeeder` idempotente que replica [[Roles y permisos RBAC]] validada en el [[2026-11-03 Taller - Roles y permisos]]; llamado desde `DatabaseSeeder` y desde el despliegue.
+- **Archivos:** `database/seeders/RolesAndPermissionsSeeder.php`, `database/seeders/DatabaseSeeder.php`, `tests/Feature/Rbac/PermissionMatrixTest.php`.
+- **Pruebas:** *dataset* Pest rol × permiso que verifica cada celda de la matriz; ejecutar el *seeder* dos veces no duplica.
+
+#### T-1-10 · *Factories*, *helpers* y cuentas semilla — Dev 2
+- **Qué:** estados de `UserFactory`: `active()`, `pending()`, `deactivated()`, `withTemporaryPassword()`, `withRoles(StaffRole ...)`; *helper* global `actingAsStaff(StaffRole ...$roles)` en `tests/Pest.php`; comando `colegio:crear-cuenta {correo} {--rol=*}` que crea una cuenta activa con contraseña temporal (72 h) y la muestra una sola vez (temporal hasta [[HU-009 Invitar personal]]).
+- **Archivos:** `database/factories/UserFactory.php`, `tests/Pest.php`, `app/Console/Commands/CreateStaffAccount.php`, `tests/Feature/Commands/CreateStaffAccountTest.php`.
+- **Pruebas:** el comando crea la cuenta con los roles y `must_change_password = true`; rechaza correos fuera del dominio.
+
+#### T-1-11 · Acceso a paneles por rol y rol principal — Dev 2
+- **Qué:** `User::canAccessPanel()`: `admin` → algún rol administrativo y cuenta activa; `docente` → rol `teacher` y cuenta activa. Migración `add_primary_role_to_users_table`; método `primaryPanelId()` (rol principal o prioridad por defecto).
+- **Archivos:** `app/Models/User.php`, `database/migrations/2026_11_16_110000_add_primary_role_to_users_table.php`, `tests/Feature/HU007/PanelAuthorizationTest.php`.
+- **Pruebas (HU-007):** *dataset* rol × panel (permitido/403); cuenta desactivada → 403 en ambos.
+
+#### T-1-12 · Redirección al panel principal — Dev 2
+- **Qué:** implementación propia del contrato `LoginResponse` de Filament que redirige a la URL del panel principal; registrada en un nuevo `StaffAuthServiceProvider`.
+- **Archivos:** `app/Http/Responses/StaffLoginResponse.php`, `app/Providers/StaffAuthServiceProvider.php`, `bootstrap/providers.php`, `tests/Feature/HU007/LoginRedirectTest.php`.
+- **Pruebas (HU-007):** "Docente" → `/docente`; "Administrativo" → `/admin`.
+
+#### T-1-13 · Cambio de panel y panel docente vacío — Dev 2
+- **Qué:** ítem del menú de usuario "Cambiar a panel docente/administrativo" en cada *PanelProvider*, visible solo si `canAccessPanel()` del otro panel es verdadero; *dashboard* docente con el mensaje "Tus aulas aparecerán aquí cuando coordinación te asigne materias".
+- **Archivos:** `app/Providers/Filament/AdminPanelProvider.php`, `app/Providers/Filament/DocentePanelProvider.php`, `app/Filament/Docente/Pages/Dashboard.php`, `lang/es/panels.php`, `tests/Feature/HU007/PanelSwitchTest.php`.
+- **Pruebas (HU-007):** "Varios roles" (entra al principal, ve el ítem y abre el otro panel sin nuevo login); usuario con un solo rol no ve el ítem.
+
+#### T-1-14 · 403 en español y registro del acceso denegado — Dev 2
+- **Qué:** vista `errors/403.blade.php` liviana con "No tienes permiso para ver esta página" y enlace a su panel; en `bootstrap/app.php` (`withExceptions`) registrar `access.denied` con `AuditLogger` (URL, usuario, IP).
+- **Archivos:** `resources/views/errors/403.blade.php`, `bootstrap/app.php`, `lang/es/errors.php`, `tests/Feature/HU007/UnauthorizedAccessTest.php`.
+- **Pruebas (HU-007):** "Acceso no autorizado por URL" (docente → `/admin` = 403 con el texto y un `AuditEvent` `access.denied`).
+
+#### T-1-15 · `audit_events`, modelo inmutable y `AuditLogger` — Dev 3 ⚠️ temprano (día 1–2; lo usa T-1-14)
+- **Qué:** migración `create_audit_events_table` (UUID, `occurred_at`, `event_type`, `actor_id` nullable, `subject_type`/`subject_id` nullable, `email_attempted`, `result`, `ip_address` (`ipAddress()`), `user_agent`, `context` json/jsonb; índices por fecha, tipo y actor); enum `AuditEventType`; modelo `AuditEvent` que lanza excepción en `updating`/`deleting`; servicio `App\Services\AuditLogger::record()` que filtra claves sensibles (`password`, `token`, `secret`, `code`…).
+- **Archivos:** `database/migrations/2026_11_16_080000_create_audit_events_table.php`, `app/Models/AuditEvent.php`, `app/Enums/AuditEventType.php`, `app/Services/AuditLogger.php`, `lang/es/audit.php`, `tests/Unit/Services/AuditLoggerTest.php`.
+- **Pruebas:** registra un evento con contexto; nunca guarda claves sensibles; `update()`/`delete()` lanzan excepción.
+
+#### T-1-16 · *Trigger* PostgreSQL — Dev 3
+- **Qué:** migración que, solo si el *driver* es `pgsql`, crea la función y el *trigger* que rechazan `UPDATE`/`DELETE` en `audit_events` (la retención usará un rol de base de datos distinto, TEC-17).
+- **Archivos:** `database/migrations/2026_11_16_080100_add_immutability_trigger_to_audit_events.php`, `tests/Feature/HU013/AuditImmutabilityPgsqlTest.php` (se omite en SQLite; corre en el trabajo `pest-pgsql`).
+- **Pruebas (HU-013):** "Inmutabilidad" a nivel de base de datos (`DB::table()->update()` falla).
+
+#### T-1-17 · *Listeners* de login y logout — Dev 3
+- **Qué:** *listeners* descubiertos automáticamente para `Illuminate\Auth\Events\Login`, `Failed`, `Logout`: registran fecha/hora, correo intentado, resultado, IP y navegador; nunca la contraseña.
+- **Archivos:** `app/Listeners/RecordSuccessfulLogin.php`, `app/Listeners/RecordFailedLogin.php`, `app/Listeners/RecordLogout.php`, `tests/Feature/HU013/LoginAuditTest.php`.
+- **Pruebas (HU-013):** "Registro de intento" (éxito y fallo vía página de login de Filament con `Livewire::test`), la contraseña no aparece en ninguna columna.
+
+#### T-1-18 · *Policy* de auditoría — Dev 3
+- **Qué:** `AuditEventPolicy`: `update`/`delete`/`create` siempre `false`; `viewAny`/`view` con permiso `audit.view` (para HU-014).
+- **Archivos:** `app/Policies/AuditEventPolicy.php`, `tests/Feature/HU013/AuditPolicyTest.php`.
+- **Pruebas (HU-013):** "Inmutabilidad" a nivel de aplicación.
+
+#### T-1-19 · Spike: peso del login en 3G — Dev 3 (timebox 1 día)
+- **Qué:** medir `/admin/login` en staging con Chrome DevTools (perfil "Slow 3G") y Lighthouse: bytes transferidos, tiempo hasta interactivo. Si supera 200 KB / 10 s, proponer medidas (compresión Brotli/gzip en Nginx, caché de recursos, fuentes del sistema).
+- **Entregable:** resultados y decisión en la sección "Decisiones técnicas" de este sprint; tareas nuevas si hacen falta.
+
+#### T-1-20 · Spike: MFA por rol en Filament 5 — Dev 3 (timebox 1 día)
+- **Qué:** prototipo en rama descartable: activar MFA de app autenticadora con códigos de recuperación (10), exigirlo según `StaffRole::isAdministrative()` aunque el usuario entre por `/docente`, y engancharse al código incorrecto para sumar al bloqueo de HU-004.
+- **Entregable:** nota en "Decisiones técnicas" y, si cambia algo, actualización de [[ADR-005 Stack PHP Laravel y Filament]] §4; tareas del Sprint 2 ajustadas.
+
+#### T-1-21 · Verificación de la DoD de experiencia — Dev 3
+- **Qué:** en staging, recorrer HU-001, HU-002, HU-006, HU-007 en Chrome, Firefox y Android, con red 3G simulada, navegación por teclado y contraste (Lighthouse Accesibilidad ≥ 90).
+- **Entregable:** lista de verificación en esta nota; defectos como tareas o *bugs*.
+
+## Decisiones técnicas
+_(completar durante el sprint: resultados de T-1-19 y T-1-20)_
+
 ## Riesgos del sprint
 - Definición final de roles pendiente con dirección → usar roles base de [[Roles y permisos RBAC]].
+- Personalizar el login de Filament exige conocer sus internos (T-1-02/T-1-03) → *pairing* Dev 1 + Dev 2 si se atasca más de medio día.
+- Muchos archivos compartidos el primer día (`User.php`, *PanelProviders*) → respetar los dueños de archivo de los [[Paquetes MOC|paquetes de trabajo]].
 
 ## Daily Scrum
 _Enlazar aquí las notas diarias de `07-Reuniones`._
